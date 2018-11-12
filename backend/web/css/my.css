@@ -1,0 +1,21 @@
+
+div.activeform{
+	text-align: center;
+	margin-top: 33px;
+	padding: 0;
+}
+.fix-header .navbar-static-top{
+	position: inherit;
+}
+.tabs-style-shape{max-width: 100%}
+.fix-header #page-wrapper{margin-top: 0;}
+.fix-sidebar .sidebar{
+	margin-top: 60px;
+	padding-top: 0;
+}
+div.form-group.button_save{
+	position: fixed;
+	right: 40px;
+	top: 80px;
+	z-index: 1;
+}
