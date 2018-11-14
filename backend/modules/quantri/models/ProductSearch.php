@@ -19,7 +19,7 @@ class ProductSearch extends Product
     {
         return [
             [['id', 'price', 'price_sales', 'order', 'manufacturer_id', 'guarantee', 'views', 'product_category_id', 'created_at', 'updated_at', 'user_id'], 'integer'],
-            [['pro_name', 'title', 'slug', 'keyword', 'description', 'short_introduction', 'content', 'start_sale', 'end_sale', 'active', 'product_type_id', 'salse', 'hot', 'best_seller', 'models_id', 'code', 'image', 'images_list', 'tags', 'related_articles', 'related_products'], 'safe'],
+            [['pro_name', 'title', 'slug', 'keyword', 'description', 'short_introduction', 'content', 'start_sale', 'end_sale', 'active', 'product_type_id', 'salse', 'hot', 'best_seller', 'models_id', 'code', 'image', 'images_large', 'tags', 'related_articles', 'related_products'], 'safe'],
         ];
     }
 
@@ -89,7 +89,7 @@ class ProductSearch extends Product
             ->andFilterWhere(['like', 'models_id', $this->models_id])
             ->andFilterWhere(['like', 'code', $this->code])
             ->andFilterWhere(['like', 'image', $this->image])
-            ->andFilterWhere(['like', 'images_list', $this->images_list])
+            ->andFilterWhere(['like', 'images_large', $this->images_large])
             ->andFilterWhere(['like', 'tags', $this->tags])
             ->andFilterWhere(['like', 'related_articles', $this->related_articles])
             ->andFilterWhere(['like', 'related_products', $this->related_products]);

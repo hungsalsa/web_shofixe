@@ -24,7 +24,7 @@ HomeAsset::register($this);
 	<meta name="author" content="hencework"/>
 	
 	<link rel="shortcut icon" href="<?=Yii::$app->homeUrl ?>favicon.ico">
-	<link rel="icon" href="<?=Yii::$app->homeUrl ?>favicon.ico" type="image/x-icon">
+	<link rel="icon" type="image/png" sizes="16x16" href="<?=Yii::$app->homeUrl ?>plugins/images/favicon.png">
 
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>

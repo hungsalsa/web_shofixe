@@ -49,6 +49,7 @@ class AppAsset extends AssetBundle
         'js/animate-heading.js',
         'js/ajax-mail.js',
         'js/main.js',
+        'vender/my.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

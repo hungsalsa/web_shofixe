@@ -3,7 +3,7 @@
 namespace backend\modules\quantri\models;
 
 use Yii;
-
+use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "tbl_manufactures".
  *
@@ -71,6 +71,7 @@ class Manufactures extends \yii\db\ActiveRecord
         ];
     }
 
+    // Sử dụng cho thêm sp mới
     public function getAllManufacture($status = true)
     {
     	return ArrayHelper::map(self::find()->where('active=:active',[':active'=>$status])->all(),'idMan','ManName');

@@ -12,7 +12,6 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
-
 /**
  * Site controller
  */
@@ -21,6 +20,7 @@ class SiteController extends Controller
     /**
      * {@inheritdoc}
      */
+    public static  $dataProType = [];
     public function behaviors()
     {
         return [
@@ -86,23 +86,23 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    // public function actionLogin()
-    // {
-    //     if (!Yii::$app->user->isGuest) {
-    //         return $this->goHome();
-    //     }
+    public function actionLogin()
+    {
+        if (!Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
 
-    //     $model = new LoginForm();
-    //     if ($model->load(Yii::$app->request->post()) && $model->login()) {
-    //         return $this->goBack();
-    //     } else {
-    //         $model->password = '';
+        $model = new LoginForm();
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return $this->goBack();
+        } else {
+            $model->password = '';
 
-    //         return $this->render('login', [
-    //             'model' => $model,
-    //         ]);
-    //     }
-    // }
+            return $this->render('login', [
+                'model' => $model,
+            ]);
+        }
+    }
 
     // /**
     //  * Logs out the current user.

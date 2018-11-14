@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = 'Update';
         'model' => $model,
         'dataCate' => $dataCate,
         'dataGroup' => $dataGroup,
+        'seo' => $seo,
     ]) ?>
 
 </div>

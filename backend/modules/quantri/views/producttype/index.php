@@ -27,7 +27,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'typeName',
+            [
+               'attribute' => 'typeName',
+               'format' => 'raw',
+               'value'=>function ($data) {
+                return Html::a(Html::encode($data->typeName),Yii::$app->homeUrl.'quantri/producttype/update?id='.$data->id);
+                },
+            ],
             'status',
 
             ['class' => 'yii\grid\ActionColumn'],

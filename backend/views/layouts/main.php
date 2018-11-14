@@ -24,7 +24,8 @@ AppAsset::register($this);
 	<meta name="author" content="hencework"/>
 	
 	<link rel="shortcut icon" href="<?=Yii::$app->homeUrl ?>favicon.ico">
-	<link rel="icon" href="<?=Yii::$app->homeUrl ?>favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?=Yii::$app->homeUrl ?>plugins/images/favicon.png">
+
 
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
@@ -90,7 +91,6 @@ AppAsset::register($this);
                 <?php 
                     $user =  Yii::$app->user->identity->username;
                     $auth_key =  Yii::$app->user->identity->auth_key;
-                    // $auth_key =  'f<qbi8qh{3w41>rd][)ywsqiw1(gfdkk';
                     ?>
                 <iframe  width="100%" height="450" frameborder="0"
                     src="../../../filemanager/dialog.php?type=1&field_id=imageFile&akey=<?= md5($user.$auth_key) ?>">

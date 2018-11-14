@@ -15,6 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
+        <?= Html::a(Yii::t('app', 'Danh sách'), ['index'], ['class' => 'btn btn-success']) ?>
         <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->idMan], ['class' => 'btn btn-primary']) ?>
         <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->idMan], [
             'class' => 'btn btn-danger',

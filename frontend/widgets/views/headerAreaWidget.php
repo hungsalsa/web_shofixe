@@ -111,7 +111,7 @@
          <div class="row">
             <div class="col-md-3 col-sm-6 col-xs-12">
                <div class="header-logo">
-                  <a href="index.html"><img src="<?= Yii::$app->homeUrl?>img/logo/1.png" alt="shofixe"></a>
+                  <a href="<?= Yii::$app->homeUrl ?>"><img src="<?= Yii::$app->homeUrl?>img/logo/1.png" alt="shofixe"></a>
                </div>
             </div>
             <div class="col-md-3 hidden-sm hidden-xs">

@@ -41,7 +41,7 @@ class ProductType extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'typeName' => 'Loại sản phẩm',
-            'status' => 'Trạng thái',
+            'status' => 'Kích hoạt',
         ];
     }
 

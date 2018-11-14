@@ -19,22 +19,28 @@ LoginAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= Yii::$app->homeUrl ?>plugins/images/favicon.png">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
 <body>
 <?php $this->beginBody() ?>
-
-<div class="wrap">
-
-    <div class="container">
-        <div class="col-md-10 col-md-offset-4">
-        <?= $content ?>
-        </div>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="cssload-speeding-wheel"></div>
     </div>
-</div>
-
+    <section id="wrapper" class="login-register" style="margin: 50px auto;width:90%">
+        <div class="col-md-6">
+            <img width="100%" src="<?= Yii::$app->homeUrl ?>plugins/images/login-register.jpg">
+        </div>
+        <div class="login-box login-sidebar col-md-6" style="width:100%">
+            <div class="white-box">
+                
+                <?= $content ?>
+            </div>
+        </div>
+    </section>
 
 
 <?php $this->endBody() ?>

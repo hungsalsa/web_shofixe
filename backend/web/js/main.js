@@ -94,7 +94,8 @@ tinymce.init({
 	// 	timer: 4000
 	// });
 
-	$('#product-start_sale').datepicker({ dateFormat: 'dd-mm-yy' });
+	$('#product-start_sale').datepicker({ dateFormat: 'dd-mm-yy',firstDay: 1, numberOfMonths: 2,changeMonth: true,
+    changeYear: true, });
 	$('#product-end_sale').datepicker({ dateFormat: 'dd-mm-yy' });
 
   // $("#imageFile").click(function (event) {

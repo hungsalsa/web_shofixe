@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\modules\quantri\models\Manufactures */
 
-$this->title = Yii::t('app', 'Update Manufactures: {nameAttribute}', [
+$this->title = Yii::t('app', 'Chỉnh sửa : '.$model->ManName, [
     'nameAttribute' => $model->title,
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Manufactures'), 'url' => ['index']];

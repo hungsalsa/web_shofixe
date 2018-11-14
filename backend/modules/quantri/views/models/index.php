@@ -17,7 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create Models'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Thêm mới xe'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Reset'), ['index'], ['class' => 'btn btn-primary']) ?>
     </p>
 
     <?= GridView::widget([
@@ -27,7 +28,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'name',
+            [
+               'attribute' => 'name',
+               'format' => 'raw',
+               'value'=>function ($data) {
+                return Html::a(Html::encode($data->name),Yii::$app->homeUrl.'quantri/models/update?id='.$data->id);
+                },
+            ],
             'parent_id',
             'keyword',
             'description:ntext',

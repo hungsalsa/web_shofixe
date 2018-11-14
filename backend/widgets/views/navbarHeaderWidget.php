@@ -1,3 +1,4 @@
+<?php use yii\helpers\Html; ?>
 <div class="navbar-default sidebar" role="navigation">
    <div class="sidebar-nav navbar-collapse slimscrollsidebar">
       <ul class="nav" id="side-menu">
@@ -17,7 +18,7 @@
                <li><a href="javascript:void(0)"><i class="ti-user"></i> My Profile</a></li>
                <li><a href="javascript:void(0)"><i class="ti-email"></i> Inbox</a></li>
                <li><a href="javascript:void(0)"><i class="ti-settings"></i> Account Setting</a></li>
-               <li><a href="javascript:void(0)"><i class="fa fa-power-off"></i> Logout</a></li>
+               <li><?= Html::a('<i class="fa fa-power-off"></i> Logout', Yii::$app->request->hostInfo.'/backend/site/logout',['data-method' => 'post']) ?></li>
             </ul>
          </li>
          <!-- <li class="nav-small-cap m-t-10">--- Main Menu</li> -->
@@ -30,7 +31,7 @@
                <li> <a href="compose.html">Compose mail</a></li>
             </ul>
          </li>
-         <li class="nav-small-cap m-t-10">--- Professional</li -->>
+         <li class="nav-small-cap m-t-10">--- Professional</li >-->
          <li>
             <a href="javascript:void(0);" class="waves-effect"><i class="ti-calendar p-r-10"></i> <span class="hide-menu"> Quản lý chung <span class="fa arrow"></span></span></a>
             <ul class="nav nav-second-level">
@@ -59,7 +60,7 @@
                <li> <a href="patient-profile.html">Patient Profile</a> </li>
             </ul>
          </li>
-         <li>
+         <!-- <li>
             <a href="javascript:void(0);" class="waves-effect"><i class="icon-chart p-r-10"></i> <span class="hide-menu"> Reports <span class="fa arrow"></span></span></a>
             <ul class="nav nav-second-level">
                <li> <a href="payment-report.html">Payment Report</a></li>
@@ -213,8 +214,24 @@
                   </ul>
                </li>
             </ul>
+         </li> -->
+         <li>
+            <a href="tables.html" class="waves-effect"><i data-icon="O" class="linea-icon linea-software fa-fw"></i> <span class="hide-menu">Setting<span class="fa arrow"></span><span class="label label-rouded label-danger pull-right">7</span></span></a>
+            <ul class="nav nav-second-level">
+               <li><a href="<?= Yii::$app->homeUrl ?>setting/categoryhome">Danh sách SP trang chủ</a></li>
+               <!-- <li><a href="table-layouts.html">Table Layouts</a></li>
+               <li><a href="data-table.html">Data Table</a></li>
+               <li class="hidden"><a href="crud-table.html">Crud Table</a></li>
+               <li><a href="bootstrap-tables.html">Bootstrap Tables</a></li>
+               <li><a href="responsive-tables.html">Responsive Tables</a></li>
+               <li><a href="editable-tables.html">Editable Tables</a></li>
+               <li><a href="foo-tables.html">FooTables</a></li>
+               <li><a href="jsgrid.html">JsGrid Tables</a></li> -->
+            </ul>
          </li>
-         <li><a href="login.html" class="waves-effect"><i class="icon-logout fa-fw"></i> <span class="hide-menu">Log out</span></a></li>
+         
+         <li><?= Html::a('<i class="icon-logout fa-fw"></i> <span class="hide-menu">Log out</span>', Yii::$app->request->hostInfo.'/backend/site/logout',['data-method' => 'post']) ?></li>
+
          <li class="hide-menu">
             <a href="javacript:void(0);">
                <span>Progress Report</span>

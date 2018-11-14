@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\modules\quantri\models\Product */
 
-$this->title = 'Create Product';
+$this->title = 'Thêm mới sản phẩm';
 $this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -22,6 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProtype' => $dataProtype,
         'dataProduct' => $dataProduct,
         'dataNews' => $dataNews,
+        'modelsImgproList' => $modelsImgproList,
     ]) ?>
 
 </div>

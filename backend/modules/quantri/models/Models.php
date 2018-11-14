@@ -3,7 +3,7 @@
 namespace backend\modules\quantri\models;
 
 use Yii;
-
+use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "tbl_models".
  *
@@ -62,5 +62,11 @@ class Models extends \yii\db\ActiveRecord
             'active' => 'Active',
             'order' => 'Order',
         ];
+    }
+
+    // Sử dụng cho thêm sp mới
+    public function getAllModels($status = true)
+    {
+        return ArrayHelper::map(self::find()->where('active=:active',[':active'=>$status])->all(),'id','name');
     }
 }

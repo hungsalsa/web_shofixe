@@ -14,10 +14,11 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
 <div class="models-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1 class="pull-left"><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
         'model' => $model,
+        'seo' => $seo,
     ]) ?>
 
 </div>

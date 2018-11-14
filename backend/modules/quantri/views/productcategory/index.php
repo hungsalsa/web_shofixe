@@ -6,8 +6,8 @@ use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\modules\quantri\models\ProductCategorySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-
-$this->title = 'Product Categories';
+use backend\modules\quantri\models\ProductCategory;
+$this->title = 'Danh mục sản phẩm';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="product-category-index">
@@ -17,8 +17,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Product Category', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Thêm mới', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -27,18 +28,37 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'idCate',
-            'title',
-            'cateName',
-            'group_id',
-            'cate_parent_id',
-            //'slug',
+            // 'title',
+            [
+               'attribute' => 'cateName',
+               'format' => 'raw',
+               'value'=>function ($data) {
+                return Html::a(Html::encode($data->cateName),Yii::$app->homeUrl.'quantri/productcategory/update?id='.$data->idCate);
+                },
+            ],
+            // 'group_id',
+            [
+                'attribute'=>'cate_parent_id',
+                'value'=>function ($data)
+                {
+                    $model = new ProductCategory();
+                    $dataCate = $model->getCategoryParent();
+                    if($data->cate_parent_id == 0){
+                        return 'root';
+                    }else {
+                        return $dataCate[$data->cate_parent_id];
+                    }
+                }
+            ],
+            // 'cate_parent_id',
+            'slug',
             //'keyword:ntext',
             //'description:ntext',
             //'content:ntext',
             //'short_introduction:ntext',
             //'home_page',
             //'image',
-            //'order',
+            'order',
             'active',
             //'created_at',
             //'updated_at',

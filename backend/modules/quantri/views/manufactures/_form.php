@@ -21,7 +21,7 @@ use kartik\checkbox\CheckboxX;
 
     <?= $form->field($model, 'title',['options'=>['class'=>'col-md-4']])->textInput(['maxlength' => true,'id'=>'title_slug'])?>
 
-    <?= $form->field($seo, 'slug',['options'=>['class'=>'col-md-5']])->textInput(['maxlength' => true,'id'=>'slug_url'])?>
+    <?= $form->field($model, 'slug',['options'=>['class'=>'col-md-5']])->textInput(['maxlength' => true,'id'=>'slug_url'])?>
 
     <?= $form->field($model, 'image',['options'=>['class'=>'col-md-4']])
     ->textInput(['maxlength' => true,'id'=>'imageFile','placeholder'=>'Chọn ảnh 195x243 pixel','data-toggle'=>'modal','data-target'=>'#myModal']) 

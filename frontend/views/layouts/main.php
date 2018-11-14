@@ -7,18 +7,6 @@ use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
 use frontend\widgets\headerAreaWidget;
-use frontend\widgets\sliderWidget;
-use frontend\widgets\sliderBottomWidget;
-use frontend\widgets\arrivalWidget;
-use frontend\widgets\featuredWidget;
-use frontend\widgets\bannerAreaWidget;
-use frontend\widgets\womenAreaWidget;
-use frontend\widgets\offerAreaWidget;
-use frontend\widgets\menAreaWidget;
-use frontend\widgets\newsletterWidget;
-use frontend\widgets\blogAreaWidget;
-use frontend\widgets\testimonialAreaWidget;
-use frontend\widgets\clientAreaWidget;
 use frontend\widgets\serviceAreaWidget;
 use frontend\widgets\touchAreaWidget;
 use frontend\widgets\footerWidget;
@@ -58,42 +46,9 @@ AppAsset::register($this);
         <!-- header start -->
         <?= headerAreaWidget::widget() ?>
         <!-- header end -->
-        <!-- slider start -->
-        <?= sliderWidget::widget() ?>
-        <!-- slider end -->
-        <!-- slider bottom start -->
-        <?= sliderBottomWidget::widget() ?>
-        <!--slider bottom end -->
-        <!-- arrival start-->
-        <?= arrivalWidget::widget() ?>
-        <!-- arrival end -->
-        <!-- featured start -->
-        <?= featuredWidget::widget() ?>
-        <!-- featured end -->
-        <!-- off banner area start -->
-        <?= bannerAreaWidget::widget() ?>
-        <!-- off banner area end -->
-        <!-- women area start -->
-        <?= womenAreaWidget::widget() ?>
-        <!-- women area end -->
-        <!-- offer area start -->
-        <?= offerAreaWidget::widget() ?>
-        <!-- offer area end -->
-        <!-- men area start -->
-        <?= menAreaWidget::widget() ?>
-        <!-- men area end -->
-        <!-- newsletter area start -->
-        <?= newsletterWidget::widget() ?>
-        <!-- newsletter area end -->
-        <!-- blog area start -->
-        <?= blogAreaWidget::widget() ?>
-        <!-- blog area end -->
-        <!-- testimonial area start -->
-        <?= testimonialAreaWidget::widget() ?>
-        <!-- testimonial area end -->
-        <!-- client area start -->
-        <?= clientAreaWidget::widget() ?>
-        <!-- client area end -->
+        <!-- content start -->
+        <?= $content ?>
+        <!-- content end -->
         <!-- service area end -->
         <?= serviceAreaWidget::widget() ?>
         <!-- service area end -->
@@ -104,12 +59,64 @@ AppAsset::register($this);
         <?= footerWidget::widget() ?>
         <!-- footer end -->
 
-
-
-
-
     </div>
 </div>
+
+<!-- QUICKVIEW PRODUCT -->
+<div id="quickview-wrapper">
+    <!-- Modal -->
+    <div class="modal fade" id="productModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-product">
+                        <div class="product-images">
+                            <div class="main-image images">
+                                <img alt="" src="" id="imgPreview">
+                            </div>
+                        </div><!-- .product-images -->
+
+                        <div class="product-info">
+                            <h2 id="txtNameProduct"></h2>
+                            <div class="price-box">
+                                <p class="price"><span class="special-price"><span class="amount" id="txtPriceSales"></span><span class="old-price" id="txtprice"></span></span></p>
+                            </div>
+                            <a href="shop.html" class="see-all">Xem chi tiết</a>
+                            <div class="quick-add-to-cart">
+                                <form method="post" class="cart">
+                                    <div class="numbers-row">
+                                        <input type="number" id="french-hens" value="1">
+                                    </div>
+                                    <button class="single-add-to-cart-button" type="submit">Thêm vào giỏ hàng</button>
+                                </form>
+                            </div>
+                            <div class="quick-desc" id="txtDescription">
+                                
+                            </div>
+                            <div class="social-sharing">
+                                <div class="widget widget_socialsharing_widget">
+                                    <h3 class="widget-title-modal">Chia sẻ sản phẩm này</h3>
+                                    <ul class="social-icons">
+                                        <li><a target="_blank" title="Facebook" href="#" class="facebook social-icon"><i class="fa fa-facebook"></i></a></li>
+                                        <li><a target="_blank" title="Twitter" href="#" class="twitter social-icon"><i class="fa fa-twitter"></i></a></li>
+                                        <li><a target="_blank" title="Pinterest" href="#" class="pinterest social-icon"><i class="fa fa-pinterest"></i></a></li>
+                                        <li><a target="_blank" title="Google +" href="#" class="gplus social-icon"><i class="fa fa-google-plus"></i></a></li>
+                                        <li><a target="_blank" title="LinkedIn" href="#" class="linkedin social-icon"><i class="fa fa-linkedin"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div><!-- .product-info -->
+                    </div><!-- .modal-product -->
+                </div><!-- .modal-body -->
+            </div><!-- .modal-content -->
+        </div><!-- .modal-dialog -->
+    </div>
+    <!-- END Modal -->
+</div>
+<!-- END QUICKVIEW PRODUCT -->
 <?php $this->endBody() ?>
 </body>
 </html>

@@ -4,16 +4,18 @@ namespace backend\modules\quantri\controllers;
 
 use Yii;
 use backend\modules\quantri\models\Product;
+use backend\modules\quantri\models\ImgproList;
 use backend\modules\quantri\models\ProductSearch;
 use backend\modules\quantri\models\ProductCategory;
 use backend\modules\quantri\models\Manufactures;
 use backend\modules\quantri\models\Models;
 use backend\modules\quantri\models\ProductType;
+use backend\modules\quantri\models\SeoUrl;
 use backend\modules\quanlytin\models\News;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use yii\widgets\ActiveForm;
 /**
  * ProductController implements the CRUD actions for Product model.
  */
@@ -111,8 +113,38 @@ class ProductController extends Controller
         $model->updated_at = time();
         $model->user_id = Yii::$app->user->id;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $modelsImgproList = [new ImgproList];
+
+        if ($model->load($post = Yii::$app->request->post())) {
+
+            if ($post['Product']['image']!='') {
+                $model->image = str_replace(Yii::$app->request->hostInfo.'/','',$post['Product']['image']);
+            }
+
+            if (!empty($post['Product']['models_id'])) {
+                 $model->models_id = json_encode($post['Product']['models_id']);
+            }
+            if (!empty($post['Product']['tags'])) {
+                 $model->tags = json_encode($post['Product']['tags']);
+            }
+            if (!empty($post['Product']['related_articles'])) {
+                 $model->related_articles = json_encode($post['Product']['related_articles']);
+            }
+            if (!empty($post['Product']['related_products'])) {
+                 $model->related_products = json_encode($post['Product']['related_products']);
+            }
+
+            // echo '<pre>';print_r($post);die;
+            if($post['Product']['slug'] !=''){
+                $seo->slug = $post['Product']['slug'];
+            }
+
+            if($model->save()){
+                $seo->query = 'product_id='.$model->id;
+                $seo->save();
+                unset($post);
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('create', [
@@ -123,6 +155,7 @@ class ProductController extends Controller
             'dataProtype' => $dataProtype,
             'dataProduct' => $dataProduct,
             'dataNews' => $dataNews,
+            'modelsImgproList' => (empty($modelsImgproList)) ? [new ImgproList] : $modelsImgproList
         ]);
     }
 
@@ -136,6 +169,14 @@ class ProductController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+
+        $seo = new SeoUrl();
+        $idseo = $seo->getId($model->slug);
+        if($idseo){
+            $seo = SeoUrl::findOne($idseo);
+            unset($idseo);
+        }
+
         $dataProduct = $model->getAllProduct();
         if(empty($dataProduct)){
             $dataProduct = [];
@@ -171,12 +212,68 @@ class ProductController extends Controller
             $dataNews = [];
         }
 
+        if($model->product_type_id !=''){
+           $model->product_type_id = json_decode($model->product_type_id);
+        }
+
+        if($model->models_id !=''){
+             $model->models_id = json_decode($model->models_id);
+        }
+
+        if($model->tags !=''){
+            $model->tags = json_decode($model->tags);
+        }
+        if($model->related_articles !=''){
+            $model->related_articles = json_decode($model->related_articles);
+        }
+        if($model->related_products !=''){
+            $model->related_products = json_decode($model->related_products);
+        }
+        
+
         $model->updated_at = time();
         $model->user_id = Yii::$app->user->id;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = 'json';
+            return ActiveForm::validate($model);
         }
+
+        if ($model->load($post = Yii::$app->request->post())) {
+
+            if ($post['Product']['image']!='') {
+                $model->image = str_replace(Yii::$app->request->hostInfo.'/','',$post['Product']['image']);
+            }
+
+
+            if (!empty($post['Product']['product_type_id'])) {
+                 $model->product_type_id = json_encode($post['Product']['product_type_id']);
+            }
+            if (!empty($post['Product']['models_id'])) {
+                 $model->models_id = json_encode($post['Product']['models_id']);
+            }
+            if (!empty($post['Product']['tags'])) {
+                 $model->tags = json_encode($post['Product']['tags']);
+            }
+            if (!empty($post['Product']['related_articles'])) {
+                 $model->related_articles = json_encode($post['Product']['related_articles']);
+            }
+            if (!empty($post['Product']['related_products'])) {
+                 $model->related_products = json_encode($post['Product']['related_products']);
+            }
+
+            // echo '<pre>';print_r($post);die;
+
+            $seo->slug = $post['Product']['slug'];
+
+            if($model->save()){
+                $seo->query = 'product_id='.$model->id;
+                $seo->save();
+                unset($post);
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
+
 
         return $this->render('update', [
             'model' => $model,

@@ -27,9 +27,15 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'pro_name',
-            'title',
-            // 'slug',
+            [
+               'attribute' => 'pro_name',
+               'format' => 'raw',
+               'value'=>function ($data) {
+                return Html::a(Html::encode($data->pro_name),Yii::$app->homeUrl.'quantri/product/update?id='.$data->id);
+                },
+            ],
+            // 'title',
+            'slug',
             // 'keyword:ntext',
             //'description:ntext',
             //'short_introduction:ntext',
@@ -50,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'views',
             //'code',
             'image',
-            //'images_list',
+            //'images_large',
             //'tags',
             'product_category_id',
             //'related_articles',

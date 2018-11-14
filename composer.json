@@ -29,7 +29,9 @@
         "kartik-v/yii2-icons": "@dev",
         "kartik-v/yii2-widget-activeform": "@dev",
         "sjaakp/yii2-alphapager": "*",
-        "loveorigami/yii2-reversed-pagination": "~2.0"
+        "loveorigami/yii2-reversed-pagination": "~2.0",
+        "jlorente/yii2-widget-remainingcharacters": "*",
+        "wbraganca/yii2-dynamicform": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

@@ -69,10 +69,11 @@ class ModelsController extends Controller
         $seo = new SeoUrl();
 
         $model->active = true;
-
-        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+        
+        
+        if (Yii::$app->request->isAjax && $seo->load(Yii::$app->request->post()) && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = 'json';
-            return ActiveForm::validate($model);
+            return ActiveForm::validate($seo,$model);
         }
 
         if ($model->load($post = Yii::$app->request->post())) {
@@ -102,12 +103,31 @@ class ModelsController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $seo = new SeoUrl();
+        $idseo = $seo->getId($model->slug);
+        if($idseo){
+            $seo = SeoUrl::findOne($idseo);
+            unset($idseo);
+        }
+
+        if (Yii::$app->request->isAjax && $seo->load(Yii::$app->request->post()) && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = 'json';
+            return ActiveForm::validate($seo,$model);
+        }
+
+        if ($model->load($post = Yii::$app->request->post())) {
+            $model->slug = $post['SeoUrl']['slug'];
+            $seo->slug = $post['SeoUrl']['slug'];
+            if($model->save()){
+                $seo->query = 'model_id='.$model->id;
+                $seo->save();
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('update', [
             'model' => $model,
+            'seo' => $seo,
         ]);
     }
 
@@ -120,7 +140,17 @@ class ModelsController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+
+        $model = $this->findModel($id);
+        $seo = new SeoUrl();
+        $idseo = $seo->getId($model->slug);
+        if($idseo){
+            $seo = SeoUrl::findOne($idseo);
+            unset($idseo);
+            $seo->delete();
+        }
+
+        $model->delete();
 
         return $this->redirect(['index']);
     }

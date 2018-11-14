@@ -12,6 +12,12 @@ use kartik\checkbox\CheckboxX;
 
     <?php $form = ActiveForm::begin(['enableAjaxValidation' => true]); ?>
 
+    <div class="form-group button_save">
+      <?= Html::submitButton('Save', ['class' => 'btn btn-success px-5']) ?>
+      <?= Html::a('Hủy', ['index'], ['class' => 'btn btn-default px-5']) ?>
+   </div>
+    <div class="clearfix"></div>
+
     <?= $form->field($model, 'name',['options' => ['class' => 'col-md-3']])->textInput(['maxlength' => true]) ?>
 
     <?php // $form->field($model, 'parent_id')->textInput() ?>
@@ -39,10 +45,6 @@ use kartik\checkbox\CheckboxX;
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
     <?= $form->field($model, 'short_introduction')->textarea(['rows' => 6,'class'=>'content']) ?>
-
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
-    </div>
 
     <?php ActiveForm::end(); ?>
 

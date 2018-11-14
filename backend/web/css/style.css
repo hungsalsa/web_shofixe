@@ -3870,11 +3870,11 @@ table.focus-on tbody tr.focused td {
   line-height: 210px;
 }
 /* Login- register pages */
-.login-register {
-  background: url(../../plugins/images/login-register.jpg) no-repeat center center / cover !important;
+/* .login-register {
+  background: url(../plugins/images/login-register.jpg) no-repeat center center / cover !important;
   height: 100%;
   position: fixed;
-}
+} */
 .login-box {
   background: #ffffff;
   width: 400px;

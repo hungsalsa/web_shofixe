@@ -31,7 +31,7 @@ use yii\helpers\ArrayHelper;
  * @property int $views
  * @property string $code Mã sản phẩm nếu có
  * @property string $image
- * @property string $images_list
+ * @property string $images_large
  * @property string $tags
  * @property int $product_category_id
  * @property string $related_articles
@@ -60,9 +60,12 @@ class Product extends \yii\db\ActiveRecord
             [['keyword', 'description', 'short_introduction', 'content'], 'string'],
             [['price', 'price_sales', 'order', 'manufacturer_id', 'guarantee', 'views', 'product_category_id', 'created_at', 'updated_at', 'user_id'], 'integer'],
             [['start_sale', 'end_sale'], 'safe'],
-            [['pro_name', 'title', 'slug', 'product_type_id', 'models_id', 'code', 'image', 'images_list', 'tags', 'related_articles', 'related_products'], 'string', 'max' => 255],
-            [['active', 'salse', 'hot', 'best_seller'], 'string', 'max' => 4],
-            [['pro_name', 'slug'], 'unique', 'targetAttribute' => ['pro_name', 'slug']],
+            // , 'models_id', 'tags', 'related_articles', 'product_type_id',  'related_products'
+            [['pro_name', 'title', 'slug','code', 'image', 'images_large'], 'string', 'max' => 255],
+            [['active'], 'string', 'max' => 4],
+            [['short_introduction'], 'string', 'max' => 165],
+            [['pro_name'], 'unique','message'=>'{attribute} này đã có xin chọn {attribute} khác'],
+            [['slug'], 'unique','message'=>'{attribute} này đã có xin chọn {attribute} khác'],
         ];
     }
 
@@ -73,7 +76,7 @@ class Product extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'pro_name' => 'Tên',
+            'pro_name' => 'Tên sản phẩm',
             'title' => 'Tiêu đề',
             'slug' => 'Đường dẫn',
             'keyword' => 'Keyword',
@@ -85,7 +88,7 @@ class Product extends \yii\db\ActiveRecord
             'start_sale' => 'Ngày đầu giảm',
             'end_sale' => 'Ngày cuối giảm',
             'order' => 'Sắp xếp',
-            'active' => 'Trạng thái',
+            'active' => 'Kích hoạt',
             'product_type_id' => 'Loại SP',
             'salse' => 'Salse',
             'hot' => 'Hot',
@@ -96,7 +99,7 @@ class Product extends \yii\db\ActiveRecord
             'views' => 'Views',
             'code' => 'Mã SP',
             'image' => 'Ảnh SP',
-            'images_list' => 'Images List',
+            'images_large' => 'Images List',
             'tags' => 'Tags',
             'product_category_id' => 'Danh mục SP',
             'related_articles' => 'Bài viết liên quan',
@@ -110,5 +113,11 @@ class Product extends \yii\db\ActiveRecord
     public function getAllProduct($status = true)
     {
         return ArrayHelper::map(self::find()->where('active=:active',[':active'=>$status])->all(),'id','pro_name');
+    }
+
+    // Hai ham de lien ket filter index
+    public function getProductCategory()
+    {
+        return $this->hasOne(Productcategory::className(),['idCate'=>'product_category_id']);
     }
 }

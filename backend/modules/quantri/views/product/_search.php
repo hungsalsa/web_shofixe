@@ -66,7 +66,7 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'image') ?>
 
-    <?php // echo $form->field($model, 'images_list') ?>
+    <?php // echo $form->field($model, 'images_large') ?>
 
     <?php // echo $form->field($model, 'tags') ?>
 
@@ -83,8 +83,8 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'user_id') ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+        <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

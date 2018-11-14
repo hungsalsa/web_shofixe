@@ -47,6 +47,7 @@ class ProductCategory extends \yii\db\ActiveRecord
             [['title', 'cateName', 'slug', 'image'], 'string', 'max' => 255],
             [['home_page', 'active'], 'string', 'max' => 4],
             [['cateName'], 'unique'],
+            [['slug'], 'unique','message'=>'{attribute} này đã có xin chọn đường dẫn khác'],
         ];
     }
 
@@ -57,19 +58,19 @@ class ProductCategory extends \yii\db\ActiveRecord
     {
         return [
             'idCate' => 'Id Cate',
-            'title' => 'Title',
-            'cateName' => 'Cate Name',
-            'group_id' => 'Group ID',
-            'cate_parent_id' => 'Product Parent ID',
+            'title' => 'Tiêu đề',
+            'cateName' => 'Tên danh mục',
+            'group_id' => 'Nhóm',
+            'cate_parent_id' => 'Danh mục cha',
             'slug' => 'Slug',
             'keyword' => 'Keyword',
             'description' => 'Description',
-            'content' => 'Content',
-            'short_introduction' => 'Short Introduction',
-            'home_page' => 'Home Page',
-            'image' => 'Image',
-            'order' => 'Order',
-            'active' => 'Active',
+            'content' => 'Chi tiết',
+            'short_introduction' => 'Mô tả ngắn',
+            'home_page' => 'Hiện ở trang chủ',
+            'image' => 'Ảnh',
+            'order' => 'Sắp xếp',
+            'active' => 'Kích hoạt',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'user_id' => 'User ID',
@@ -90,5 +91,12 @@ class ProductCategory extends \yii\db\ActiveRecord
         }
 
         return $this->data;
+    }
+
+    // Lấy tên sp cho ra view
+    public function getCateName($id,$status=true)
+    {
+        $data =  ProductCate::find()->select('cateName')->where('active =:Status AND idCate=:id',['Status'=>$status,'id'=>$id])->one();
+        return $data->cateName;
     }
 }

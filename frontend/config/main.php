@@ -13,6 +13,14 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
+    'modules' => [
+        'quantri' => [
+            'class' => 'frontend\modules\quantri\quantri',
+        ],
+        'setting' => [
+            'class' => 'frontend\modules\setting\setting',
+        ],
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
@@ -89,8 +97,14 @@ return [
                 'defaultRoute' => '/site/index',
             ],
         ],
+
+        'formatter' => [
+            'thousandSeparator' => '.',
+            // 'currencyCode' => 'VNĐ',
+        ],
         
     ],
+    
     'params' => $params,
 
     // 'container' => [

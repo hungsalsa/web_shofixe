@@ -12,6 +12,7 @@
          </li>
       </ul>
       <ul class="nav navbar-top-links navbar-right pull-right">
+         <li><?= Html::a('<i class="fa fa-home"></i> Xem website', Yii::$app->request->hostInfo,['target' => '_blank']) ?></li>
          <li class="dropdown">
             <a class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="#">
                <i class="icon-envelope"></i>
@@ -123,8 +124,7 @@
                <li><a href="javascript:void(0)"><i class="ti-user"></i>  My Profile</a></li>
                <li><a href="javascript:void(0)"><i class="ti-email"></i>  Inbox</a></li>
                <li><a href="javascript:void(0)"><i class="ti-settings"></i>  Account Setting</a></li>
-               <li><a href="login.html"><i class="fa fa-power-off"></i>  Logout</a></li>
-               <li><?= Html::a('<i class="ti-power-off m-r-5"></i> Logout', Yii::$app->request->hostInfo.'/backend/site/logout',['data-method' => 'post']) ?></li>
+               <li><?= Html::a('<i class="fa fa-power-off"></i> Logout', Yii::$app->request->hostInfo.'/backend/site/logout',['data-method' => 'post']) ?></li>
             </ul>
             <!-- /.dropdown-user -->
          </li>

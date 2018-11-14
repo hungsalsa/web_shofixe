@@ -9,6 +9,8 @@ use backend\modules\quantri\models\Group;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use backend\modules\quantri\models\SeoUrl;
+use yii\widgets\ActiveForm;
 
 /**
  * ProductcategoryController implements the CRUD actions for ProductCategory model.
@@ -74,6 +76,7 @@ class ProductcategoryController extends Controller
     public function actionCreate()
     {
         $model = new ProductCategory();
+        $seo = new SeoUrl();
 
         $dataCate = $model->getCategoryParent();
         if(empty($dataCate)){
@@ -91,12 +94,26 @@ class ProductcategoryController extends Controller
         $model->updated_at = time();
         $model->user_id = Yii::$app->user->id;
 
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = 'json';
+            return ActiveForm::validate($model);
+        }
+
          if ($model->load($post = Yii::$app->request->post())) {
+
+            if ($post['ProductCategory']['image']!='') {
+                $model->image = str_replace(Yii::$app->request->hostInfo.'/','',$post['ProductCategory']['image']);
+            }
+
             if($post['ProductCategory']['cate_parent_id'] == ''){
                 $model->cate_parent_id = 0;
             }
+
+            $seo->slug = $post['ProductCategory']['slug'];
             if($model->save()){
-                return $this->redirect(['view', 'id' => $model->idCate]);
+                $seo->query = 'product_category_id='.$model->idCate;
+                $seo->save();
+                return $this->redirect(['index']);
             }
         }
 
@@ -104,6 +121,7 @@ class ProductcategoryController extends Controller
             'model' => $model,
             'dataCate' => $dataCate,
             'dataGroup' => $dataGroup,
+            'seo' => $seo,
         ]);
     }
 
@@ -118,6 +136,13 @@ class ProductcategoryController extends Controller
     {
         $model = $this->findModel($id);
 
+        $seo = new SeoUrl();
+        $idseo = $seo->getId($model->slug);
+        if($idseo){
+            $seo = SeoUrl::findOne($idseo);
+            unset($idseo);
+        }
+
         $dataCate = $model->getCategoryParent();
         if(empty($dataCate)){
             $dataCate = array();
@@ -128,18 +153,33 @@ class ProductcategoryController extends Controller
         if(empty($dataGroup)){
             throw new NotFoundHttpException('Bạn hãy tạo nhóm trước khi tạo danh mục sản phẩm !');
         }
-// echo '<pre>';print_r($dataGroup);die;
-        if(in_array('sản phẩm',$dataGroup)){die;
-            // $dataGroup = [1=>'Sản phẩm'] ;
-        }
+
         $model->updated_at = time();
+        $model->user_id = Yii::$app->user->id;
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = 'json';
+            return ActiveForm::validate($model);
+        }
 
         if ($model->load($post = Yii::$app->request->post())) {
+
+            if ($post['ProductCategory']['image']!='') {
+                $model->image = str_replace(Yii::$app->request->hostInfo.'/','',$post['ProductCategory']['image']);
+            }
+
+
             if($post['ProductCategory']['cate_parent_id'] == ''){
                 $model->cate_parent_id = 0;
             }
+            // $model->slug = $post['SeoUrl']['slug'];
+            $seo->slug = $post['ProductCategory']['slug'];
+
             if($model->save()){
-                return $this->redirect(['view', 'id' => $model->idCate]);
+                $seo->query = 'product_category_id='.$model->idCate;
+                $seo->save();
+                unset($post);
+                return $this->redirect(['index']);
             }
         }
 
@@ -147,6 +187,7 @@ class ProductcategoryController extends Controller
             'model' => $model,
             'dataCate' => $dataCate,
             'dataGroup' => $dataGroup,
+            'seo' => $seo,
         ]);
     }
 

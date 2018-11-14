@@ -32,7 +32,8 @@ class SeoUrl extends \yii\db\ActiveRecord
             [['query', 'slug'], 'required'],
             [['query', 'slug'], 'string', 'max' => 255],
             // [['slug'], 'unique'],
-            [['slug'], 'unique','message'=>'{attribute} này đã có xin chọn đường dẫn khác'],
+            // [['slug'], 'unique','message'=>'{attribute} này đã có xin chọn đường dẫn khác'],
+            [['slug', 'query'], 'unique', 'targetAttribute' => ['slug', 'query'],'message'=>'{attribute} này đã có xin chọn đường dẫn khác'],
         ];
     }
 

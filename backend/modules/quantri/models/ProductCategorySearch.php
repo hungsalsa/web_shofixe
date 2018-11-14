@@ -18,8 +18,8 @@ class ProductCategorySearch extends ProductCategory
     public function rules()
     {
         return [
-            [['idCate', 'group_id', 'cate_parent_id', 'order', 'created_at', 'updated_at', 'user_id'], 'integer'],
-            [['title', 'cateName', 'slug', 'keyword', 'description', 'content', 'short_introduction', 'home_page', 'image', 'active'], 'safe'],
+            [['idCate', 'group_id', 'order', 'created_at', 'updated_at', 'user_id'], 'integer'],
+            [['title', 'cateName', 'cate_parent_id', 'slug', 'keyword', 'description', 'content', 'short_introduction', 'home_page', 'image', 'active'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class ProductCategorySearch extends ProductCategory
      */
     public function search($params)
     {
-        $query = ProductCategory::find();
+        $query = ProductCategory::find()->alias('cate');
 
         // add conditions that should always apply here
 
@@ -61,7 +61,7 @@ class ProductCategorySearch extends ProductCategory
         $query->andFilterWhere([
             'idCate' => $this->idCate,
             'group_id' => $this->group_id,
-            'cate_parent_id' => $this->cate_parent_id,
+            // 'cate_parent_id' => $this->cate_parent_id,
             'order' => $this->order,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
@@ -77,7 +77,8 @@ class ProductCategorySearch extends ProductCategory
             ->andFilterWhere(['like', 'short_introduction', $this->short_introduction])
             ->andFilterWhere(['like', 'home_page', $this->home_page])
             ->andFilterWhere(['like', 'image', $this->image])
-            ->andFilterWhere(['like', 'active', $this->active]);
+            ->andFilterWhere(['like', 'active', $this->active])
+            ->andFilterWhere(['like', 'cate.cateName', $this->cate_parent_id]);
 
         return $dataProvider;
     }

@@ -889,7 +889,7 @@ li.single-cart-item > span.trash-cart > a i{
     transition: all 0.5s ease 0s;
 }
 .arrival-area .section-tab-menu ul li {
-    width: 245px;
+    width: 285px;
 }
 .col-xs-12.col-width {
     padding-left: 10px;
@@ -1041,7 +1041,7 @@ span.old-price {
 }
 .single-product:hover .hover-text {
     padding: 0 18px;
-    top: 38%;
+    top: 16%;
 }
 /*----------------------------------------*/
 /*  7.  Featured CSS
@@ -3671,6 +3671,10 @@ textarea {
 .hover-text > p {
     font-size: 12px;
     line-height: 18px;
+    text-align: justify;
+    height: 122px;
+    overflow: hidden;
+    margin: 0;
 }
 .mailchimp-alerts{
     margin-top: 20px;

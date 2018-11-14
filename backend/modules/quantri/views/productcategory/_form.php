@@ -11,12 +11,13 @@ use kartik\select2\Select2;
 
 <div class="product-category-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['enableAjaxValidation' => true]); ?>
 
-    <div class="form-group pull-right" style="padding-right: 50px">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success px-5']) ?>
-        <?= Html::a('Hủy', ['index'], ['class' => 'btn btn-primary px-5']) ?>
-    </div>
+    <div class="form-group button_save">
+      <?= Html::submitButton('Save', ['class' => 'btn btn-success px-5']) ?>
+      <?= Html::a('Hủy', ['index'], ['class' => 'btn btn-default px-5']) ?>
+   </div>
+    <div class="clearfix"></div>
          <svg class="hidden">
             <defs>
                <path id="tabshape" d="M80,60C34,53.5,64.417,0,0,0v60H80z" />
@@ -53,7 +54,9 @@ use kartik\select2\Select2;
                      <?= $form->field($model, 'cateName',['options' => ['class' => 'col-md-3']])->textInput(['maxlength' => true]) ?>
 
 
-                     <?= $form->field($model, 'image',['options'=>['class'=>'col-md-3']])->textInput(['maxlength' => true,'id'=>'imageFile','placeholder'=>'Chọn ảnh 195x243 pixel']) ?>
+                     <?= $form->field($model, 'image',['options'=>['class'=>'col-md-2']])
+                     ->textInput(['maxlength' => true,'id'=>'imageFile','placeholder'=>'Chọn ảnh 195x243 pixel','data-toggle'=>'modal','data-target'=>'#myModal']) 
+                     ?>
                      <div class="col-md-1" style="height: 80px">
                         <img src="<?= (isset($model->image))? Yii::$app->request->hostInfo.'/'.$model->image:''?>" id="previewImage" alt="" style="height: 100%">
                     </div>
@@ -74,7 +77,7 @@ use kartik\select2\Select2;
                         ])->label(false);
                         ?>
                     <div class="clearfix"></div>
-                     <?= $form->field($model, 'short_introduction')->textarea(['rows' => 6]) ?>
+                     <?= $form->field($model, 'short_introduction')->textarea(['rows' => 6,'class'=>'content']) ?>
 
                     <?= $form->field($model, 'content')->textarea(['rows' => 6,'class'=>'content']) ?>
 
@@ -85,6 +88,7 @@ use kartik\select2\Select2;
                         'data' => $dataGroup,
                         'options' => ['placeholder' => 'Select a color ...'],
                         'pluginOptions' => [
+                            'allowClear' => true,
                             'tokenSeparators' => [',', ' '],
                             'maximumInputLength' => 10
                         ],
@@ -94,6 +98,7 @@ use kartik\select2\Select2;
                         'data' => $dataCate,
                         'options' => ['placeholder' => 'Select a color ...'],
                         'pluginOptions' => [
+                            'allowClear' => true,
                             'tokenSeparators' => [',', ' '],
                             'maximumInputLength' => 10
                         ],
@@ -104,7 +109,7 @@ use kartik\select2\Select2;
 
                     
 
-                    <?= $form->field($model, 'keyword')->textarea(['rows' => 6]) ?>
+                    <?= $form->field($model, 'keyword')->textarea(['rows' => 2]) ?>
 
                     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 

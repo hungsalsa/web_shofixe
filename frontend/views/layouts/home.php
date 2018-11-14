@@ -1,22 +1,27 @@
 <?php
 
-/* @var $this \yii\web\View */
-/* @var $content string */
-
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
-// use frontend\widgets\topMenuWidget;
-use frontend\widgets\navBarWidget;
-use frontend\widgets\mainHeaderWidget;
+use frontend\widgets\headerAreaWidget;
+use frontend\widgets\sliderWidget;
+use frontend\widgets\sliderBottomWidget;
+use frontend\widgets\arrivalWidget;
+use frontend\widgets\featuredWidget;
+use frontend\widgets\bannerAreaWidget;
+use frontend\widgets\womenAreaWidget;
+use frontend\widgets\offerAreaWidget;
+use frontend\widgets\menAreaWidget;
+use frontend\widgets\newsletterWidget;
+use frontend\widgets\blogAreaWidget;
+use frontend\widgets\testimonialAreaWidget;
+use frontend\widgets\clientAreaWidget;
+use frontend\widgets\serviceAreaWidget;
+use frontend\widgets\touchAreaWidget;
 use frontend\widgets\footerWidget;
-use frontend\widgets\modalCartWidget;
-
-// use app\widgets\footerWidget;
-
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -25,49 +30,82 @@ AppAsset::register($this);
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
-    <link rel="shortcut icon" href="<?= Yii::$app->homeUrl ?>vender/images/favicon.ico">
     <?php $this->head() ?>
-    <!-- HTML5 elements and media queries Support for IE8 : HTML5 shim and Respond.js -->
-    <!--[if lt IE 9]>
-        <script src="<?= Yii::$app->homeUrl ?>vender/js/html5shiv.js"></script>
-        <script src="<?= Yii::$app->homeUrl ?>vender/js/respond.min.js"></script>
-    <![endif]-->
 </head>
-<body class="cnt-home">
+<body>
     <?php $this->beginBody() ?>
-    <!-- ============================================== HEADER ============================================== -->
-    <header class="header-style-1 header-style-3">
 
-        <!-- ============================================== TOP MENU ============================================== -->
-        <?php //topMenuWidget::widget() ?>
-        <!-- ============================================== TOP MENU : END ============================================== -->
-        <!-- ============================================== MAIN HEADER ============================================== -->
-        <?= mainHeaderWidget::widget() ?>
-        <!-- ============================================== MAIN HEADER : END ============================================== -->
+<!-- Pre Loader
+    ============================================ -->
+    <div class="preloader">
+        <div class="loading-center">
+            <div class="loading-center-absolute">
+                <div class="object object_one"></div>
+                <div class="object object_two"></div>
+                <div class="object object_three"></div>
+            </div>
+        </div>
+    </div>
+<!--[if lt IE 8]>
+    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+<div class="as-mainwrapper">
+    <div class="bg-white">
+        <!-- header start -->
+        <?= headerAreaWidget::widget() ?>
+        <!-- header end -->
+        <!-- slider start -->
+        <?= sliderWidget::widget() ?>
+        <!-- slider end -->
+        <!-- slider bottom start -->
+        <?= sliderBottomWidget::widget() ?>
+        <!--slider bottom end -->
+        <!-- arrival start-->
+        <?= arrivalWidget::widget() ?>
+        <!-- arrival end -->
+        <!-- featured start -->
+        <?= featuredWidget::widget() ?>
+        <!-- featured end -->
+        <!-- off banner area start -->
+        <?= bannerAreaWidget::widget() ?>
+        <!-- off banner area end -->
+        <!-- women area start -->
+        <?= womenAreaWidget::widget() ?>
+        <!-- women area end -->
+        <!-- offer area start -->
+        <?= offerAreaWidget::widget() ?>
+        <!-- offer area end -->
+        <!-- men area start -->
+        <?= menAreaWidget::widget() ?>
+        <!-- men area end -->
+        <!-- newsletter area start -->
+        <?= newsletterWidget::widget() ?>
+        <!-- newsletter area end -->
+        <!-- blog area start -->
+        <?= blogAreaWidget::widget() ?>
+        <!-- blog area end -->
+        <!-- testimonial area start -->
+        <?= testimonialAreaWidget::widget() ?>
+        <!-- testimonial area end -->
+        <!-- client area start -->
+        <?= clientAreaWidget::widget() ?>
+        <!-- client area end -->
+        <!-- service area end -->
+        <?= serviceAreaWidget::widget() ?>
+        <!-- service area end -->
+        <!-- touch area end -->
+        <?= touchAreaWidget::widget() ?>
+        <!-- touch area end -->
+        <!-- footer start -->
+        <?= footerWidget::widget() ?>
+        <!-- footer end -->
 
-        <!-- ============================================== NAVBAR ============================================== -->
-        <?= navBarWidget::widget() ?>
-        <!-- ============================================== NAVBAR : END ============================================== -->
-
-    </header>
-    <!-- ============================================== HEADER : END ============================================== -->
-
-    <!-- ============================================== BODY-CONTENT ============================================== -->
-    <div class="body-content" id="top-banner-and-menu">
-    <?= $content ?>
-    </div><!-- /#top-banner-and-menu -->
-
-    <!-- ============================================== BODY-CONTENT :END ============================================== -->
-
-    <!-- ============================================================= FOOTER ============================================================= -->
-    <?= footerWidget::widget() ?>
-    <!-- ============================================================= FOOTER : END============================================================= -->
-    <!-- ===========    MODAL CART   ================= -->
-    <?= modalCartWidget::widget() ?>
-    <!-- ===========    MODAL CART   ================= -->
+    </div>
+</div>
 <?php $this->endBody() ?>
 </body>
 </html>

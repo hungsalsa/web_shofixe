@@ -15,6 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
+        <?= Html::a('Danh sách', ['index'], ['class' => 'btn btn-success']) ?>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
@@ -52,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'views',
             'code',
             'image',
-            'images_list',
+            'images_large',
             'tags',
             'product_category_id',
             'related_articles',
