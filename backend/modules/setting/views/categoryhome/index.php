@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $dataCate[$data->category_id];
                 }
             ],
-            'location',
+            // 'location',
             'status',
             'updated_at',
             //'user_update',

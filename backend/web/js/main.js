@@ -3,60 +3,29 @@ host = host.split("backend");
 
 
 
-// tinymce.init({
-//   selector: 'textarea',
-//   height: 500,
-//   theme: 'modern',
-//   plugins: 'code print preview fullpage searchreplace autolink directionality advcode visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount tinymcespellchecker a11ychecker imagetools mediaembed  linkchecker contextmenu colorpicker textpattern help responsivefilemanager',
-//   toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat',
-//   toolbar2: "| responsivefilemanager | image | media | link unlink anchor | print preview fullscreen code",
-// // menubar: "tools",
-//   filemanager_title:"Responsive Filemanager",
-//     filemanager_crossdomain: true,
-//     external_filemanager_path: host[0]+"filemanager/",
-//     external_plugins: { 
-//     	"filemanager" : host[0]+"filemanager/plugin.min.js"
-//     },
 
-
-//   image_advtab: true,
-//   templates: [
-//     { title: 'Test template 1', content: 'Test 1' },
-//     { title: 'Test template 2', content: 'Test 2' }
-//   ],
-//   content_css: [
-//     '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-//     '//www.tinymce.com/css/codepen.min.css'
-//   ]
-//  });
-
-
-tinymce.init({
+/*tinymce.init({
   selector: "textarea.content",
     theme: "modern",
-    height: 120,
-    // width: 220,
+    width: "",
+    height: 150,
     plugins: [
          "code advlist autolink link image lists charmap print preview hr anchor pagebreak",
          "searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking spellchecker",
          "table contextmenu directionality emoticons paste textcolor responsivefilemanager fullscreen"
    ],
-   toolbar1: "code undo redo | bold italic underline | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | styleselect",
-   toolbar2: "responsivefilemanager | image | media | link unlink anchor | print preview fullscreen",
+   toolbar1: "code undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | styleselect",
+   toolbar2: "| responsivefilemanager | image | media | link unlink anchor | print preview fullscreen",
     menubar: false,
     toolbar_items_size: 'small',
     relative_urls: false,
     remove_script_host:false,
 
-    filemanager_title:"Quản lý file",
+    filemanager_title:"Responsive Filemanager",
     // filemanager_crossdomain: true,
     external_filemanager_path: host[0]+"filemanager/",
     external_plugins: { "filemanager" : host[0]+"filemanager/plugin.min.js"},
-    filemanager_access_key:"86d93af342a8b8ac53b8d1cc42949f34",
-
-
-// file_browser_callback : 'myFileBrowser',
-
+    filemanager_access_key:"ae8c77efd8f0ccaa1aed347113d4a6c2" ,
   
    image_advtab: true,
    image_title: true,
@@ -65,23 +34,67 @@ tinymce.init({
   image_class_list: [
       { title: "Responsive", value: "lazy img-responsive img-post" }
   ],
-  image_list: function (success) {
-      $.ajax({
-          url: "/Image/List",
-          type: "GET",
-          dataType: "json",
-          success: function (data) {
-              success(data);
-          }
-      });
-  },
 
  });
+ */
 
+ tinymce.init({
+  selector: "textarea.content",
+  element_format : 'html',
+  // theme: "silver",
+  height: 380,
+  // forced_root_block : 'div',
+    // width: 220,
+    // plugins: "paste",
+    // theme_modern_font_sizes: "10px,12px,13px,14px,16px,18px,20px",
+    // font_size_style_values: "12px,13px,14px,16px,18px,20px",
+    plugins: [
+    "code autolink link image lists charmap print preview hr anchor pagebreak",
+    "searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking spellchecker",
+    "table contextmenu directionality emoticons paste textcolor responsivefilemanager fullscreen"
+    ],
+    theme_advanced_buttons3_add : "pastetext,pasteword,selectall",
+    toolbar1: "code undo redo | bold italic underline fontsizeselect | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | styleselect",
+    toolbar2: "responsivefilemanager | pastetext removeformat searchreplace | table | media |link unlink anchor| print preview fullscreen",
+    fontsize_formats: "8px 10px 12px 14px 18px 24px 36px",
+    menubar: false,
+    toolbar_items_size: 'small',
+    relative_urls: false,
+    remove_script_host:false,
+    // paste_as_text: true
+    // paste_as_text: true
+    // paste_text_sticky : true,
+    // paste_text_sticky_default: true
+    // paste_as_text: true
+    // images_upload_base_path: 'uploads/',
+    // file_browser_callback: "openmanager",
+    // open_manager_upload_path: 'uploads/',
 
+    filemanager_title:"Quản lý file",
+    // filemanager_crossdomain: true,
+    external_filemanager_path: host[0]+"filemanager/",
+    external_plugins: { "filemanager" : host[0]+"filemanager/plugin.min.js"},
+    filemanager_access_key:"ae8c77efd8f0ccaa1aed347113d4a6c2",
+
+    media_url_resolver: function (data, resolve/*, reject*/) {
+      if (data.url.indexOf('YOUR_SPECIAL_VIDEO_URL') !== -1) {
+        var embedHtml = '<iframe src="' + data.url +
+        '" width="400" height="400" ></iframe>';
+        resolve({html: embedHtml});
+      } else {
+        resolve({html: ''});
+      }
+    },
+
+    image_advtab: true,
+    image_title: true,
+    image_description: true,
+    image_dimensions: true,
+    branding: false
+
+  });
 
  $(document).ready(function(){
-
   // alert('adsa');
 	// demo.initChartist();
 
@@ -94,31 +107,27 @@ tinymce.init({
 	// 	timer: 4000
 	// });
 
-	$('#product-start_sale').datepicker({ dateFormat: 'dd-mm-yy',firstDay: 1, numberOfMonths: 2,changeMonth: true,
-    changeYear: true, });
-	$('#product-end_sale').datepicker({ dateFormat: 'dd-mm-yy' });
-
-  // $("#imageFile").click(function (event) {
-  //   $("#myModal").modal();
-  // })
+  $("#imageFile").click(function (event) {
+    $("#myModal").modal();
+  })
 
   $('#myModal').on('hidden.bs.modal', function () {
     imgsrc = $("#imageFile").val();
+    // alert(imgsrc);
     $("#previewImage").attr('src', imgsrc);
-})
+  })
 
 
-
-function ChangeToSlug()
-{
+  function ChangeToSlug()
+  {
     var title, slug;
- 
+
     //Lấy text từ thẻ input title 
     title = document.getElementById("title_slug").value;
- 
+
     //Đổi chữ hoa thành chữ thường
     slug = title.toLowerCase();
- 
+
     //Đổi ký tự có dấu thành không dấu
     slug = slug.replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a');
     slug = slug.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e');
@@ -131,18 +140,25 @@ function ChangeToSlug()
     slug = slug.replace(/\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi, '');
     //Đổi khoảng trắng thành ký tự gạch ngang
     slug = slug.replace(/ /gi, "-");
+    //Đổi khoảng daaus cham thành ký tự rong
+    // slug = slug.replace(/\./gi, "");
     //Đổi nhiều ký tự gạch ngang liên tiếp thành 1 ký tự gạch ngang
     //Phòng trường hợp người nhập vào quá nhiều ký tự trắng
+    slug = slug.replace(/[^a-zA-Z0-9]/gi, '-');
     slug = slug.replace(/\-\-\-\-\-/gi, '-');
     slug = slug.replace(/\-\-\-\-/gi, '-');
     slug = slug.replace(/\-\-\-/gi, '-');
     slug = slug.replace(/\-\-/gi, '-');
+
+    // $str = slug.replace('/([\s]+)/gi', '-');
     //Xóa các ký tự gạch ngang ở đầu và cuối
     slug = '@' + slug + '@';
     slug = slug.replace(/\@\-|\-\@|\@/gi, '');
+    //Đổi chữ hoa thành chữ thường
+    slug = slug.toLowerCase();
     //In slug ra textbox có id “slug”
     document.getElementById('slug_url').value = slug;
-}
+  }
   
   $("#title_slug").blur(function(event) {
     ChangeToSlug();

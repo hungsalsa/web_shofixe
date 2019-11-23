@@ -23,7 +23,7 @@ use Yii;
  * @property int $active
  * @property int $created_at
  * @property int $updated_at
- * @property int $user_id
+ * @property int $userCreated
  */
 class ProductCategory extends \yii\db\ActiveRecord
 {
@@ -41,8 +41,8 @@ class ProductCategory extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'cateName', 'group_id', 'active', 'created_at', 'updated_at', 'user_id'], 'required'],
-            [['group_id', 'cate_parent_id', 'order', 'created_at', 'updated_at', 'user_id'], 'integer'],
+            [['title', 'cateName', 'group_id', 'active', 'created_at', 'updated_at', 'userCreated'], 'required'],
+            [['group_id', 'cate_parent_id', 'order', 'created_at', 'updated_at', 'userCreated', 'userUpdated'], 'integer'],
             [['keyword', 'description', 'content', 'short_introduction'], 'string'],
             [['title', 'cateName', 'slug', 'image'], 'string', 'max' => 255],
             [['home_page', 'active'], 'string', 'max' => 4],
@@ -73,7 +73,8 @@ class ProductCategory extends \yii\db\ActiveRecord
             'active' => 'Active',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-            'user_id' => 'User ID',
+            'userCreated' => 'User ID',
+            'userUpdated' => 'User ID',
         ];
     }
 

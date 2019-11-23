@@ -8,8 +8,6 @@ use yii\widgets\Breadcrumbs;
 use common\widgets\Alert;
 use backend\widgets\navbarWidget;
 use backend\widgets\navbarHeaderWidget;
-// use backend\widgets\RightSidebarWidget;
-// use backend\widgets\FooterWidget;
 
 HomeAsset::register($this);
 ?>
@@ -30,7 +28,7 @@ HomeAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body class="fix-header fix-sidebar card-no-border">
+<body class="fix-header fix-sidebar card-no-border content-wrapper">
 <?php $this->beginBody() ?>
 	<!-- Preloader -->
     <div class="preloader">
@@ -73,4 +71,4 @@ HomeAsset::register($this);
 <?php endif; ?>
 </body>
 </html>
-<?php $this->endPage() ?>
+<?php $this->endPage();exit(); ?>

@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model backend\modules\setting\models\Banner */
 
-$this->title = $model->id;
+$this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Banners', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -29,15 +29,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'image',
-            'url:url',
-            'alt',
-            'order',
+            'title',
+            'description',
+            'keywords',
             'content:ntext',
+            'content_mobile:ntext',
             'status',
             'created_at',
             'updated_at',
-            'user_id',
+            'user_add',
+            'user_edit',
         ],
     ]) ?>
 

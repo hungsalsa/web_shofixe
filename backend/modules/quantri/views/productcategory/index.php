@@ -24,6 +24,17 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'summary' => "Hiện {begin} -> {end} Của {totalCount} danh mục",
+        'tableOptions' => ['class' => 'table table-bordered table-hover'],
+        'rowOptions' => function ($model, $key, $index, $grid) {
+            return [
+                'style' => "cursor: pointer",
+                'id' => $model['idCate'], 
+                'onclick' => 'location.href="'
+                . Yii::$app->urlManager->createUrl('quantri/productcategory/update')
+                . '?id="+(this.id);',
+            ];
+        },
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -33,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                'attribute' => 'cateName',
                'format' => 'raw',
                'value'=>function ($data) {
-                return Html::a(Html::encode($data->cateName),Yii::$app->homeUrl.'quantri/productcategory/update?id='.$data->idCate);
+                return Html::a(Html::encode($data->cateName),Yii::$app->homeUrl.'quantri/productcategory/view?id='.$data->idCate);
                 },
             ],
             // 'group_id',
@@ -56,12 +67,15 @@ $this->params['breadcrumbs'][] = $this->title;
             //'description:ntext',
             //'content:ntext',
             //'short_introduction:ntext',
-            //'home_page',
+            'home_page',
             //'image',
             'order',
             'active',
             //'created_at',
-            //'updated_at',
+            [
+                'attribute' => 'updated_at',
+                'format' => ['date', 'php:H:i  ->   d-m-Y']
+            ],
             //'user_id',
 
             ['class' => 'yii\grid\ActionColumn'],

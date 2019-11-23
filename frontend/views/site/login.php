@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="sign-in-page inner-bottom-sm">
     <div class="row">
         <!-- Sign-in -->            
-        <div class="col-md-6 col-sm-6 sign-in">
+        <div class="col-md-8 col-sm-8 sign-in">
             <h4 class="">sign in</h4>
             <p class="">Hello, Welcome to your account.</p>
             <div class="social-sign-in outer-top-xs">

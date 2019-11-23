@@ -7,7 +7,7 @@ mb_http_input('UTF-8');
 mb_language('uni');
 mb_regex_encoding('UTF-8');
 ob_start('mb_output_handler');
-date_default_timezone_set('Europe/Rome');
+date_default_timezone_set('Asia/Bangkok');
 
 /*
 |--------------------------------------------------------------------------
@@ -141,7 +141,7 @@ $config = array(
 	|
 	*/
 
-	'access_keys' => array('86d93af342a8b8ac53b8d1cc42949f34','48ef7eccfc064a72d71aec24ebf9d0ad'),
+	'access_keys' => array('ae8c77efd8f0ccaa1aed347113d4a6c2'),
 
 	//--------------------------------------------------------------------------------------------------------
 	// YOU CAN COPY AND CHANGE THESE VARIABLES INTO FOLDERS config.php FILES TO CUSTOMIZE EACH FOLDER OPTIONS
@@ -338,16 +338,18 @@ $config = array(
 	//Allowed extensions (lowercase insert)
 	//**********************
 	'ext_img'                                 => array( 'jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'svg' ), //Images
-	'ext_file'                                => array( 'doc', 'docx', 'rtf', 'pdf', 'xls', 'xlsx', 'txt', 'csv', 'html', 'xhtml', 'psd', 'sql', 'log', 'fla', 'xml', 'ade', 'adp', 'mdb', 'accdb', 'ppt', 'pptx', 'odt', 'ots', 'ott', 'odb', 'odg', 'otp', 'otg', 'odf', 'ods', 'odp', 'css', 'ai', 'kmz','dwg', 'dxf', 'hpgl', 'plt', 'spl', 'step', 'stp', 'iges', 'igs', 'sat', 'cgm'), //Files
+	'ext_file'                                => array(), //Files
+	// 'ext_file'                                => array( 'doc', 'docx', 'rtf', 'pdf', 'xls', 'xlsx', 'txt', 'csv', 'html', 'xhtml', 'psd', 'sql', 'log', 'fla', 'xml', 'ade', 'adp', 'mdb', 'accdb', 'ppt', 'pptx', 'odt', 'ots', 'ott', 'odb', 'odg', 'otp', 'otg', 'odf', 'ods', 'odp', 'css', 'ai', 'kmz','dwg', 'dxf', 'hpgl', 'plt', 'spl', 'step', 'stp', 'iges', 'igs', 'sat', 'cgm'), //Files
 	'ext_video'                               => array( 'mov', 'mpeg', 'm4v', 'mp4', 'avi', 'mpg', 'wma', "flv", "webm" ), //Video
 	'ext_music'                               => array( 'mp3', 'mpga', 'm4a', 'ac3', 'aiff', 'mid', 'ogg', 'wav' ), //Audio
-	'ext_misc'                                => array( 'zip', 'rar', 'gz', 'tar', 'iso', 'dmg' ), //Archives
+	'ext_misc'                                => array(), //Archives
+	// 'ext_misc'                                => array( 'zip', 'rar', 'gz', 'tar', 'iso', 'dmg' ), //Archives
 
 	/******************
 	* AVIARY config
 	*******************/
 	'aviary_active'                           => true,
-	'aviary_apiKey'                           => "2444282ef4344e3dacdedc7a78f8877d",
+	'aviary_apiKey'                           => "ae8c77efd8f0ccaa1aed347113d4a6c2",
 	'aviary_language'                         => "en",
 	'aviary_theme'                            => "light",
 	'aviary_tools'                            => "all",
@@ -391,12 +393,12 @@ $config = array(
 	// path_from_filemanager/test/test1/
 	// PS if there isn't write permission in your destination folder you must set it
 	//
-	'fixed_image_creation'                    => false, //activate or not the creation of one or more image resized with fixed path from filemanager folder
-	'fixed_path_from_filemanager'             => array( '../test/', '../test1/' ), //fixed path of the image folder from the current position on upload folder
-	'fixed_image_creation_name_to_prepend'    => array( '', 'test_' ), //name to prepend on filename
-	'fixed_image_creation_to_append'          => array( '_test', '' ), //name to appendon filename
-	'fixed_image_creation_width'              => array( 300, 400 ), //width of image (you can leave empty if you set height)
-	'fixed_image_creation_height'             => array( 200, '' ), //height of image (you can leave empty if you set width)
+	'fixed_image_creation'                    => true, //activate or not the creation of one or more image resized with fixed path from filemanager folder
+	'fixed_path_from_filemanager'             => array( '../tin-tuc/'), //fixed path of the image folder from the current position on upload folder
+	'fixed_image_creation_name_to_prepend'    => array(''), //name to prepend on filename
+	'fixed_image_creation_to_append'          => array(''), //name to appendon filename
+	'fixed_image_creation_width'              => array( 130), //width of image (you can leave empty if you set height)
+	'fixed_image_creation_height'             => array( 78), //height of image (you can leave empty if you set width)
 	/*
 	#             $option:     0 / exact = defined size;
 	#                          1 / portrait = keep aspect set height;
@@ -404,7 +406,7 @@ $config = array(
 	#                          3 / auto = auto;
 	#                          4 / crop= resize and crop;
 	*/
-	'fixed_image_creation_option'             => array( 'crop', 'auto' ), //set the type of the crop
+	'fixed_image_creation_option'             => array( 'crop', 'crop' ), //set the type of the crop
 
 
 	// New image resized creation with relative path inside to upload folder after uploading (thumbnails in relative mode)
@@ -413,7 +415,7 @@ $config = array(
 	// The image creation path is always relative so if i'm inside source/test/test1 and I upload an image, the path start from here
 	//
 	'relative_image_creation'                 => false, //activate or not the creation of one or more image resized with relative path from upload folder
-	'relative_path_from_current_pos'          => array( './', './' ), //relative path of the image folder from the current position on upload folder
+	'relative_path_from_current_pos'          => array( './tin-tuc', './blog' ), //relative path of the image folder from the current position on upload folder
 	'relative_image_creation_name_to_prepend' => array( '', '' ), //name to prepend on filename
 	'relative_image_creation_name_to_append'  => array( '_thumb', '_thumb1' ), //name to append on filename
 	'relative_image_creation_width'           => array( 300, 400 ), //width of image (you can leave empty if you set height)

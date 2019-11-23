@@ -1,6 +1,6 @@
 <?php
 /* @var $this yii\web\View */
-$this->title = 'My Yii Application';
+$this->title = 'Chào mừng đến mới quản trị | hungsalsa@gmail.com';
 ?>
 <div class="row bg-title">
    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
@@ -24,6 +24,17 @@ $this->title = 'My Yii Application';
             <div class="bodystate">
                <h4>370</h4>
                <span class="text-muted">New Patient</span> 
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="col-md-3 col-sm-6">
+      <div class="white-box">
+         <div class="r-icon-stats">
+            <i class="ti-server bg-info"></i>
+            <div class="bodystate">
+               <h4>tong 4</h4>
+               <span class="text-muted">Sản phẩm</span> 
             </div>
          </div>
       </div>

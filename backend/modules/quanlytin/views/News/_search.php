@@ -22,7 +22,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'name') ?>
 
-    <?= $form->field($model, 'link') ?>
+    <?= $form->field($model, 'slug') ?>
 
     <?= $form->field($model, 'images') ?>
 

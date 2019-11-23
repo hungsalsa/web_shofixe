@@ -1,0 +1,15 @@
+@charset "UTF-8";
+.navbar-brand {
+  display: none;
+  height: 35px; }
+
+/*ipad ngang (1024x768)*/
+/*ipad dọc (768x1024)*/
+@media screen and (max-width: 767px) {
+  .navbar-brand {
+    display: inherit; } }
+/*tablet nhỏ (480x640)*/
+/*iphone (480x640)*/
+/*smartphone nhỏ*/
+
+/*# sourceMappingURL=mobile.css.map */

@@ -1,24 +1,92 @@
+.proUpdate {
+  display: none;
+}
 
-div.activeform{
-	text-align: center;
-	margin-top: 33px;
-	padding: 0;
+div.activeform {
+  text-align: center;
+  margin-top: 33px;
+  padding: 0;
 }
-.fix-header .navbar-static-top{
-	position: inherit;
+
+.fix-header .navbar-static-top {
+  position: inherit;
 }
-.tabs-style-shape{max-width: 100%}
-.fix-header #page-wrapper{margin-top: 0;}
-.fix-sidebar .sidebar{
-	margin-top: 60px;
-	padding-top: 0;
+
+.tabs-style-shape {
+  max-width: 100%;
 }
-div.form-group.button_save{
-	position: fixed;
-	right: 40px;
-	top: 83px;
-	z-index: 2;
+
+.fix-header #page-wrapper {
+  margin-top: 0;
 }
-div.form-group.button_save button,div.form-group.button_save a{
-	padding: 1.5rem 3.8rem;
+.fix-header #page-wrapper .contentImage img {
+  max-width: 100%;
 }
+
+.fix-sidebar .sidebar {
+  margin-top: 60px;
+  padding-top: 0;
+}
+
+div.form-group.button_save {
+  position: fixed;
+  right: 40px;
+  top: 83px;
+  z-index: 2;
+}
+
+div.form-group.button_save button, div.form-group.button_save a {
+  padding: 1.5rem 3.8rem;
+}
+
+.btn_save {
+  position: fixed;
+  right: 40px;
+  top: 83px;
+  z-index: 2;
+}
+
+.btn_luu {
+  padding: 11px 20px;
+  font-size: 20px;
+}
+
+.btn_active {
+  margin-top: 20px;
+  font-size: 20px;
+}
+
+h1, h2, h3, h4, h5, h6, body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.modal-lg {
+  min-width: 90%;
+}
+
+#side-menu ul > li > a.active {
+  color: #00f5ff;
+}
+
+.proUpdate .btn.btn-outline {
+  margin: 2px;
+  padding: 7px 3px;
+}
+
+.table.table-hover .NewName:hover {
+  background-color: #5cb85c;
+  transition: 0.8s;
+  padding-top: 22px;
+  border: 1px solid #5cb85c;
+}
+.table.table-hover .NewName:hover .nameItem {
+  color: #fff;
+  transition: 0.8s;
+}
+
+.paddinglefright75 {
+  padding-left: 7.5px;
+  padding-right: 7.5px;
+}
+
+/*# sourceMappingURL=my.css.map */

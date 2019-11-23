@@ -3,6 +3,8 @@
 namespace backend\modules\setting\models;
 
 use Yii;
+use backend\modules\quanlytin\models\Categories;
+use backend\models\User;
 
 /**
  * This is the model class for table "tbl_menus".
@@ -36,12 +38,20 @@ class Menus extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'slug', 'type', 'status', 'created_at', 'updated_at', 'user_id'], 'required'],
+            /*[['name', 'status', 'created_at', 'updated_at', 'user_id','link_cate'], 'required'],
             [['type', 'parent_id', 'link_cate', 'order', 'created_at', 'updated_at', 'user_id'], 'integer'],
             [['introduction'], 'string'],
             [['name', 'title', 'slug', 'image'], 'string', 'max' => 255],
             [['status'], 'string', 'max' => 4],
-            [['slug'], 'unique'],
+            [['name'], 'unique'],
+            // [['link_cate'], 'unique'],*/
+            [['name', 'status', 'created_at', 'updated_at', 'user_id'], 'required'],
+            [['type', 'parent_id', 'link_cate', 'created_at', 'updated_at', 'user_id'], 'integer'],
+            [['introduction'], 'string'],
+            [['name', 'title', 'slug', 'image'], 'string', 'max' => 255],
+            // [['mega', 'status'], 'string', 'max' => 4],
+            [['name'], 'unique'],
+            [['order'], 'isNumeric'],
         ];
     }
 
@@ -52,20 +62,37 @@ class Menus extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-             'title' => 'Title',
-            'slug' => 'Slug',
-            'type' => 'Type',
+            'name' => 'Tên hiển thị',
+            'title' => 'Title',
+            'slug' => 'Đường dẫn',
+            'mega' => 'Mega',
+            'type' => 'Loại menu',
             'introduction' => 'Introduction',
-            'parent_id' => 'Parent ID',
-            'link_cate' => 'Link Cate',
-            'order' => 'Order',
+            'parent_id' => 'Menu cha',
+            'link_cate' => 'Liên kết danh mục',
+            'order' => 'Sắp xếp',
             'image' => 'Image',
-            'status' => 'Status',
+            'status' => 'Kích hoạt',
             'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'user_id' => 'User ID',
+            'updated_at' => 'Ngày sửa',
+            'user_id' => 'Người sửa',
         ];
+    }
+
+    public function isNumeric($attribute, $params)
+    {
+        if (!is_numeric($this->order))
+            $this->addError($attribute, Yii::t('app', '{attribute} must be numeric', ['{attribute}'=>$attribute]));
+    }
+
+    public function getUserad()
+    {
+        return $this->hasOne(User::className(),['id'=>'user_id']);
+    }
+
+    public function getCategory()
+    {
+        return $this->hasOne(Categories::className(),['id'=>'link_cate']);
     }
 
     public $data;

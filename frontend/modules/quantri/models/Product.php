@@ -3,6 +3,7 @@
 namespace frontend\modules\quantri\models;
 
 use Yii;
+use frontend\modules\quantri\models\ProductCategory;
 
 /**
  * This is the model class for table "tbl_product".
@@ -132,6 +133,45 @@ class Product extends \yii\db\ActiveRecord
     // Laays tất cả các sản phẩm có product_category_id nằm trong mảng $idCate = []
     public function getAllProductByIdCate($idCate,$status = true)
     {
-        return self::find()->select(['id','pro_name','slug','image','product_type_id','price_sales','price'])->where('active=:status',[':status'=>$status])->andWhere(['in','product_category_id',$idCate])->all();
+        return self::find()->select(['id','product_category_id','pro_name','slug','image','product_type_id','price_sales','price','short_introduction'])->where('active=:status',[':status'=>$status])->andWhere(['in','product_category_id',$idCate])->all();
+    }
+
+    // Lấy id sản phẩm với slug truyền vào
+    public function getProductId($slug,$status=true)
+    {
+        $data = self::find()->select(['id'])->where('slug=:slug AND active=:status',[':slug'=>$slug,':status'=>$status])->one();
+        return $data->id;
+    }
+
+    // Lấy thông tin sản phẩm liên quan idPro truyền vào
+    public function getProductRelated($id,$status = true){
+        return self::find()->select(['id','pro_name','slug','image','product_type_id','price_sales','price','short_introduction'])->where('active=:status',[':status'=>$status])->andWhere(['in','id',$id])->all();
+    }
+
+    // Lấy danh sách sản phẩm với slug cate truyền vào
+    public function getAllProBySlug($slug,$status = true)
+    {
+        $data = $this->getIdCate($slug);
+        $idCate = $data->idCate;
+        $idCate = $this->getChildrenIdCate($idCate);
+        return $this->getAllProductByIdCate($idCate);
+    }
+
+    // trả về Idcate với slug truyền vào
+    private function getIdCate($slug)
+    {
+        return ProductCategory::findOne(['slug'=>$slug,'active'=>true]);
+    }
+
+    private function getChildrenIdCate($idCate)
+    {
+        $data = ProductCategory::find()->select('idCate')->where(['cate_parent_id'=>$idCate,'active'=>true])->all();
+        $idList[] = $idCate;
+        if (!empty($data)) {
+            foreach ($data as $value) {
+                $idList[] = $value->idCate;
+            }
+        }
+        return $idList;
     }
 }

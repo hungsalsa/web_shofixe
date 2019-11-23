@@ -1,8 +1,5 @@
 <?php
-
-/* @var $this \yii\web\View */
-/* @var $content string */
-
+ob_start();
 use backend\assets\LoginAsset;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
@@ -31,10 +28,11 @@ LoginAsset::register($this);
         <div class="cssload-speeding-wheel"></div>
     </div>
     <section id="wrapper" class="login-register" style="margin: 50px auto;width:90%">
-        <div class="col-md-6">
+        <h1>Chào mừng đến với quản trị</h1>
+        <div class="col-md-8">
             <img width="100%" src="<?= Yii::$app->homeUrl ?>plugins/images/login-register.jpg">
         </div>
-        <div class="login-box login-sidebar col-md-6" style="width:100%">
+        <div class="login-box login-sidebar col-md-4" style="width:100%">
             <div class="white-box">
                 
                 <?= $content ?>
@@ -46,4 +44,4 @@ LoginAsset::register($this);
 <?php $this->endBody() ?>
 </body>
 </html>
-<?php $this->endPage() ?>
+<?php $this->endPage();exit(); ?>

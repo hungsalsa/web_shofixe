@@ -14,9 +14,6 @@ return [
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'modules' => [
-        'quantri' => [
-            'class' => 'backend\modules\quantri\Quantri',
-        ],
         'auth' => [
             'class' => 'backend\modules\auth\Module',
         ],
@@ -39,6 +36,12 @@ return [
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
         ],
+        /*'user' => [
+            'identityClass' => 'common\models\User',
+            'enableAutoLogin' => false,
+            'authTimeout' => 3600,// 60*60*24, // Log out after 24 
+            'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
+        ],*/
         'session' => [
             // this is the name of the session cookie used for login on the backend
             'name' => 'advanced-backend',
@@ -64,7 +67,12 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                  // 'defaultRoute' => '/quantri/index',
+                '<controller:[\w-]+>/<action:\w+>/<id:\d+>/<currentStatus:\d+>/<field:\w+>' => '<controller>/<action>',
+                '<controller:[\w-]+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+
+                // 'pattern'=>'<action>', 'route'=>'controller/<action>',
+                  'defaultRoute' => '/quanlytin/news',
             ],
         ],
         'authManager' => [
@@ -74,4 +82,5 @@ return [
         
     ],
     'params' => $params,
+    'defaultRoute' => 'quanlytin/news',
 ];

@@ -35,7 +35,7 @@ class AppAsset extends AssetBundle
         'plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js',
         'plugins/bower_components/peity/jquery.peity.min.js',
         'plugins/bower_components/peity/jquery.peity.init.js',
-        'js/custom.min.js',
+        'js/custom.js',
         // 'js/dashboard1.js',
         'plugins/bower_components/styleswitcher/jQuery.style.switcher.js',
         'js/jquery-ui.min.js',

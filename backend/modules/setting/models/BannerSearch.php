@@ -18,8 +18,8 @@ class BannerSearch extends Banner
     public function rules()
     {
         return [
-            [['id', 'order', 'created_at', 'updated_at', 'user_id'], 'integer'],
-            [['image', 'url', 'alt', 'content', 'status'], 'safe'],
+            [['id', 'created_at', 'updated_at', 'user_add', 'user_edit'], 'integer'],
+            [['title', 'description', 'keywords', 'content', 'content_mobile', 'status'], 'safe'],
         ];
     }
 
@@ -60,16 +60,17 @@ class BannerSearch extends Banner
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'order' => $this->order,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'user_id' => $this->user_id,
+            'user_add' => $this->user_add,
+            'user_edit' => $this->user_edit,
         ]);
 
-        $query->andFilterWhere(['like', 'image', $this->image])
-            ->andFilterWhere(['like', 'url', $this->url])
-            ->andFilterWhere(['like', 'alt', $this->alt])
+        $query->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['like', 'description', $this->description])
+            ->andFilterWhere(['like', 'keywords', $this->keywords])
             ->andFilterWhere(['like', 'content', $this->content])
+            ->andFilterWhere(['like', 'content_mobile', $this->content_mobile])
             ->andFilterWhere(['like', 'status', $this->status]);
 
         return $dataProvider;

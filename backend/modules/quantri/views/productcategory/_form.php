@@ -55,7 +55,7 @@ use kartik\select2\Select2;
 
 
                      <?= $form->field($model, 'image',['options'=>['class'=>'col-md-2']])
-                     ->textInput(['maxlength' => true,'id'=>'imageFile','placeholder'=>'Chọn ảnh 195x243 pixel','data-toggle'=>'modal','data-target'=>'#myModal']) 
+                     ->textInput(['maxlength' => true,'id'=>'imageFile','placeholder'=>'Chọn ảnh 472x269 pixel','data-toggle'=>'modal','data-target'=>'#myModal']) 
                      ?>
                      <div class="col-md-1" style="height: 80px">
                         <img src="<?= (isset($model->image))? Yii::$app->request->hostInfo.'/'.$model->image:''?>" id="previewImage" alt="" style="height: 100%">

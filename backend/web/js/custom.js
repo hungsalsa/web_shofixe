@@ -65,7 +65,7 @@ $(document).ready(function () {
 
                 /* ===== This is for resizing window ===== */
 
-                if (width < 1170) {
+                if (width > 1170) {
                     body.addClass('content-wrapper');
                     $(".open-close i").removeClass('icon-arrow-left-circle');
                     $(".sidebar-nav, .slimScrollDiv").css("overflow-x", "visible").parent().css("overflow", "visible");

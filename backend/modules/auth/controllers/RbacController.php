@@ -73,7 +73,7 @@ class RbacController extends Controller
 
          // Assign roles to users. 1 and 2 are IDs returned by IdentityInterface::getId()
         // usually implemented in your User model.
-        $auth->assign($author, 2);
+        // $auth->assign($author, 2);
         $auth->assign($admin, 1);
     }
 
@@ -105,29 +105,25 @@ class RbacController extends Controller
     public function actionCreate_role()
     {
         $auth = Yii::$app->authManager;
-        // Author ->index/create/view
-        // Admin ->{Author} and update/delete ->index/create/view
-
-        $categories_index = $auth->createPermission('quantri/categories/index');
-        $categories_create = $auth->createPermission('quantri/categories/create');
-        $categories_view = $auth->createPermission('quantri/categories/view');
-
-        $categories_update = $auth->createPermission('quantri/categories/update');
-        $categories_delete = $auth->createPermission('quantri/categories/delete');
-
+        
         $author = $auth->createRole('author');
-        $auth->add($author);
-        $auth->addChild($author, $categories_index);
-        $auth->addChild($author, $categories_create);
-        $auth->addChild($author, $categories_view);
-
-        // add "admin" role and give this role the "updatePost" permission
-        // as well as the permissions of the "author" role
+        // $auth->add($author);
         $admin = $auth->createRole('admin');
-        $auth->add($admin);
-        $auth->addChild($admin, $author);
-        $auth->addChild($admin, $categories_update);
-        $auth->addChild($admin, $categories_delete);
+        // $auth->add($admin);
+
+//         $rule = new \app\rbac\UserGroupRule;
+//         $auth->add($rule);
+
+// $author = $auth->createRole('viewer');
+// $author->ruleName = $rule->name;
+// $auth->add($viewer);
+
+// $admin = $auth->createRole('admin');
+// $admin->ruleName = $rule->name;
+// $auth->add($admin);
+$auth->addChild($admin, $author);
+
+
     }
     // Create Permission 
     public function actionCreate_permission()
@@ -209,13 +205,37 @@ class RbacController extends Controller
 
     public function actionIndex()
     {
-        $searchModel = new AuthItemSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $auth = Yii::$app->authManager;
+        $admin = $auth->createRole('admin');
+        $manager = $auth->createRole('manager');
+        $author = $auth->createRole('author');
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        // $site_xml = $auth->createPermission('site/xml');
+        // $site_xml->description = 'Tạo file Xml';
+        // $auth->add($site_xml);
+
+        $site_xml = $auth->createPermission('site/index');
+        $site_xml->description = 'Trang index backend';
+        $auth->add($site_xml);
+        
+        // $author = $auth->createRole('author');
+
+        // $logout = $auth->createPermission('site/logout');
+        // $logout->description = 'logout user';
+        // $auth->add($logout);
+        
+        
+        // $login = $auth->createPermission('site/login');
+        // $login->description = 'login user';
+        // $auth->add($login);
+        
+        // $auth->add($author);
+        $auth->addChild($author, $site_xml);
+        // $auth->addChild($author, $logout);
+        // $auth->addChild($author, $login);
+
+        // $auth->add($manager);
+        // $auth->addChild($admin, $manager);
     }
 
     /**

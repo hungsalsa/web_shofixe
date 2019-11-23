@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\modules\quanlytin\models\News */
 
-$this->title = 'Create News';
+$this->title = 'Thêm mới tin tức';
 $this->params['breadcrumbs'][] = ['label' => 'News', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -16,6 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
+        'dataCate' => $dataCate,
+        'dataNews' => $dataNews,
     ]) ?>
 
 </div>

@@ -2,41 +2,40 @@
 namespace frontend\controllers;
 
 use Yii;
+use yii\helpers\Url;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\LoginForm;
-use frontend\models\PasswordResetRequestForm;
-use frontend\models\ResetPasswordForm;
-use frontend\models\SignupForm;
-use frontend\models\ContactForm;
-/**
- * Site controller
- */
+// use common\models\LoginForm;
+// use frontend\models\PasswordResetRequestForm;
+// use frontend\models\ResetPasswordForm;
+// use frontend\models\SignupForm;
+// use frontend\models\ContactForm;
+use app\modules\quantri\models\FNews;
+use app\modules\setting\models\FSetting;
+// use frontend\modules\quantri\models\Categories;
+use yii\web\Response;
+
 class SiteController extends Controller
 {
     /**
      * {@inheritdoc}
      */
-    public static  $dataProType = [];
+
     public function behaviors()
     {
         return [
+
             'access' => [
                 'class' => AccessControl::className(),
                 'only' => ['logout', 'signup'],
                 'rules' => [
                     [
-                        'actions' => ['signup'],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
+                        'actions'=>['index','xml'],
+                        'roles'=>['?','@'],
+                        'allow'=> TRUE,
                     ],
                 ],
             ],
@@ -57,6 +56,7 @@ class SiteController extends Controller
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
+                'layout' => 'error',
             ],
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
@@ -65,50 +65,37 @@ class SiteController extends Controller
         ];
     }
 
-    /**
-     * Displays homepage.
-     *
-     * @return mixed
-     */
     public function actionIndex()
     {
         // $this->layout = 'home';
-        return $this->render('index');
+
+        // $url_request = Yii::$app->request->url;
+        // if (strpos($url_request, 'site') !== false) {
+        //     Yii::$app->getResponse()->redirect(Url::to(['/']));
+        // }
+        $data = FSetting::find()->one();
+        $setting = Yii::$app->cache->get('settings_app_website');
+        // $setting = Yii::$app->cache->delete('settings_app_website');
+        // dbg($setting);
+        Yii::$app->view->registerMetaTag([
+            'name' => 'description',
+            'content' => $setting['description']
+        ]);
+        Yii::$app->view->registerMetaTag([
+            'name' => 'keywords',
+            'content' => $setting['keyword']
+        ]);
+        
+        return $this->render('index',['title'=>$setting['title']]);
     }
+   /*
 
     public function actionCategory()
     {
         return $this->render('category');
     }
-
-    /**
-     * Logs in a user.
-     *
-     * @return mixed
-     */
-    public function actionLogin()
-    {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        } else {
-            $model->password = '';
-
-            return $this->render('login', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    // /**
-    //  * Logs out the current user.
-    //  *
-    //  * @return mixed
-    //  */
+*/
+    
     // public function actionLogout()
     // {
     //     Yii::$app->user->logout();
@@ -116,11 +103,11 @@ class SiteController extends Controller
     //     return $this->goHome();
     // }
 
-    // /**
-    //  * Displays contact page.
-    //  *
-    //  * @return mixed
-    //  */
+    /**
+     * Displays contact page.
+     *
+     * @return mixed
+     */
     // public function actionContact()
     // {
     //     $model = new ContactForm();
@@ -139,21 +126,21 @@ class SiteController extends Controller
     //     }
     // }
 
-    // /**
-    //  * Displays about page.
-    //  *
-    //  * @return mixed
-    //  */
+    /**
+     * Displays about page.
+     *
+     * @return mixed
+     */
     // public function actionAbout()
     // {
     //     return $this->render('about');
     // }
 
-    // /**
-    //  * Signs user up.
-    //  *
-    //  * @return mixed
-    //  */
+    /**
+     * Signs user up.
+     *
+     * @return mixed
+     */
     // public function actionSignup()
     // {
     //     $model = new SignupForm();
@@ -170,11 +157,11 @@ class SiteController extends Controller
     //     ]);
     // }
 
-    // /**
-    //  * Requests password reset.
-    //  *
-    //  * @return mixed
-    //  */
+    /**
+     * Requests password reset.
+     *
+     * @return mixed
+     */
     // public function actionRequestPasswordReset()
     // {
     //     $model = new PasswordResetRequestForm();
@@ -193,13 +180,13 @@ class SiteController extends Controller
     //     ]);
     // }
 
-    // /**
-    //  * Resets password.
-    //  *
-    //  * @param string $token
-    //  * @return mixed
-    //  * @throws BadRequestHttpException
-    //  */
+    /**
+     * Resets password.
+     *
+     * @param string $token
+     * @return mixed
+     * @throws BadRequestHttpException
+     */
     // public function actionResetPassword($token)
     // {
     //     try {

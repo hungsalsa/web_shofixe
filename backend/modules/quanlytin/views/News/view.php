@@ -14,7 +14,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
+    <p class="btn_save">
+        <?= Html::a('Danh sách', ['index'], ['class' => 'btn btn-info']) ?>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
@@ -30,25 +31,53 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'name',
-            'link',
+            'slug',
             'images',
+            [
+              'attribute' => 'images',
+              'format' => 'image',
+              'value' => function ($data) 
+              {
+                $url = Yii::$app->request->hostinfo.'/'.$data['images'];
+                return Html::img($url, ['alt'=>$data['seo_title'],'width'=>'70','height'=>'50']);
+              },
+            ],
             'image_category',
             'image_detail',
-            'category_id',
-            'htmltitle',
-            'htmlkeyword',
-            'htmldescriptions:ntext',
-            'short_description:ntext',
-            'content:ntext',
+            [
+                'attribute'=>'category_id',
+                'value'=>$model->danhmuc->cateName,
+            ],
+            'seo_title',
+            'seo_keyword',
+            'seo_descriptions:ntext',
+            'short_description:html',
+            // 'content:html',
             'hot',
             'view',
+            'see_more',
+            'popular',
             'related_products',
             'related_news',
             'sort',
             'status',
-            'user_add',
-            'created_at',
-            'updated_at',
+            [
+                'attribute'=>'user_add',
+                'value'=>$model->userad->username,
+            ],
+            [
+                'attribute'=>'user_edit',
+                'value'=>function($data)
+                {
+                    if ($data->user_edit =='') {
+                        return 'Chưa sửa';
+                    } else {
+                        return $model->usered->username;
+                    }
+                }
+            ],
+            'created_at:datetime',
+            'updated_at:datetime',
         ],
     ]) ?>
 

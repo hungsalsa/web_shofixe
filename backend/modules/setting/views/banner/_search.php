@@ -20,15 +20,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'image') ?>
+    <?= $form->field($model, 'title') ?>
 
-    <?= $form->field($model, 'url') ?>
+    <?= $form->field($model, 'description') ?>
 
-    <?= $form->field($model, 'alt') ?>
+    <?= $form->field($model, 'keywords') ?>
 
-    <?= $form->field($model, 'order') ?>
+    <?= $form->field($model, 'content') ?>
 
-    <?php // echo $form->field($model, 'content') ?>
+    <?php // echo $form->field($model, 'content_mobile') ?>
 
     <?php // echo $form->field($model, 'status') ?>
 
@@ -36,7 +36,9 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'updated_at') ?>
 
-    <?php // echo $form->field($model, 'user_id') ?>
+    <?php // echo $form->field($model, 'user_add') ?>
+
+    <?php // echo $form->field($model, 'user_edit') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

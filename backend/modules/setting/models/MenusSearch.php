@@ -18,8 +18,8 @@ class MenusSearch extends Menus
     public function rules()
     {
         return [
-             [['id', 'type', 'parent_id', 'link_cate', 'order', 'created_at', 'updated_at', 'user_id'], 'integer'],
-            [['name', 'title', 'slug', 'introduction', 'image', 'status'], 'safe'],
+            [['id', 'type', 'parent_id', 'link_cate', 'order', 'created_at', 'updated_at', 'user_id'], 'integer'],
+            [['name', 'title', 'slug', 'introduction', 'image', 'mega', 'status'], 'safe'],
         ];
     }
 
@@ -47,6 +47,7 @@ class MenusSearch extends Menus
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['order'=>SORT_ASC]]
         ]);
 
         $this->load($params);
@@ -70,10 +71,11 @@ class MenusSearch extends Menus
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
-        ->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'slug', $this->slug])
             ->andFilterWhere(['like', 'introduction', $this->introduction])
             ->andFilterWhere(['like', 'image', $this->image])
+            ->andFilterWhere(['like', 'mega', $this->mega])
             ->andFilterWhere(['like', 'status', $this->status]);
 
         return $dataProvider;

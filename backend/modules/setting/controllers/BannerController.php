@@ -8,7 +8,7 @@ use backend\modules\setting\models\BannerSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use yii\filters\AccessControl;
 /**
  * BannerController implements the CRUD actions for Banner model.
  */
@@ -20,11 +20,53 @@ class BannerController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['login', 'error'],
+                        'allow' => true,
+                    ],
+                    [
+// 'actions' => ['logout', 'index'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback'=> function ($rule ,$action)
+                        {
+                            $control = Yii::$app->controller->id;
+                            $action = Yii::$app->controller->action->id;
+                            $module = Yii::$app->controller->module->id;
+
+                            $role = $module.'/'.$control.'/'.$action;
+                            if (Yii::$app->user->can($role)) {
+                                return true;
+                            }else {
+                                throw new \yii\web\HttpException(403, 'Bạn không có quyền vào đây');
+                            }
+                        }
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'logout' => ['post'],
+                    // 'laygia' => ['post'],
+                    // 'subcat' => ['post'],
+                    // 'delete' => ['post'],
+                    // 'suachitiet' => ['post'],
+                    // 'xoachitiet' => ['post'],
+                    // 'checkvitri' => ['post'],
                 ],
+            ],
+        ];
+    }
+
+    public function actions()
+    {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
             ],
         ];
     }
@@ -34,6 +76,7 @@ class BannerController extends Controller
         $this->enableCsrfValidation = false; 
         return parent::beforeAction($action); 
     }
+
     /**
      * Lists all Banner models.
      * @return mixed
@@ -71,12 +114,13 @@ class BannerController extends Controller
     {
         $model = new Banner();
 
+        $model->status = 1;
         $model->created_at = time();
         $model->updated_at = time();
-        $model->user_id = Yii::$app->user->id;
+        $model->user_add = Yii::$app->user->id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
@@ -94,9 +138,8 @@ class BannerController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
         $model->updated_at = time();
-        $model->user_id = Yii::$app->user->id;
+        $model->user_edit = Yii::$app->user->id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);

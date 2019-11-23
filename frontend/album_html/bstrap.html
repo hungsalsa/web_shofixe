@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Bootstrap 3 Carousel</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+<style type="text/css">
+	.item{
+    background: #333;    
+    text-align: center;
+    height: 200px !important;
+}
+.control-buttons{
+	text-align:center;
+}
+.transition-timer-carousel-progress-bar {
+    height: 3px;
+    background-color: #5cb85c;
+    width: 0%;
+    margin: 0px 0px 0px 0px;
+    border: none;
+    z-index: 11;
+    position: relative;
+}
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</head>
+	<body>
+				    <div id="myCarousel" class="carousel slide" data-interval="false" data-ride="carousel">
+
+				    	        <ol class="carousel-indicators">
+						            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+						            <li data-target="#myCarousel" data-slide-to="1"></li>
+						            <li data-target="#myCarousel" data-slide-to="2"></li>
+						        </ol> 
+				        <!-- Carousel items -->
+				        <div class="carousel-inner">
+				            <div class="active item">
+                        <div class="container">
+				         		<div class="carousel-caption">
+				                  <h3>First slide label</h3>
+				                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+				                </div>
+                        </div>
+				            </div>
+				            <div class="item">
+                        <div class="container">
+				                <div class="carousel-caption">
+				                  <h3>Second slide label</h3>
+				                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+				                </div>
+                        </div>
+				            </div>
+				            <div class="item">
+                        <div class="container">
+				                <div class="carousel-caption">
+				                  <h3>Third slide label</h3>
+				                  <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+				                </div>
+                        </div>
+				            </div>
+				        </div>
+				    </div>
+				        <hr class="transition-timer-carousel-progress-bar" />
+    <center>
+      <h2>Bootstrap 3 Carousel With Progress Bar</h2>
+      <h3>A pen by elgsantos</h3>
+    </center>
+    <script type="text/javascript">
+    	$(document).ready(function(){
+      var percent = 0, bar = $('.transition-timer-carousel-progress-bar'), crsl = $('#myCarousel');
+			function progressBarCarousel() {
+			  bar.css({width:percent+'%'});
+			 percent = percent +0.5;
+			  if (percent>100) {
+			      percent=0;
+			      crsl.carousel('next');
+			  }      
+			}
+			crsl.carousel({
+			    interval: false,
+			    pause: true
+			}).on('slid.bs.carousel', function () {});var barInterval = setInterval(progressBarCarousel, 30);
+			crsl.hover(
+			    function(){
+			        clearInterval(barInterval);
+			    },
+			    function(){
+			        barInterval = setInterval(progressBarCarousel, 30);
+          })
+    });
+    </script>
+</body>
+</html>

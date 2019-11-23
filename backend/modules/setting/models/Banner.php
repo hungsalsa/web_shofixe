@@ -8,15 +8,16 @@ use Yii;
  * This is the model class for table "tbl_banner".
  *
  * @property int $id
- * @property string $image
- * @property string $url
- * @property string $alt
- * @property int $order
+ * @property string $title
+ * @property string $description
+ * @property string $keywords
  * @property string $content
+ * @property string $content_mobile
  * @property int $status
  * @property int $created_at
  * @property int $updated_at
- * @property int $user_id
+ * @property int $user_add
+ * @property int $user_edit
  */
 class Banner extends \yii\db\ActiveRecord
 {
@@ -34,10 +35,11 @@ class Banner extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['image', 'status', 'created_at', 'updated_at', 'user_id'], 'required'],
-            [['order', 'created_at', 'updated_at', 'user_id'], 'integer'],
-            [['content'], 'string'],
-            [['image', 'url', 'alt'], 'string', 'max' => 255],
+            [['status', 'created_at', 'updated_at', 'user_add'], 'required'],
+            [['content', 'content_mobile'], 'string'],
+            [['created_at', 'updated_at', 'user_add', 'user_edit'], 'integer'],
+            [['title'], 'string', 'max' => 60],
+            [['description', 'keywords'], 'string', 'max' => 150],
             [['status'], 'string', 'max' => 4],
         ];
     }
@@ -49,15 +51,16 @@ class Banner extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'image' => 'Image',
-            'url' => 'Url',
-            'alt' => 'Alt',
-            'order' => 'Order',
-            'content' => 'Content',
-            'status' => 'Status',
+            'title' => 'Seo Title',
+            'description' => 'Seo Description',
+            'keywords' => 'Keywords',
+            'content' => ' Banner Desktop',
+            'content_mobile' => 'Banner Mobile',
+            'status' => 'Kích hoạt',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-            'user_id' => 'User ID',
+            'user_add' => 'User Add',
+            'user_edit' => 'User Edit',
         ];
     }
 }

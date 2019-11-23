@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use  backend\modules\quantri\models\ProductCategory;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\modules\quantri\models\ProductSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -23,6 +24,17 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'summary' => "Hiện {begin} -> {end} Của {totalCount} sản phẩm",
+        'tableOptions' => ['class' => 'table table-bordered table-hover'],
+        'rowOptions' => function ($model, $key, $index, $grid) {
+            return [
+                'style' => "cursor: pointer",
+                'id' => $model['id'], 
+                'onclick' => 'location.href="'
+                . Yii::$app->urlManager->createUrl('quantri/productcategory/update')
+                . '?id="+(this.id);',
+            ];
+        },
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -31,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                'attribute' => 'pro_name',
                'format' => 'raw',
                'value'=>function ($data) {
-                return Html::a(Html::encode($data->pro_name),Yii::$app->homeUrl.'quantri/product/update?id='.$data->id);
+                return Html::a(Html::encode($data->pro_name),Yii::$app->homeUrl.'quantri/product/view?id='.$data->id);
                 },
             ],
             // 'title',
@@ -58,11 +70,22 @@ $this->params['breadcrumbs'][] = $this->title;
             'image',
             //'images_large',
             //'tags',
-            'product_category_id',
+            [
+               'attribute' => 'product_category_id',
+               'format' => 'raw',
+               'value'=>function ($data) {
+                $cate = new ProductCategory();
+                $dataCate = $cate->getCategoryParent();
+                return $dataCate[$data->product_category_id];
+                },
+            ],
             //'related_articles',
             //'related_products',
             //'created_at',
-            'updated_at',
+            [
+                'attribute' => 'updated_at',
+                'format' => ['date', 'php:H:i  ->   d-m-Y']
+            ],
             //'user_id',
 
             ['class' => 'yii\grid\ActionColumn'],

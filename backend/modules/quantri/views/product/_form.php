@@ -7,6 +7,8 @@ use kartik\select2\Select2;
 use kartik\checkbox\CheckboxX;
 use jlorente\remainingcharacters\RemainingCharacters;
 use wbraganca\dynamicform\DynamicFormWidget;
+use kartik\file\FileInput;
+use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model backend\modules\quantri\models\Product */
 /* @var $form yii\widgets\ActiveForm */
@@ -58,17 +60,6 @@ $this->registerCssFile('@web/plugins/bower_components/sweetalert/sweetalert.css'
                      <span>SEO</span> 
                   </a>
                </li>
-               <li>
-                  <a href="#section-shape-4">
-                     <svg viewBox="0 0 80 60" preserveAspectRatio="none">
-                        <use xlink:href="#tabshape"></use>
-                     </svg>
-                     <svg viewBox="0 0 80 60" preserveAspectRatio="none">
-                        <use xlink:href="#tabshape"></use>
-                     </svg>
-                     <span>Danh sách Ảnh</span> 
-                  </a>
-               </li>
             </ul>
          </nav>
          <div class="content-wrap">
@@ -83,7 +74,8 @@ $this->registerCssFile('@web/plugins/bower_components/sweetalert/sweetalert.css'
                <div class="col-md-1" style="height: 80px">
                   <img src="<?= (isset($model->image))? Yii::$app->request->hostInfo.'/'.$model->image:''?>" id="previewImage" alt="" style="height: 100%">
                </div>
-               
+
+
                <?= $form->field($model, 'code',['options'=>['class'=>'col-md-2']])->textInput(['maxlength' => true]) ?>
                <?= $form->field($model, 'price',['options'=>['class'=>'col-md-2']])->widget(NumberControl::classname(), [
                   'maskedInputOptions' => [
@@ -223,69 +215,7 @@ $this->registerCssFile('@web/plugins/bower_components/sweetalert/sweetalert.css'
                <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
             </section>
 
-            <section id="section-shape-4">
-             <div class="row">
-              <div class="panel panel-default col-md-12">
-                <div class="panel-heading"><h4><i class="glyphicon glyphicon-envelope"></i> Hiển thị loại sản phẩm </h4></div>
-                <div class="panel-body">
-                 <?php DynamicFormWidget::begin([
-                'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
-                'widgetBody' => '.container-items', // required: css class selector
-                'widgetItem' => '.item', // required: css class
-                'limit' => 4, // the maximum times, an element can be cloned (default 999)
-                'min' => 1, // 0 or 1 (default 1)
-                'insertButton' => '.add-item', // css class
-                'deleteButton' => '.remove-item', // css class
-                'model' => $modelsImgproList[0],
-                'formId' => 'dynamic-form',
-                'formFields' => [
-                  'image',
-                  'title',
-                  'alt',
-                  'status',
-                ],
-              ]); ?>
-
-              <div class="container-items"><!-- widgetContainer -->
-                <?php foreach ($modelsImgproList as $i => $modelImgproList): ?>
-                  <div class="item panel panel-default"><!-- widgetBody -->
-                    <div class="panel-heading">
-                      <!-- <h3 class="panel-title pull-left">Loại sản phẩm</h3> -->
-                      <span class="panel-title-address">Loại sản phẩm : <?= ($i + 1) ?></span>
-                      <div class="pull-right">
-                        <button type="button" class="add-item btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"></i></button>
-                        <button type="button" class="remove-item btn btn-danger btn-xs"><i class="glyphicon glyphicon-minus"></i></button>
-                      </div>
-                      <div class="clearfix"></div>
-                    </div>
-                    <div class="panel-body">
-                      <?php
-                            // necessary for update action.
-                      if (! $modelImgproList->isNewRecord) {
-                        echo Html::activeHiddenInput($modelImgproList, "[{$i}]id");
-                      }
-                      ?>
-                      <div class="row">
-                        <div class="col-sm-12">
-                          <?= $form->field($modelImgproList, "[{$i}]image",['options'=>['class'=>'col-md-2']])->textInput(['maxlength' => true]) ?>
-
-                          <div class="col-md-2" style="height: 80px">
-                            <img src="<?= (isset($modelImgproList->image))? Yii::$app->request->hostInfo.'/'.$modelImgproList->image:''?>" id="previewItems" alt="" style="height: 100%">
-                          </div>
-
-                          <?= $form->field($modelImgproList, "[{$i}]title",['options'=>['class'=>'col-md-4']])->textInput(['maxlength' => true]) ?>
-                          <?= $form->field($modelImgproList, "[{$i}]alt",['options'=>['class'=>'col-md-4']])->textInput(['maxlength' => true]) ?>
-                        </div>
-                      </div><!-- .row -->
-                    </div>
-                  </div>
-                <?php endforeach; ?>
-              </div>
-              <?php DynamicFormWidget::end(); ?>
-            </div>
-          </div>
-        </div>
-      </section>
+            
          </div>
          <!-- /content -->
       </div>
