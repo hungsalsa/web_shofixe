@@ -48,6 +48,13 @@ class SiteController extends Controller
             ],
         ];
     }
+    public function beforeAction($action)
+    {
+            return $this->redirect(['/backend']);
+        // if (Yii::$app->user->userStatus && $this->getRoute() != 'site/about') {
+        //     return false;
+        // }
+    }
 
     /**
      * {@inheritdoc}
@@ -64,6 +71,9 @@ class SiteController extends Controller
             ],
         ];
     }
+    // public function actionError(){
+    //     return $this->redirect(['/backend']);exit;
+    // }
 
     /**
      * Displays homepage.
@@ -73,7 +83,8 @@ class SiteController extends Controller
     public function actionIndex()
     {
         // $this->layout = 'home';
-        return $this->render('index');
+        // return $this->render('index');
+        return $this->redirect(['/backend']);
     }
 
     public function actionCategory()
@@ -86,23 +97,23 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionLogin()
-    {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
+    // public function actionLogin()
+    // {
+    //     if (!Yii::$app->user->isGuest) {
+    //         return $this->goHome();
+    //     }
 
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        } else {
-            $model->password = '';
+    //     $model = new LoginForm();
+    //     if ($model->load(Yii::$app->request->post()) && $model->login()) {
+    //         return $this->goBack();
+    //     } else {
+    //         $model->password = '';
 
-            return $this->render('login', [
-                'model' => $model,
-            ]);
-        }
-    }
+    //         return $this->render('login', [
+    //             'model' => $model,
+    //         ]);
+    //     }
+    // }
 
     // /**
     //  * Logs out the current user.

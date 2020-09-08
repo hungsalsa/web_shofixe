@@ -209,13 +209,14 @@ class RbacController extends Controller
 
     public function actionIndex()
     {
-        $searchModel = new AuthItemSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $auth = Yii::$app->authManager;
+        $admin = $auth->createRole('admin');
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        $user_resetpassword = $auth->createPermission('user/resetpassword');
+        $user_resetpassword->description = 'Reset Password user đăng nhập';
+        $auth->add($user_resetpassword);
+
+        $auth->addChild($admin, $user_resetpassword);
     }
 
     /**

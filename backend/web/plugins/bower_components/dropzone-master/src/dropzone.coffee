@@ -131,7 +131,6 @@ class Dropzone extends Emitter
     url: null
     method: "post"
     withCredentials: no
-    timeout: 30000 # timeout in milliseconds
     parallelUploads: 2
     uploadMultiple: no # Whether to send multiple files in one request.
     maxFilesize: 256 # in MB
@@ -1133,8 +1132,7 @@ class Dropzone extends Emitter
 
   uploadFiles: (files) ->
     xhr = new XMLHttpRequest()
-    xhr.timeout = resolveOption @options.timeout, files
-    
+
     # Put the xhr object in the file objects to be able to reference it later.
     file.xhr = xhr for file in files
 

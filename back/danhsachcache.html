@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Danh sách cache</title>
+</head>
+<body>
+	<div class="wrapper">
+		<h1>Cache trong dịch vụ:</h1>
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>STT</th>
+					<th>Tên</th>
+					<th>Cache</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>1</td>
+					<td>Sản phẩm tồn</td>
+					<td>$cache = Yii::$app->cache->get('cache_app_sanpham_ton');</td>
+				</tr>
+				<tr>
+					<td>1</td>
+					<td>Danh sách dịch vụ khi xuất hóa đơn khách hàng: </td>
+					<td>$cache = Yii::$app->cache->get('cache_app_dichvukh');</td>
+				</tr>
+				<tr> <td>Danh sach san pham cho xuat noi bo, theo user dang nhap : $cache = Yii::$app->cache->get('cache_app_danhsachsp_user');</td> </tr>
+				<tr> <td>Danh sach san pham  : $cache = Yii::$app->cache->get('cache_app_danhsachsp');</td> </tr>
+				<tr> <td>$cache = Yii::$app->cache->get('cache_app_sophieu_ch');</td> </tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>

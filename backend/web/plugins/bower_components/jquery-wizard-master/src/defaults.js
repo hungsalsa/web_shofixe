@@ -1,80 +1,82 @@
-/*eslint no-unused-vars: "off"*/
-/*eslint no-empty-function: "off"*/
-export default {
-  step: '.wizard-steps > li',
+Wizard.defaults = {
+    step: '.wizard-steps > li',
 
-  getPane: function(index, step) {
-    return this.$element.find('.wizard-content').children().eq(index);
-  },
-
-  buttonsAppendTo: 'this',
-  templates: {
-    buttons: function() {
-      const options = this.options;
-      return `<div class="wizard-buttons"><a class="wizard-back" href="#${this.id}" data-wizard="back" role="button">${options.buttonLabels.back}</a><a class="wizard-next" href="#${this.id}" data-wizard="next" role="button">${options.buttonLabels.next}</a><a class="wizard-finish" href="#${this.id}" data-wizard="finish" role="button">${options.buttonLabels.finish}</a></div>`;
-    }
-  },
-
-  classes: {
-    step: {
-      done: 'done',
-      error: 'error',
-      active: 'current',
-      disabled: 'disabled',
-      activing: 'activing',
-      loading: 'loading'
+    getPane: function(index, step){
+        return this.$element.find('.wizard-content').children().eq(index);
     },
 
-    pane: {
-      active: 'active',
-      activing: 'activing'
+    buttonsAppendTo: 'this',
+    templates: {
+        buttons: function(){
+            var options = this.options;
+            return '<div class="wizard-buttons">'+
+                '<a class="wizard-back" href="#'+this.id+'" data-wizard="back" role="button">'+options.buttonLabels.back+'</a>' +
+                '<a class="wizard-next" href="#'+this.id+'" data-wizard="next" role="button">'+options.buttonLabels.next+'</a>' +
+                '<a class="wizard-finish" href="#'+this.id+'" data-wizard="finish" role="button">'+options.buttonLabels.finish+'</a>' +
+            '</div>';
+        }
     },
 
-    button: {
-      hide: 'hide',
-      disabled: 'disabled'
-    }
-  },
+    classes: {
+        step: {
+            done: 'done',
+            error: 'error',
+            active: 'current',
+            disabled: 'disabled',
+            activing: 'activing',
+            loading: 'loading'
+        },
 
-  autoFocus: true,
-  keyboard: true,
+        pane: {
+            active: 'active',
+            activing: 'activing'
+        },
 
-  enableWhenVisited: false,
+        button: {
+            hide: 'hide',
+            disabled: 'disabled'
+        }
+    },
 
-  buttonLabels: {
-    next: 'Next',
-    back: 'Back',
-    finish: 'Finish'
-  },
+    autoFocus: true,
+    keyboard: true,
 
-  loading: {
-    show: function(step) { },
-    hide: function(step) { },
-    fail: function(step) { }
-  },
+    enableWhenVisited: false,
 
-  cacheContent: false,
+    buttonLabels: {
+        next: 'Next',
+        back: 'Back',
+        finish: 'Finish'
+    },
 
-  validator: function(step) {
-    return true;
-  },
+    loading: {
+        show: function(step) {},
+        hide: function(step) {},
+        fail: function(step) {}
+    },
 
-  onInit: null,
-  onNext: null,
-  onBack: null,
-  onReset: null,
+    cacheContent: false,
 
-  onBeforeShow: null,
-  onAfterShow: null,
-  onBeforeHide: null,
-  onAfterHide: null,
-  onBeforeLoad: null,
-  onAfterLoad: null,
+    validator: function(step){
+        return true;
+    },
 
-  onBeforeChange: null,
-  onAfterChange: null,
+    onInit: null,
+    onNext: null,
+    onBack: null,
+    onReset: null,
 
-  onStateChange: null,
+    onBeforeShow: null,
+    onAfterShow: null,
+    onBeforeHide: null,
+    onAfterHide: null,
+    onBeforeLoad: null,
+    onAfterLoad: null,
 
-  onFinish: null
+    onBeforeChange: null,
+    onAfterChange: null,
+
+    onStateChange: null,
+
+    onFinish: null
 };

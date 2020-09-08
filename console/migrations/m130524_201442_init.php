@@ -4,6 +4,11 @@ use yii\db\Migration;
 
 class m130524_201442_init extends Migration
 {
+    public function init()
+    {
+        $this->db = 'db1';
+        parent::init();
+    }
     public function up()
     {
         $tableOptions = null;

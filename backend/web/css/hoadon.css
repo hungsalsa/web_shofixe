@@ -1,0 +1,44 @@
+li{
+	list-style: none;
+}
+.right h2{
+	text-transform: uppercase;
+}
+.inhoadon {
+    background: #fff;
+    padding: 11px 62px;
+	
+}
+.inhoadon * {
+    overflow: hidden;
+}
+.right table{
+	width: 100%;
+    font-size: 18px;
+    
+}
+.inhoadon .left ul{
+	padding-left: 0;
+}
+table td,th{color: #000 !important;line-height: 25px;}
+.content_main table{
+	width: 100%;
+}
+.content_main thead th{
+	text-align: center;
+}
+.content_main td,.content_main th{
+	border: 1px solid black;
+	padding: 0 2px;
+}
+.content_main td,.content_main tfoot th{
+	/*line-height: 32px;*/
+	/*height: 32px;*/
+}
+.content_main tbody td{
+	border-top: none;
+	border-bottom: 1px dotted black;
+}
+.bold{
+	font-weight: 600;
+}

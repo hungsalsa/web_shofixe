@@ -13,34 +13,34 @@ class HomeAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'bootstrap/dist/css/bootstrap.min.css',
-        'plugins/bower_components/bootstrap-extension/css/bootstrap-extension.css',
         'plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css',
+        'plugins/bower_components/toast-master/css/jquery.toast.css',
         'plugins/bower_components/morrisjs/morris.css',
+        'plugins/bower_components/chartist-js/dist/chartist.min.css',
+        'plugins/bower_components/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.css',
+        'plugins/bower_components/calendar/dist/fullcalendar.css',
         'css/animate.css',
-        'css/style.min.css',
-        'css/colors/megna.css',
-        // 'css/my.css'
+        'css/style.css',
+        'css/colors/default.css',
     ];
     public $js = [
-        // 'plugins/bower_components/jquery/dist/jquery.min.js',
-        'bootstrap/dist/js/tether.min.js',
+        'plugins/bower_components/jquery/dist/jquery.min.js',
         'bootstrap/dist/js/bootstrap.min.js',
-        'plugins/bower_components/bootstrap-extension/js/bootstrap-extension.min.js',
         'plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.js',
         'js/jquery.slimscroll.js',
         'js/waves.js',
-        'plugins/bower_components/raphael/raphael-min.js',
-        // 'plugins/bower_components/morrisjs/morris.js',
-        'plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js',
-        'plugins/bower_components/peity/jquery.peity.min.js',
-        'plugins/bower_components/peity/jquery.peity.init.js',
-        'js/custom.min.js',
-        // 'js/dashboard1.js',
-        'plugins/bower_components/styleswitcher/jQuery.style.switcher.js',
-        // 'js/main.js',
+        'plugins/bower_components/flot/excanvas.min.js',
+        'js/custom.js',
+        'plugins/bower_components/flot/jquery.flot.js',
+        'plugins/bower_components/flot/jquery.flot.pie.js',
+        'plugins/bower_components/flot/jquery.flot.time.js',
+        'plugins/bower_components/flot.tooltip/js/jquery.flot.tooltip.min.js',
+        'plugins/js/bootstrap-notify.min.js',
+// 'js/1flot-data.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
     ];
+
 }

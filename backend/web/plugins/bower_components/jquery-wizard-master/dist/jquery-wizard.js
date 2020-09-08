@@ -1,1148 +1,838 @@
-/**
-* jQuery wizard v0.4.3
-* https://github.com/amazingSurge/jquery-wizard
-*
-* Copyright (c) amazingSurge
-* Released under the LGPL-3.0 license
-*/
-(function(global, factory) {
-  if (typeof define === "function" && define.amd) {
-    define(['jquery'], factory);
-  } else if (typeof exports !== "undefined") {
-    factory(require('jquery'));
-  } else {
-    var mod = {
-      exports: {}
-    };
-    factory(global.jQuery);
-    global.jqueryWizardEs = mod.exports;
-  }
-})(this,
-
-  function(_jquery) {
-    'use strict';
-
-    var _jquery2 = _interopRequireDefault(_jquery);
-
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : {
-        default: obj
-      };
-    }
-
-    function _toConsumableArray(arr) {
-      if (Array.isArray(arr)) {
-
-        for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
-          arr2[i] = arr[i];
-        }
-
-        return arr2;
-      } else {
-
-        return Array.from(arr);
-      }
-    }
-
-    var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ?
-
-      function(obj) {
-        return typeof obj;
-      }
-      :
-
-      function(obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
-      };
-
-    function _classCallCheck(instance, Constructor) {
-      if (!(instance instanceof Constructor)) {
-        throw new TypeError("Cannot call a class as a function");
-      }
-    }
-
-    var _createClass = function() {
-      function defineProperties(target, props) {
-        for (var i = 0; i < props.length; i++) {
-          var descriptor = props[i];
-          descriptor.enumerable = descriptor.enumerable || false;
-          descriptor.configurable = true;
-
-          if ("value" in descriptor)
-            descriptor.writable = true;
-          Object.defineProperty(target, descriptor.key, descriptor);
-        }
-      }
-
-      return function(Constructor, protoProps, staticProps) {
-        if (protoProps)
-          defineProperties(Constructor.prototype, protoProps);
-
-        if (staticProps)
-          defineProperties(Constructor, staticProps);
-
-        return Constructor;
-      };
-    }();
-
-    /*eslint no-unused-vars: "off"*/
-    /*eslint no-empty-function: "off"*/
-    var DEFAULTS = {
-      step: '.wizard-steps > li',
-
-      getPane: function getPane(index, step) {
-        return this.$element.find('.wizard-content').children().eq(index);
-      },
-
-      buttonsAppendTo: 'this',
-      templates: {
-        buttons: function buttons() {
-          var options = this.options;
-
-          return '<div class="wizard-buttons"><a class="wizard-back" href="#' + this.id + '" data-wizard="back" role="button">' + options.buttonLabels.back + '</a><a class="wizard-next" href="#' + this.id + '" data-wizard="next" role="button">' + options.buttonLabels.next + '</a><a class="wizard-finish" href="#' + this.id + '" data-wizard="finish" role="button">' + options.buttonLabels.finish + '</a></div>';
-        }
-      },
-
-      classes: {
-        step: {
-          done: 'done',
-          error: 'error',
-          active: 'current',
-          disabled: 'disabled',
-          activing: 'activing',
-          loading: 'loading'
-        },
-
-        pane: {
-          active: 'active',
-          activing: 'activing'
-        },
-
-        button: {
-          hide: 'hide',
-          disabled: 'disabled'
-        }
-      },
-
-      autoFocus: true,
-      keyboard: true,
-
-      enableWhenVisited: false,
-
-      buttonLabels: {
-        next: 'Next',
-        back: 'Back',
-        finish: 'Finish'
-      },
-
-      loading: {
-        show: function show(step) {},
-        hide: function hide(step) {},
-        fail: function fail(step) {}
-      },
-
-      cacheContent: false,
-
-      validator: function validator(step) {
-        return true;
-      },
-
-      onInit: null,
-      onNext: null,
-      onBack: null,
-      onReset: null,
-
-      onBeforeShow: null,
-      onAfterShow: null,
-      onBeforeHide: null,
-      onAfterHide: null,
-      onBeforeLoad: null,
-      onAfterLoad: null,
-
-      onBeforeChange: null,
-      onAfterChange: null,
-
-      onStateChange: null,
-
-      onFinish: null
-    };
-
-    /**
-     * Css features detect
-     **/
-    var support = {};
-
-    (function(support) {
-      /**
-       * Borrowed from Owl carousel
-       **/
-      var events = {
-          transition: {
-            end: {
-              WebkitTransition: 'webkitTransitionEnd',
-              MozTransition: 'transitionend',
-              OTransition: 'oTransitionEnd',
-              transition: 'transitionend'
-            }
-          },
-          animation: {
-            end: {
-              WebkitAnimation: 'webkitAnimationEnd',
-              MozAnimation: 'animationend',
-              OAnimation: 'oAnimationEnd',
-              animation: 'animationend'
-            }
-          }
-        },
-        prefixes = ['webkit', 'Moz', 'O', 'ms'],
-        style = (0, _jquery2.default)('<support>').get(0).style,
-        tests = {
-          csstransitions: function csstransitions() {
-            return Boolean(test('transition'));
-          },
-          cssanimations: function cssanimations() {
-            return Boolean(test('animation'));
-          }
-        };
-
-      var test = function test(property, prefixed) {
-        var result = false,
-          upper = property.charAt(0).toUpperCase() + property.slice(1);
-
-        if (style[property] !== undefined) {
-          result = property;
-        }
-
-        if (!result) {
-          _jquery2.default.each(prefixes,
-
-            function(i, prefix) {
-              if (style[prefix + upper] !== undefined) {
-                result = '-' + prefix.toLowerCase() + '-' + upper;
-
-                return false;
-              }
-
-              return true;
-            }
-          );
-        }
-
-        if (prefixed) {
-
-          return result;
-        }
-
-        if (result) {
-
-          return true;
-        }
-
-        return false;
-      };
-
-      var prefixed = function prefixed(property) {
-        return test(property, true);
-      };
-
-      if (tests.csstransitions()) {
-        /*eslint no-new-wrappers: "off"*/
-        support.transition = new String(prefixed('transition'));
-        support.transition.end = events.transition.end[support.transition];
-      }
-
-      if (tests.cssanimations()) {
-        /*eslint no-new-wrappers: "off"*/
-        support.animation = new String(prefixed('animation'));
-        support.animation.end = events.animation.end[support.animation];
-      }
-    })(support);
-
-    function emulateTransitionEnd($el, duration) {
-      'use strict';
-
-      var called = false;
-
-      $el.one(support.transition.end,
-
-        function() {
-          called = true;
-        }
-      );
-      var callback = function callback() {
-        if (!called) {
-          $el.trigger(support.transition.end);
-        }
-      };
-      setTimeout(callback, duration);
-    }
-
-    var Step = function() {
-      function Step(element, wizard, index) {
-        _classCallCheck(this, Step);
-
-        this.TRANSITION_DURATION = 200;
-
-        this.initialize(element, wizard, index);
-      }
-
-      _createClass(Step, [{
-        key: 'initialize',
-        value: function initialize(element, wizard, index) {
-          this.$element = (0, _jquery2.default)(element);
-          this.wizard = wizard;
-
-          this.events = {};
-          this.loader = null;
-          this.loaded = false;
-
-          this.validator = this.wizard.options.validator;
-
-          this.states = {
-            done: false,
-            error: false,
-            active: false,
-            disabled: false,
-            activing: false
-          };
-
-          this.index = index;
-          this.$element.data('wizard-index', index);
-
-          this.$pane = this.getPaneFromTarget();
-
-          if (!this.$pane) {
-            this.$pane = this.wizard.options.getPane.call(this.wizard, index, element);
-          }
-
-          this.setValidatorFromData();
-          this.setLoaderFromData();
-        }
-      }, {
-        key: 'getPaneFromTarget',
-        value: function getPaneFromTarget() {
-          var selector = this.$element.data('target');
-
-          if (!selector) {
-            selector = this.$element.attr('href');
-            selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '');
-          }
-
-          if (selector) {
-
-            return (0, _jquery2.default)(selector);
-          }
-
-          return null;
-        }
-      }, {
-        key: 'setup',
-        value: function setup() {
-          var current = this.wizard.currentIndex();
-
-          if (this.index === current) {
-            this.enter('active');
-
-            if (this.loader) {
-              this.load();
-            }
-          } else if (this.index > current) {
-            this.enter('disabled');
-          }
-
-          this.$element.attr('aria-expanded', this.is('active'));
-          this.$pane.attr('aria-expanded', this.is('active'));
-
-          var classes = this.wizard.options.classes;
-
-          if (this.is('active')) {
-            this.$pane.addClass(classes.pane.active);
-          } else {
-            this.$pane.removeClass(classes.pane.active);
-          }
-        }
-      }, {
-        key: 'show',
-        value: function show(callback) {
-          if (this.is('activing') || this.is('active')) {
-
-            return;
-          }
-
-          this.trigger('beforeShow');
-          this.enter('activing');
-
-          var classes = this.wizard.options.classes;
-
-          this.$element.attr('aria-expanded', true);
-
-          this.$pane.addClass(classes.pane.activing).addClass(classes.pane.active).attr('aria-expanded', true);
-
-          var complete = function complete() {
-            this.$pane.removeClass(classes.pane.activing);
-
-            this.leave('activing');
-            this.enter('active');
-            this.trigger('afterShow');
-
-            if (_jquery2.default.isFunction(callback)) {
-              callback.call(this);
-            }
-          };
-
-          if (!support.transition) {
-            complete.call(this);
-
-            return;
-          }
-
-          this.$pane.one(support.transition.end, _jquery2.default.proxy(complete, this));
-
-          emulateTransitionEnd(this.$pane, this.TRANSITION_DURATION);
-        }
-      }, {
-        key: 'hide',
-        value: function hide(callback) {
-          if (this.is('activing') || !this.is('active')) {
-
-            return;
-          }
-
-          this.trigger('beforeHide');
-          this.enter('activing');
-
-          var classes = this.wizard.options.classes;
-
-          this.$element.attr('aria-expanded', false);
-
-          this.$pane.addClass(classes.pane.activing).removeClass(classes.pane.active).attr('aria-expanded', false);
-
-          var complete = function complete() {
-            this.$pane.removeClass(classes.pane.activing);
-
-            this.leave('activing');
-            this.leave('active');
-            this.trigger('afterHide');
-
-            if (_jquery2.default.isFunction(callback)) {
-              callback.call(this);
-            }
-          };
-
-          if (!support.transition) {
-            complete.call(this);
-
-            return;
-          }
-
-          this.$pane.one(support.transition.end, _jquery2.default.proxy(complete, this));
-
-          emulateTransitionEnd(this.$pane, this.TRANSITION_DURATION);
-        }
-      }, {
-        key: 'empty',
-        value: function empty() {
-          this.$pane.empty();
-        }
-      }, {
-        key: 'load',
-        value: function load(callback) {
-          var that = this;
-          var loader = this.loader;
-
-          if (_jquery2.default.isFunction(loader)) {
-            loader = loader.call(this.wizard, this);
-          }
-
-          if (this.wizard.options.cacheContent && this.loaded) {
-
-            if (_jquery2.default.isFunction(callback)) {
-              callback.call(this);
-            }
-
-            return;
-          }
-
-          this.trigger('beforeLoad');
-          this.enter('loading');
-
-          function setContent(content) {
-            that.$pane.html(content);
-
-            that.leave('loading');
-            that.loaded = true;
-            that.trigger('afterLoad');
-
-            if (_jquery2.default.isFunction(callback)) {
-              callback.call(that);
-            }
-          }
-
-          if (typeof loader === 'string') {
-            setContent(loader);
-          } else if ((typeof loader === 'undefined' ? 'undefined' : _typeof(loader)) === 'object' && loader.hasOwnProperty('url')) {
-            that.wizard.options.loading.show.call(that.wizard, that);
-
-            _jquery2.default.ajax(loader.url, loader.settings || {}).done(
-
-              function(data) {
-                setContent(data);
-
-                that.wizard.options.loading.hide.call(that.wizard, that);
-              }
-            ).fail(
-
-              function() {
-                that.wizard.options.loading.fail.call(that.wizard, that);
-              }
-            );
-          } else {
-            setContent('');
-          }
-        }
-      }, {
-        key: 'trigger',
-        value: function trigger(event) {
-          var _wizard;
-
-          for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-            args[_key - 1] = arguments[_key];
-          }
-
-          if (_jquery2.default.isArray(this.events[event])) {
-
-            for (var i in this.events[event]) {
-
-              if ({}.hasOwnProperty.call(this.events[event], i)) {
-                var _events$event;
-
-                (_events$event = this.events[event])[i].apply(_events$event, args);
-              }
-            }
-          }
-
-          (_wizard = this.wizard).trigger.apply(_wizard, _toConsumableArray([event, this].concat(args)));
-        }
-      }, {
-        key: 'enter',
-        value: function enter(state) {
-          this.states[state] = true;
-
-          var classes = this.wizard.options.classes;
-          this.$element.addClass(classes.step[state]);
-
-          this.trigger('stateChange', true, state);
-        }
-      }, {
-        key: 'leave',
-        value: function leave(state) {
-          if (this.states[state]) {
-            this.states[state] = false;
-
-            var classes = this.wizard.options.classes;
-            this.$element.removeClass(classes.step[state]);
-
-            this.trigger('stateChange', false, state);
-          }
-        }
-      }, {
-        key: 'setValidatorFromData',
-        value: function setValidatorFromData() {
-          var validator = this.$pane.data('validator');
-
-          if (validator && _jquery2.default.isFunction(window[validator])) {
-            this.validator = window[validator];
-          }
-        }
-      }, {
-        key: 'setLoaderFromData',
-        value: function setLoaderFromData() {
-          var loader = this.$pane.data('loader');
-
-          if (loader) {
-
-            if (_jquery2.default.isFunction(window[loader])) {
-              this.loader = window[loader];
-            }
-          } else {
-            var url = this.$pane.data('loader-url');
-
-            if (url) {
-              this.loader = {
-                url: url,
-                settings: this.$pane.data('settings') || {}
-              };
-            }
-          }
-        }
-      }, {
-        key: 'active',
-        value: function active() {
-          return this.wizard.goTo(this.index);
-        }
-      }, {
-        key: 'on',
-        value: function on(event, handler) {
-          if (_jquery2.default.isFunction(handler)) {
-
-            if (_jquery2.default.isArray(this.events[event])) {
-              this.events[event].push(handler);
-            } else {
-              this.events[event] = [handler];
-            }
-          }
-
-          return this;
-        }
-      }, {
-        key: 'off',
-        value: function off(event, handler) {
-          if (_jquery2.default.isFunction(handler) && _jquery2.default.isArray(this.events[event])) {
-            _jquery2.default.each(this.events[event],
-
-              function(i, f) {
-                /*eslint consistent-return: "off"*/
-
-                if (f === handler) {
-                  delete this.events[event][i];
-
-                  return false;
+/*! jQuery wizard - v0.3.1 - 2015-05-07
+ * https://github.com/amazingSurge/jquery-wizard
+ * Copyright (c) 2015 amazingSurge; Licensed GPL */
+(function($, document, window, undefined) {
+    "use strict";
+
+    var Support = (function() {
+        var style = $('<support>').get(0).style,
+            prefixes = ['webkit', 'Moz', 'O', 'ms'],
+            events = {
+                transition: {
+                    end: {
+                        WebkitTransition: 'webkitTransitionEnd',
+                        MozTransition: 'transitionend',
+                        OTransition: 'oTransitionEnd',
+                        transition: 'transitionend'
+                    }
                 }
-              }
-            );
-          }
+            },
+            tests = {
+                csstransitions: function() {
+                    return !!test('transition');
+                }
+            };
 
-          return this;
-        }
-      }, {
-        key: 'is',
-        value: function is(state) {
-          return this.states[state] && this.states[state] === true;
-        }
-      }, {
-        key: 'reset',
-        value: function reset() {
-          for (var state in this.states) {
+        function test(property, prefixed) {
+            var result = false,
+                upper = property.charAt(0).toUpperCase() + property.slice(1);
 
-            if ({}.hasOwnProperty.call(this.states, state)) {
-              this.leave(state);
+            if (style[property] !== undefined) {
+                result = property;
             }
-          }
-          this.setup();
+            if (!result) {
+                $.each(prefixes, function(i, prefix) {
+                    if (style[prefix + upper] !== undefined) {
+                        result = '-' + prefix.toLowerCase() + '-' + upper;
+                        return false;
+                    }
+                });
+            }
 
-          return this;
+            if (prefixed) {
+                return result;
+            }
+            if (result) {
+                return true;
+            } else {
+                return false;
+            }
         }
-      }, {
-        key: 'setLoader',
-        value: function setLoader(loader) {
-          this.loader = loader;
 
-          if (this.is('active')) {
-            this.load();
-          }
-
-          return this;
+        function prefixed(property) {
+            return test(property, true);
         }
-      }, {
-        key: 'setValidator',
-        value: function setValidator(validator) {
-          if (_jquery2.default.isFunction(validator)) {
-            this.validator = validator;
-          }
-
-          return this;
+        var support = {};
+        if (tests.csstransitions()) {
+            /* jshint -W053 */
+            support.transition = new String(prefixed('transition'))
+            support.transition.end = events.transition.end[support.transition];
         }
-      }, {
-        key: 'validate',
-        value: function validate() {
-          return this.validator.call(this.$pane.get(0), this);
-        }
-      }]);
 
-      return Step;
-    }();
+        return support;
+    })();
+
 
     var counter = 0;
-    var NAMESPACE$1 = 'wizard';
 
-    var wizard = function() {
-      function wizard(element) {
-        var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+    var Wizard = function(element, options) {
+        this.$element = $(element);
 
-        _classCallCheck(this, wizard);
-
-        this.$element = (0, _jquery2.default)(element);
-
-        this.options = _jquery2.default.extend(true, {}, DEFAULTS, options);
+        this.options = $.extend(true, {}, Wizard.defaults, options);
 
         this.$steps = this.$element.find(this.options.step);
 
         this.id = this.$element.attr('id');
-
         if (!this.id) {
-          this.id = 'wizard-' + ++counter;
-          this.$element.attr('id', this.id);
+            this.id = 'wizard-' + (++counter);
+            this.$element.attr('id', this.id);
         }
-
-        this.trigger('init');
 
         this.initialize();
-      }
+    }
 
-      _createClass(wizard, [{
-        key: 'initialize',
-        value: function initialize() {
-          this.steps = [];
-          var that = this;
+    function emulateTransitionEnd($el, duration) {
+        var called = false;
 
-          this.$steps.each(
-
-            function(index) {
-              that.steps.push(new Step(this, that, index));
+        $el.one(Support.transition.end, function() {
+            called = true;
+        });
+        var callback = function() {
+            if (!called) {
+                $el.trigger(Support.transition.end);
             }
-          );
+        }
+        setTimeout(callback, duration);
+    }
+    Wizard.defaults = {
+        step: '.wizard-steps > li',
 
-          this._current = 0;
-          this.transitioning = null;
+        getPane: function(index, step) {
+            return this.$element.find('.wizard-content').children().eq(index);
+        },
 
-          _jquery2.default.each(this.steps,
-
-            function(i, step) {
-              step.setup();
+        buttonsAppendTo: 'this',
+        templates: {
+            buttons: function() {
+                var options = this.options;
+                return '<div class="wizard-buttons">' +
+                    '<a class="wizard-back" href="#' + this.id + '" data-wizard="back" role="button">' + options.buttonLabels.back + '</a>' +
+                    '<a class="wizard-next" href="#' + this.id + '" data-wizard="next" role="button">' + options.buttonLabels.next + '</a>' +
+                    '<a class="wizard-finish" href="#' + this.id + '" data-wizard="finish" role="button">' + options.buttonLabels.finish + '</a>' +
+                    '</div>';
             }
-          );
+        },
 
-          this.setup();
+        classes: {
+            step: {
+                done: 'done',
+                error: 'error',
+                active: 'current',
+                disabled: 'disabled',
+                activing: 'activing',
+                loading: 'loading'
+            },
 
-          this.$element.on('click', this.options.step,
+            pane: {
+                active: 'active',
+                activing: 'activing'
+            },
 
-            function(e) {
-              var index = (0, _jquery2.default)(this).data('wizard-index');
-
-              if (!that.get(index).is('disabled')) {
-                that.goTo(index);
-              }
-
-              e.preventDefault();
-              e.stopPropagation();
+            button: {
+                hide: 'hide',
+                disabled: 'disabled'
             }
-          );
+        },
 
-          if (this.options.keyboard) {
-            (0, _jquery2.default)(document).on('keyup', _jquery2.default.proxy(this.keydown, this));
-          }
+        autoFocus: true,
+        keyboard: true,
 
-          this.trigger('ready');
-        }
-      }, {
-        key: 'setup',
-        value: function setup() {
-          this.$buttons = (0, _jquery2.default)(this.options.templates.buttons.call(this));
+        enableWhenVisited: false,
 
-          this.updateButtons();
+        buttonLabels: {
+            next: 'Next',
+            back: 'Back',
+            finish: 'Finish'
+        },
 
-          var buttonsAppendTo = this.options.buttonsAppendTo;
-          var $to = void 0;
+        loading: {
+            show: function(step) {},
+            hide: function(step) {},
+            fail: function(step) {}
+        },
 
-          if (buttonsAppendTo === 'this') {
-            $to = this.$element;
-          } else if (_jquery2.default.isFunction(buttonsAppendTo)) {
-            $to = buttonsAppendTo.call(this);
-          } else {
-            $to = this.$element.find(buttonsAppendTo);
-          }
-          this.$buttons = this.$buttons.appendTo($to);
-        }
-      }, {
-        key: 'updateButtons',
-        value: function updateButtons() {
-          var classes = this.options.classes.button;
-          var $back = this.$buttons.find('[data-wizard="back"]');
-          var $next = this.$buttons.find('[data-wizard="next"]');
-          var $finish = this.$buttons.find('[data-wizard="finish"]');
+        cacheContent: false,
 
-          if (this._current === 0) {
-            $back.addClass(classes.disabled);
-          } else {
-            $back.removeClass(classes.disabled);
-          }
+        validator: function(step) {
+            return true;
+        },
 
-          if (this._current === this.lastIndex()) {
-            $next.addClass(classes.hide);
-            $finish.removeClass(classes.hide);
-          } else {
-            $next.removeClass(classes.hide);
-            $finish.addClass(classes.hide);
-          }
-        }
-      }, {
-        key: 'updateSteps',
-        value: function updateSteps() {
-          var _this = this;
+        onInit: null,
+        onNext: null,
+        onBack: null,
+        onReset: null,
 
-          _jquery2.default.each(this.steps,
+        onBeforeShow: null,
+        onAfterShow: null,
+        onBeforeHide: null,
+        onAfterHide: null,
+        onBeforeLoad: null,
+        onAfterLoad: null,
 
-            function(i, step) {
-              if (i > _this._current) {
-                step.leave('error');
-                step.leave('active');
-                step.leave('done');
+        onBeforeChange: null,
+        onAfterChange: null,
 
-                if (!_this.options.enableWhenVisited) {
-                  step.enter('disabled');
+        onStateChange: null,
+
+        onFinish: null
+    };
+
+    // Step
+    function Step() {
+        return this.initialize.apply(this, Array.prototype.slice.call(arguments));
+    }
+
+    $.extend(Step.prototype, {
+        TRANSITION_DURATION: 200,
+        initialize: function(element, wizard, index) {
+            this.$element = $(element);
+            this.wizard = wizard;
+
+            this.events = {};
+            this.loader = null;
+            this.loaded = false;
+
+            this.validator = this.wizard.options.validator;
+
+            this.states = {
+                done: false,
+                error: false,
+                active: false,
+                disabled: false,
+                activing: false
+            };
+
+            this.index = index;
+            this.$element.data('wizard-index', index);
+
+
+            this.$pane = this.getPaneFromTarget();
+
+            if (!this.$pane) {
+                this.$pane = this.wizard.options.getPane.call(this.wizard, index, element);
+            }
+
+            this.setValidatorFromData();
+            this.setLoaderFromData();
+        },
+
+        getPaneFromTarget: function() {
+            var selector = this.$element.data('target');
+
+            if (!selector) {
+                selector = this.$element.attr('href');
+                selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '');
+            }
+
+            if (selector) {
+                return $(selector);
+            } else {
+                return null;
+            }
+        },
+
+        setup: function() {
+            var current = this.wizard.currentIndex();
+            if (this.index === current) {
+                this.enter('active');
+
+                if (this.loader) {
+                    this.load();
                 }
-              }
+            } else if (this.index > current) {
+                this.enter('disabled');
             }
-          );
-        }
-      }, {
-        key: 'keydown',
-        value: function keydown(e) {
-          if (/input|textarea/i.test(e.target.tagName)) {
 
-            return;
-          }
+            this.$element.attr('aria-expanded', this.is('active'));
+            this.$pane.attr('aria-expanded', this.is('active'));
 
-          switch (e.which) {
-            case 37:
-              this.back();
-              break;
-            case 39:
-              this.next();
-              break;
-            default:
-
-              return;
-          }
-
-          e.preventDefault();
-        }
-      }, {
-        key: 'trigger',
-        value: function trigger(eventType) {
-          for (var _len2 = arguments.length, params = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-            params[_key2 - 1] = arguments[_key2];
-          }
-
-          var data = [this].concat(params);
-
-          // event
-          this.$element.trigger(NAMESPACE$1 + '::' + eventType, data);
-
-          // callback
-          eventType = eventType.replace(/\b\w+\b/g,
-
-            function(word) {
-              return word.substring(0, 1).toUpperCase() + word.substring(1);
+            var classes = this.wizard.options.classes;
+            if (this.is('active')) {
+                this.$pane.addClass(classes.pane.active);
+            } else {
+                this.$pane.removeClass(classes.pane.active);
             }
-          );
-          var onFunction = 'on' + eventType;
+        },
 
-          if (typeof this.options[onFunction] === 'function') {
-            this.options[onFunction].apply(this, params);
-          }
-        }
-      }, {
-        key: 'get',
-        value: function get(index) {
-          if (typeof index === 'string' && index.substring(0, 1) === '#') {
-            var id = index.substring(1);
-
-            for (var i in this.steps) {
-
-              if (this.steps[i].$pane.attr('id') === id) {
-
-                return this.steps[i];
-              }
+        show: function(callback) {
+            if (this.is('activing') || this.is('active')) {
+                return;
             }
-          }
 
-          if (index < this.length() && this.steps[index]) {
+            this.trigger('beforeShow');
+            this.enter('activing');
 
-            return this.steps[index];
-          }
+            var classes = this.wizard.options.classes;
 
-          return null;
-        }
-      }, {
-        key: 'goTo',
-        value: function goTo(index, callback) {
-          if (index === this._current || this.transitioning === true) {
+            this.$element
+                .attr('aria-expanded', true);
 
-            return false;
-          }
+            this.$pane
+                .addClass(classes.pane.activing)
+                .addClass(classes.pane.active)
+                .attr('aria-expanded', true);
 
-          var current = this.current();
-          var to = this.get(index);
+            var complete = function() {
+                this.$pane
+                    .removeClass(classes.pane.activing)
 
-          if (index > this._current) {
+                this.leave('activing');
+                this.enter('active');
+                this.trigger('afterShow');
 
-            if (!current.validate()) {
-              current.leave('done');
-              current.enter('error');
-
-              return -1;
+                if ($.isFunction(callback)) {
+                    callback.call(this);
+                }
             }
-            current.leave('error');
+
+            if (!Support.transition) {
+                return complete.call(this);
+            }
+
+            this.$pane.one(Support.transition.end, $.proxy(complete, this));
+
+            emulateTransitionEnd(this.$pane, this.TRANSITION_DURATION);
+        },
+
+        hide: function(callback) {
+            if (this.is('activing') || !this.is('active')) {
+                return;
+            }
+
+            this.trigger('beforeHide');
+            this.enter('activing');
+
+            var classes = this.wizard.options.classes;
+
+            this.$element
+                .attr('aria-expanded', false);
+
+            this.$pane
+                .addClass(classes.pane.activing)
+                .removeClass(classes.pane.active)
+                .attr('aria-expanded', false);
+
+            var complete = function() {
+                this.$pane
+                    .removeClass(classes.pane.activing);
+
+                this.leave('activing');
+                this.leave('active');
+                this.trigger('afterHide');
+
+                if ($.isFunction(callback)) {
+                    callback.call(this);
+                }
+            }
+
+            if (!Support.transition) {
+                return complete.call(this);
+            }
+
+            this.$pane.one(Support.transition.end, $.proxy(complete, this));
+
+            emulateTransitionEnd(this.$pane, this.TRANSITION_DURATION);
+        },
+
+        empty: function() {
+            this.$pane.empty();
+        },
+
+        load: function(callback) {
+            var self = this;
+            var loader = this.loader;
+
+            if ($.isFunction(loader)) {
+                loader = loader.call(this.wizard, this);
+            }
+
+            if (this.wizard.options.cacheContent && this.loaded) {
+                if ($.isFunction(callback)) {
+                    callback.call(this);
+                }
+                return true;
+            }
+
+            this.trigger('beforeLoad');
+            this.enter('loading');
+
+            function setContent(content) {
+                self.$pane.html(content);
+
+                self.leave('loading');
+                self.loaded = true;
+                self.trigger('afterLoad');
+
+                if ($.isFunction(callback)) {
+                    callback.call(self);
+                }
+            }
+
+            if (typeof loader === 'string') {
+                setContent(loader);
+            } else if (typeof loader === 'object' && loader.hasOwnProperty('url')) {
+                self.wizard.options.loading.show.call(self.wizard, self);
+
+                $.ajax(loader.url, loader.settings || {}).done(function(data) {
+                    setContent(data);
+
+                    self.wizard.options.loading.hide.call(self.wizard, self);
+                }).fail(function() {
+                    self.wizard.options.loading.fail.call(self.wizard, self);
+                });
+            } else {
+                setContent('');
+            }
+        },
+
+        trigger: function(event) {
+            var method_arguments = Array.prototype.slice.call(arguments, 1);
+
+            if ($.isArray(this.events[event])) {
+                for (var i in this.events[event]) {
+                    this.events[event][i].apply(this, method_arguments);
+                }
+            }
+
+            this.wizard.trigger.apply(this.wizard, [event, this].concat(method_arguments));
+        },
+
+        enter: function(state) {
+            this.states[state] = true;
+
+            var classes = this.wizard.options.classes;
+            this.$element.addClass(classes.step[state]);
+
+            this.trigger('stateChange', true, state);
+        },
+
+        leave: function(state) {
+            if (this.states[state]) {
+                this.states[state] = false;
+
+                var classes = this.wizard.options.classes;
+                this.$element.removeClass(classes.step[state]);
+
+                this.trigger('stateChange', false, state);
+            }
+        },
+
+        setValidatorFromData: function() {
+            var validator = this.$pane.data('validator');
+            if (validator && $.isFunction(window[validator])) {
+                this.validator = window[validator];
+            }
+        },
+
+        setLoaderFromData: function() {
+            var loader = this.$pane.data('loader');
+
+            if (loader) {
+                if ($.isFunction(window[loader])) {
+                    this.loader = window[loader];
+                }
+            } else {
+                var url = this.$pane.data('loader-url');
+                if (url) {
+                    this.loader = {
+                        url: url,
+                        settings: this.$pane.data('settings') || {}
+                    }
+                }
+            }
+        },
+
+        /*
+         * Public methods below
+         */
+        active: function() {
+            return this.wizard.goTo(this.index);
+        },
+
+        on: function(event, handler) {
+            if ($.isFunction(handler)) {
+                if ($.isArray(this.events[event])) {
+                    this.events[event].push(handler);
+                } else {
+                    this.events[event] = [handler];
+                }
+            }
+
+            return this;
+        },
+
+        off: function(event, handler) {
+            if ($.isFunction(handler) && $.isArray(this.events[event])) {
+                $.each(this.events[event], function(i, f) {
+                    if (f === handler) {
+                        delete this.events[event][i];
+                        return false;
+                    }
+                });
+            }
+
+            return this;
+        },
+
+        is: function(state) {
+            return this.states[state] && this.states[state] === true;
+        },
+
+        reset: function() {
+            for (var state in this.states) {
+                this.leave(state);
+            }
+            this.setup();
+
+            return this;
+        },
+
+        setLoader: function(loader) {
+            this.loader = loader;
+
+            if (this.is('active')) {
+                this.load();
+            }
+
+            return this;
+        },
+
+        setValidator: function(validator) {
+            if ($.isFunction(validator)) {
+                this.validator = validator;
+            }
+
+            return this;
+        },
+
+        validate: function() {
+            return this.validator.call(this.$pane.get(0), this);
+        }
+    });
+
+    $.extend(Wizard.prototype, {
+        Constructor: Wizard,
+        initialize: function() {
+            this.steps = [];
+            var self = this;
+
+            this.$steps.each(function(index) {
+                self.steps.push(new Step(this, self, index));
+            });
+
+            this._current = 0;
+            this.transitioning = null;
+
+            $.each(this.steps, function(i, step) {
+                step.setup();
+            });
+
+            this.setup();
+
+            this.$element.on('click', this.options.step, function(e) {
+                var index = $(this).data('wizard-index');
+
+                if (!self.get(index).is('disabled')) {
+                    self.goTo(index);
+                }
+
+                e.preventDefault();
+                e.stopPropagation();
+            });
+
+            if (this.options.keyboard) {
+                $(document).on('keyup', $.proxy(this.keydown, this));
+            }
+
+            this.trigger('init');
+        },
+
+        setup: function() {
+            this.$buttons = $(this.options.templates.buttons.call(this));
+
+            this.updateButtons();
+
+            var buttonsAppendTo = this.options.buttonsAppendTo;
+            var $to;
+            if (buttonsAppendTo === 'this') {
+                $to = this.$element;
+            } else if ($.isFunction(buttonsAppendTo)) {
+                $to = buttonsAppendTo.call(this);
+            } else {
+                $to = this.$element.find(buttonsAppendTo);
+            }
+            this.$buttons = this.$buttons.appendTo($to);
+        },
+
+        updateButtons: function() {
+            var classes = this.options.classes.button;
+            var $back = this.$buttons.find('[data-wizard="back"]');
+            var $next = this.$buttons.find('[data-wizard="next"]');
+            var $finish = this.$buttons.find('[data-wizard="finish"]');
+
+            if (this._current === 0) {
+                $back.addClass(classes.disabled);
+            } else {
+                $back.removeClass(classes.disabled);
+            }
+
+            if (this._current === this.lastIndex()) {
+                $next.addClass(classes.hide);
+                $finish.removeClass(classes.hide);
+            } else {
+                $next.removeClass(classes.hide);
+                $finish.addClass(classes.hide);
+            }
+        },
+
+        updateSteps: function() {
+            var self = this;
+
+            $.each(this.steps, function(i, step) {
+
+                if (i > self._current) {
+                    step.leave('error');
+                    step.leave('active');
+                    step.leave('done');
+
+                    if (!self.options.enableWhenVisited) {
+                        step.enter('disabled');
+                    }
+                }
+            });
+        },
+
+        keydown: function(e) {
+            if (/input|textarea/i.test(e.target.tagName)) return;
+            switch (e.which) {
+                case 37:
+                    this.back();
+                    break;
+                case 39:
+                    this.next();
+                    break;
+                default:
+                    return;
+            }
+
+            e.preventDefault();
+        },
+
+        trigger: function(eventType) {
+            var method_arguments = Array.prototype.slice.call(arguments, 1);
+            var data = [this].concat(method_arguments);
+
+            this.$element.trigger('wizard::' + eventType, data);
+
+            // callback
+            eventType = eventType.replace(/\b\w+\b/g, function(word) {
+                return word.substring(0, 1).toUpperCase() + word.substring(1);
+            });
+
+            var onFunction = 'on' + eventType;
+            if (typeof this.options[onFunction] === 'function') {
+                this.options[onFunction].apply(this, method_arguments);
+            }
+        },
+
+        get: function(index) {
+            if (typeof index === 'string' && index.substring(0, 1) === '#') {
+                var id = index.substring(1);
+                for (var i in this.steps) {
+                    if (this.steps[i].$pane.attr('id') === id) {
+                        return this.steps[i];
+                    }
+                }
+            }
+
+            if (index < this.length() && this.steps[index]) {
+                return this.steps[index];
+            }
+
+            return null;
+        },
+
+        goTo: function(index, callback) {
+            if (index === this._current || this.transitioning === true) {
+                return false;
+            }
+
+            var current = this.current();
+            var to = this.get(index);
 
             if (index > this._current) {
-              current.enter('done');
+                if (!current.validate()) {
+                    current.leave('done');
+                    current.enter('error');
+
+                    return -1;
+                } else {
+                    current.leave('error');
+
+                    if (index > this._current) {
+                        current.enter('done');
+                    }
+                }
             }
-          }
 
-          var that = this;
-          var process = function process() {
-            that.trigger('beforeChange', current, to);
-            that.transitioning = true;
+            var self = this;
+            var process = function() {
+                self.trigger('beforeChange', current, to);
+                self.transitioning = true;
 
-            current.hide();
-            to.show(
+                current.hide();
+                to.show(function() {
+                    self._current = index;
+                    self.transitioning = false;
+                    this.leave('disabled');
 
-              function() {
-                that._current = index;
-                that.transitioning = false;
-                this.leave('disabled');
+                    self.updateButtons();
+                    self.updateSteps();
 
-                that.updateButtons();
-                that.updateSteps();
+                    if (self.options.autoFocus) {
+                        var $input = this.$pane.find(':input');
+                        if ($input.length > 0) {
+                            $input.eq(0).focus();
+                        } else {
+                            this.$pane.focus();
+                        }
+                    }
 
-                if (that.options.autoFocus) {
-                  var $input = this.$pane.find(':input');
+                    if ($.isFunction(callback)) {
+                        callback.call(self);
+                    }
 
-                  if ($input.length > 0) {
-                    $input.eq(0).focus();
-                  } else {
-                    this.$pane.focus();
-                  }
-                }
+                    self.trigger('afterChange', current, to);
+                });
+            };
 
-                if (_jquery2.default.isFunction(callback)) {
-                  callback.call(that);
-                }
-
-                that.trigger('afterChange', current, to);
-              }
-            );
-          };
-
-          if (to.loader) {
-            to.load(
-
-              function() {
-                process();
-              }
-            );
-          } else {
-            process();
-          }
-
-          return true;
-        }
-      }, {
-        key: 'length',
-        value: function length() {
-          return this.steps.length;
-        }
-      }, {
-        key: 'current',
-        value: function current() {
-          return this.get(this._current);
-        }
-      }, {
-        key: 'currentIndex',
-        value: function currentIndex() {
-          return this._current;
-        }
-      }, {
-        key: 'lastIndex',
-        value: function lastIndex() {
-          return this.length() - 1;
-        }
-      }, {
-        key: 'next',
-        value: function next() {
-          var _this2 = this;
-
-          if (this._current < this.lastIndex()) {
-            (function() {
-              var from = _this2._current,
-                to = _this2._current + 1;
-
-              _this2.goTo(to,
-
-                function() {
-                  this.trigger('next', this.get(from), this.get(to));
-                }
-              );
-            })();
-          }
-
-          return false;
-        }
-      }, {
-        key: 'back',
-        value: function back() {
-          var _this3 = this;
-
-          if (this._current > 0) {
-            (function() {
-              var from = _this3._current,
-                to = _this3._current - 1;
-
-              _this3.goTo(to,
-
-                function() {
-                  this.trigger('back', this.get(from), this.get(to));
-                }
-              );
-            })();
-          }
-
-          return false;
-        }
-      }, {
-        key: 'first',
-        value: function first() {
-          return this.goTo(0);
-        }
-      }, {
-        key: 'finish',
-        value: function finish() {
-          if (this._current === this.lastIndex()) {
-            var current = this.current();
-
-            if (current.validate()) {
-              this.trigger('finish');
-              current.leave('error');
-              current.enter('done');
+            if (to.loader) {
+                to.load(function() {
+                    process();
+                });
             } else {
-              current.enter('error');
+                process();
             }
-          }
-        }
-      }, {
-        key: 'reset',
-        value: function reset() {
-          this._current = 0;
 
-          _jquery2.default.each(this.steps,
+            return true;
+        },
 
-            function(i, step) {
-              step.reset();
+        length: function() {
+            return this.steps.length;
+        },
+
+        current: function() {
+            return this.get(this._current);
+        },
+
+        currentIndex: function() {
+            return this._current;
+        },
+
+        lastIndex: function() {
+            return this.length() - 1;
+        },
+
+        next: function() {
+            if (this._current < this.lastIndex()) {
+                var from = this._current,
+                    to = this._current + 1;
+
+                this.goTo(to, function() {
+                    this.trigger('next', this.get(from), this.get(to));
+                });
             }
-          );
 
-          this.trigger('reset');
+            return false;
+        },
+
+        back: function() {
+            if (this._current > 0) {
+                var from = this._current,
+                    to = this._current - 1;
+
+                this.goTo(to, function() {
+                    this.trigger('back', this.get(from), this.get(to));
+                });
+            }
+
+            return false;
+        },
+
+        first: function() {
+            return this.goTo(0);
+        },
+
+        finish: function() {
+            if (this._current === this.lastIndex()) {
+                var current = this.current();
+                if (current.validate()) {
+                    this.trigger('finish');
+                    current.leave('error');
+                    current.enter('done');
+                } else {
+                    current.enter('error');
+                }
+            }
+        },
+
+        reset: function() {
+            this._current = 0;
+
+            $.each(this.steps, function(i, step) {
+                step.reset();
+            });
+
+            this.trigger('reset');
         }
-      }], [{
-        key: 'setDefaults',
-        value: function setDefaults(options) {
-          _jquery2.default.extend(true, DEFAULTS, _jquery2.default.isPlainObject(options) && options);
-        }
-      }]);
+    });
 
-      return wizard;
-    }();
+    $(document).on('click', '[data-wizard]', function(e) {
+        var href;
+        var $this = $(this);
+        var $target = $($this.attr('data-target') || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, ''));
 
-    (0, _jquery2.default)(document).on('click', '[data-wizard]',
-
-      function(e) {
-        'use strict';
-
-        var href = void 0;
-        var $this = (0, _jquery2.default)(this);
-        var $target = (0, _jquery2.default)($this.attr('data-target') || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, ''));
-
-        var wizard = $target.data(NAMESPACE$1);
+        var wizard = $target.data('wizard');
 
         if (!wizard) {
-
-          return;
+            return;
         }
 
-        var method = $this.data(NAMESPACE$1);
+        var method = $this.data('wizard');
 
         if (/^(back|next|first|finish|reset)$/.test(method)) {
-          wizard[method]();
+            wizard[method]();
         }
 
         e.preventDefault();
-      }
-    );
+    });
 
-    var info = {
-      version: '0.4.3'
-    };
+    $.fn.wizard = function(options) {
+        if (typeof options === 'string') {
+            var method = options;
+            var method_arguments = Array.prototype.slice.call(arguments, 1);
 
-    var NAMESPACE = 'wizard';
-    var OtherWizard = _jquery2.default.fn.wizard;
-
-    var jQueryWizard = function jQueryWizard(options) {
-      var _this4 = this;
-
-      for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-        args[_key3 - 1] = arguments[_key3];
-      }
-
-      if (typeof options === 'string') {
-        var _ret3 = function() {
-          var method = options;
-
-          if (/^_/.test(method)) {
-
-            return {
-              v: false
-            };
-          } else if (/^(get)/.test(method)) {
-            var instance = _this4.first().data(NAMESPACE);
-
-            if (instance && typeof instance[method] === 'function') {
-
-              return {
-                v: instance[method].apply(instance, args)
-              };
-            }
-          } else {
-
-            return {
-              v: _this4.each(
-
-                function() {
-                  var instance = _jquery2.default.data(this, NAMESPACE);
-
-                  if (instance && typeof instance[method] === 'function') {
-                    instance[method].apply(instance, args);
-                  }
+            if (/^\_/.test(method)) {
+                return false;
+            } else if ((/^(get)$/.test(method))) {
+                var api = this.first().data('wizard');
+                if (api && typeof api[method] === 'function') {
+                    return api[method].apply(api, method_arguments);
                 }
-              )
-            };
-          }
-        }();
-
-        if ((typeof _ret3 === 'undefined' ? 'undefined' : _typeof(_ret3)) === "object")
-
-          return _ret3.v;
-      }
-
-      return this.each(
-
-        function() {
-          if (!(0, _jquery2.default)(this).data(NAMESPACE)) {
-            (0, _jquery2.default)(this).data(NAMESPACE, new wizard(this, options));
-          }
+            } else {
+                return this.each(function() {
+                    var api = $.data(this, 'wizard');
+                    if (api && typeof api[method] === 'function') {
+                        api[method].apply(api, method_arguments);
+                    }
+                });
+            }
+        } else {
+            return this.each(function() {
+                if (!$.data(this, 'wizard')) {
+                    $.data(this, 'wizard', new Wizard(this, options));
+                }
+            });
         }
-      );
     };
-
-    _jquery2.default.fn.wizard = jQueryWizard;
-
-    _jquery2.default.wizard = _jquery2.default.extend({
-      setDefaults: wizard.setDefaults,
-      noConflict: function noConflict() {
-        _jquery2.default.fn.wizard = OtherWizard;
-
-        return jQueryWizard;
-      }
-    }, info);
-  }
-);
+})(jQuery, document, window);

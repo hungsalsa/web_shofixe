@@ -1,10 +1,3 @@
-/*
-Template Name: Elitehospital Admin
-Author: Themedesigner
-Email: niravjoshi87@gmail.com
-File: js
-*/
-
 /*jslint browser: true*/
 /*global $, jQuery, alert*/
 
@@ -17,6 +10,12 @@ $(document).ready(function () {
     $(function () {
         $(".preloader").fadeOut();
         $('#side-menu').metisMenu();
+    });
+
+    /* ===== Theme Settings ===== */
+
+    $(".open-close").on("click", function () {
+        body.toggleClass("show-sidebar");
     });
 
     /* ===== Open-Close Right Sidebar ===== */
@@ -34,11 +33,6 @@ $(document).ready(function () {
 
         var fxhdr = $('.fxhdr');
         if (body.hasClass("fix-header")) {
-            fxhdr.attr('checked', true);
-        } else {
-            fxhdr.attr('checked', false);
-        }
-        if (body.hasClass("fix-sidebar")) {
             fxhdr.attr('checked', true);
         } else {
             fxhdr.attr('checked', false);
@@ -67,13 +61,9 @@ $(document).ready(function () {
 
                 if (width < 1170) {
                     body.addClass('content-wrapper');
-                    $(".open-close i").removeClass('icon-arrow-left-circle');
                     $(".sidebar-nav, .slimScrollDiv").css("overflow-x", "visible").parent().css("overflow", "visible");
-                    $(".logo span").hide();
                 } else {
                     body.removeClass('content-wrapper');
-                    $(".open-close i").addClass('icon-arrow-left-circle');
-                    $(".logo span").show();
                 }
 
                 height = height - topOffset;
@@ -92,28 +82,7 @@ $(document).ready(function () {
             element.addClass('active');
         }
         $(window).ready(set);
-        $(window).on("resize", set);
-    });
-
-    /* ===================================================
-        This is for click on open close button
-        Sidebar open close
-    =================================================== */
-
-    $(".open-close").on('click', function () {
-        if ($("body").hasClass("content-wrapper")) {
-            $("body").trigger("resize");
-            $(".sidebar-nav, .slimScrollDiv").css("overflow", "hidden").parent().css("overflow", "visible");
-            $("body").removeClass("content-wrapper");
-            $(".open-close i").addClass("icon-arrow-left-circle");
-            $(".logo span").show();
-        } else {
-            $("body").trigger("resize");
-            $(".sidebar-nav, .slimScrollDiv").css("overflow-x", "visible").parent().css("overflow", "visible");
-            $("body").addClass("content-wrapper");
-            $(".open-close i").removeClass("icon-arrow-left-circle");
-            $(".logo span").hide();
-        }
+        $(window).bind("resize", set);
     });
 
     /* ===== Collapsible Panels JS ===== */
@@ -202,9 +171,9 @@ $(document).ready(function () {
     });
     $('.slimscrollsidebar').slimScroll({
         height: '100%',
-        position: 'right',
-        size: "0px",
-        color: '#dcdcdc'
+        position: 'left',
+        size: "6px",
+        color: 'rgba(0,0,0,0.5)'
     });
     $('.chat-list').slimScroll({
         height: '100%',

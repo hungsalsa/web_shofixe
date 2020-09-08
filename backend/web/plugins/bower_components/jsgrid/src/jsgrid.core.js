@@ -26,22 +26,6 @@
         return value;
     };
 
-    var normalizePromise = function(promise) {
-        var d = $.Deferred();
-
-        if(promise && promise.then) {
-            promise.then(function() {
-                d.resolve.apply(d, arguments);
-            }, function() {
-                d.reject.apply(d, arguments);
-            });
-        } else {
-            d.resolve(promise);
-        }
-
-        return d.promise();
-    };
-
     var defaultController = {
         loadData: $.noop,
         insertItem: $.noop,
@@ -90,7 +74,6 @@
         heading: true,
         headerRowRenderer: null,
         headerRowClass: "jsgrid-header-row",
-        headerCellClass: "jsgrid-header-cell",
 
         filtering: false,
         filterRowRenderer: null,
@@ -111,7 +94,6 @@
         selectedRowClass: "jsgrid-selected-row",
         oddRowClass: "jsgrid-row",
         evenRowClass: "jsgrid-alt-row",
-        cellClass: "jsgrid-cell",
 
         sorting: false,
         sortableClass: "jsgrid-header-sortable",
@@ -158,16 +140,13 @@
             window.alert([this.invalidMessage].concat(messages).join("\n"));
         },
 
-        onInit: $.noop,
         onRefreshing: $.noop,
         onRefreshed: $.noop,
-        onPageChanged: $.noop,
         onItemDeleting: $.noop,
         onItemDeleted: $.noop,
         onItemInserting: $.noop,
         onItemInserted: $.noop,
         onItemEditing: $.noop,
-        onItemEditCancelling: $.noop,
         onItemUpdating: $.noop,
         onItemUpdated: $.noop,
         onItemInvalid: $.noop,
@@ -191,7 +170,6 @@
             this._initFields();
             this._attachWindowLoadResize();
             this._attachWindowResizeCallback();
-            this._callEventHandler(this.onInit)
         },
 
         loadStrategy: function() {
@@ -206,18 +184,6 @@
 
         _initController: function() {
             this._controller = $.extend({}, defaultController, getOrApply(this.controller, this));
-        },
-
-        renderTemplate: function(source, context, config) {
-            args = [];
-            for(var key in config) {
-                args.push(config[key]);
-            }
-
-            args.unshift(source, context);
-
-            source = getOrApply.apply(null, args);
-            return (source === undefined || source === null) ? "" : source;
         },
 
         loadIndicator: function(config) {
@@ -299,6 +265,7 @@
                 case "rowRenderer":
                 case "rowClick":
                 case "rowDoubleClick":
+                case "noDataText":
                 case "noDataRowClass":
                 case "noDataContent":
                 case "selecting":
@@ -460,13 +427,13 @@
 
         _createHeaderRow: function() {
             if($.isFunction(this.headerRowRenderer))
-                return $(this.renderTemplate(this.headerRowRenderer, this));
+                return $(this.headerRowRenderer());
 
             var $result = $("<tr>").addClass(this.headerRowClass);
 
             this._eachField(function(field, index) {
-                var $th = this._prepareCell("<th>", field, "headercss", this.headerCellClass)
-                    .append(this.renderTemplate(field.headerTemplate, field))
+                var $th = this._prepareCell("<th>", field, "headercss")
+                    .append(field.headerTemplate ? field.headerTemplate() : "")
                     .appendTo($result);
 
                 if(this.sorting && field.sorting) {
@@ -480,22 +447,21 @@
             return $result;
         },
 
-        _prepareCell: function(cell, field, cssprop, cellClass) {
+        _prepareCell: function(cell, field, cssprop) {
             return $(cell).css("width", field.width)
-                .addClass(cellClass || this.cellClass)
                 .addClass((cssprop && field[cssprop]) || field.css)
                 .addClass(field.align ? ("jsgrid-align-" + field.align) : "");
         },
 
         _createFilterRow: function() {
             if($.isFunction(this.filterRowRenderer))
-                return $(this.renderTemplate(this.filterRowRenderer, this));
+                return $(this.filterRowRenderer());
 
             var $result = $("<tr>").addClass(this.filterRowClass);
 
             this._eachField(function(field) {
                 this._prepareCell("<td>", field, "filtercss")
-                    .append(this.renderTemplate(field.filterTemplate, field))
+                    .append(field.filterTemplate ? field.filterTemplate() : "")
                     .appendTo($result);
             });
 
@@ -504,13 +470,13 @@
 
         _createInsertRow: function() {
             if($.isFunction(this.insertRowRenderer))
-                return $(this.renderTemplate(this.insertRowRenderer, this));
+                return $(this.insertRowRenderer());
 
             var $result = $("<tr>").addClass(this.insertRowClass);
 
             this._eachField(function(field) {
                 this._prepareCell("<td>", field, "insertcss")
-                    .append(this.renderTemplate(field.insertTemplate, field))
+                    .append(field.insertTemplate ? field.insertTemplate() : "")
                     .appendTo($result);
             });
 
@@ -528,7 +494,7 @@
         reset: function() {
             this._resetSorting();
             this._resetPager();
-            return this._loadStrategy.reset();
+            this.refresh();
         },
 
         _resetPager: function() {
@@ -588,21 +554,28 @@
         },
 
         _createNoDataRow: function() {
+            var noDataContent = getOrApply(this.noDataContent, this);
+
             var amountOfFields = 0;
             this._eachField(function() {
                 amountOfFields++;
             });
 
             return $("<tr>").addClass(this.noDataRowClass)
-                .append($("<td>").addClass(this.cellClass).attr("colspan", amountOfFields)
-                    .append(this.renderTemplate(this.noDataContent, this)));
+                .append($("<td>").attr("colspan", amountOfFields).append(noDataContent));
+        },
+
+        _createNoDataContent: function() {
+            return $.isFunction(this.noDataRenderer)
+                ? this.noDataRenderer()
+                : this.noDataText;
         },
 
         _createRow: function(item, itemIndex) {
             var $result;
 
             if($.isFunction(this.rowRenderer)) {
-                $result = this.renderTemplate(this.rowRenderer, this, { item: item, itemIndex: itemIndex });
+                $result = $(this.rowRenderer(item, itemIndex));
             } else {
                 $result = $("<tr>");
                 this._renderCells($result, item);
@@ -661,11 +634,10 @@
             var $result;
             var fieldValue = this._getItemFieldValue(item, field);
 
-            var args = { value: fieldValue, item : item };
             if($.isFunction(field.cellRenderer)) {
-                $result = this.renderTemplate(field.cellRenderer, field, args);
+                $result = $(field.cellRenderer(fieldValue, item));
             } else {
-                $result = $("<td>").append(this.renderTemplate(field.itemTemplate || fieldValue, field, args));
+                $result = $("<td>").append(field.itemTemplate ? field.itemTemplate(fieldValue, item) : fieldValue);
             }
 
             return this._prepareCell($result, field);
@@ -748,14 +720,10 @@
         },
 
         _setSortingCss: function() {
-            var fieldIndex = this._visibleFieldIndex(this._sortField);
+            var fieldIndex = $.inArray(this._sortField, $.grep(this.fields, function(f) { return f.visible; }));
 
             this._headerRow.find("th").eq(fieldIndex)
                 .addClass(this._sortOrder === SORT_ORDER_ASC ? this.sortAscClass : this.sortDescClass);
-        },
-
-        _visibleFieldIndex: function(field) {
-            return $.inArray(field, $.grep(this.fields, function(f) { return f.visible; }));
         },
 
         _sortData: function() {
@@ -902,23 +870,20 @@
         },
 
         _refreshWidth: function() {
-            var width = (this.width === "auto") ? this._getAutoWidth() : this.width;
-
-            this._container.width(width);
-        },
-
-        _getAutoWidth: function() {
             var $headerGrid = this._headerGrid,
-                $header = this._header;
+                $bodyGrid = this._bodyGrid,
+                width = this.width;
 
-            $headerGrid.width("auto");
-
-            var contentWidth = $headerGrid.outerWidth();
-            var borderWidth = $header.outerWidth() - $header.innerWidth();
+            if(width === "auto") {
+                $headerGrid.width("auto");
+                width = $headerGrid.outerWidth();
+            }
 
             $headerGrid.width("");
-
-            return contentWidth + borderWidth;
+            $bodyGrid.width("");
+            this._container.width(width);
+            width = $headerGrid.outerWidth();
+            $bodyGrid.width(width);
         },
 
         _scrollBarWidth: (function() {
@@ -1001,10 +966,6 @@
             if(pageIndex > firstDisplayingPage + pageButtonCount - 1) {
                 this._firstDisplayingPage = pageIndex - pageButtonCount + 1;
             }
-
-            this._callEventHandler(this.onPageChanged, {
-                pageIndex: pageIndex
-            });
         },
 
         _controllerCall: function(method, param, isCanceled, doneCallback) {
@@ -1018,7 +979,7 @@
                 throw Error("controller has no method '" + method + "'");
             }
 
-            return normalizePromise(controller[method](param))
+            return $.when(controller[method](param))
                 .done($.proxy(doneCallback, this))
                 .fail($.proxy(this._errorHandler, this))
                 .always($.proxy(this._hideLoading, this));
@@ -1155,20 +1116,16 @@
                 row: $row
             };
 
-            this._eachField(function(field) {
-                if(!field.validate ||
-                   ($row === this._insertRow && !field.inserting) ||
-                   ($row === this._getEditRow() && !field.editing))
+            this._eachField(function(field, index) {
+                if(!field.validate)
                     return;
 
-                var fieldValue = this._getItemFieldValue(item, field);
-
                 var errors = this._validation.validate($.extend({
-                    value: fieldValue,
+                    value: this._getItemFieldValue(item, field),
                     rules: field.validate
                 }, args));
 
-                this._setCellValidity($row.children().eq(this._visibleFieldIndex(field)), errors);
+                this._setCellValidity($row.children().eq(index), errors);
 
                 if(!errors.length)
                     return;
@@ -1249,7 +1206,7 @@
 
         _createEditRow: function(item) {
             if($.isFunction(this.editRowRenderer)) {
-                return $(this.renderTemplate(this.editRowRenderer, this, { item: item, itemIndex: this._itemIndex(item) }));
+                return $(this.editRowRenderer(item, this._itemIndex(item)));
             }
 
             var $result = $("<tr>").addClass(this.editRowClass);
@@ -1258,7 +1215,7 @@
                 var fieldValue = this._getItemFieldValue(item, field);
 
                 this._prepareCell("<td>", field, "editcss")
-                    .append(this.renderTemplate(field.editTemplate || "", field, { value: fieldValue, item: item }))
+                    .append(field.editTemplate ? field.editTemplate(fieldValue, item) : "")
                     .appendTo($result);
             });
 
@@ -1287,19 +1244,19 @@
         _updateRow: function($updatingRow, editedItem) {
             var updatingItem = $updatingRow.data(JSGRID_ROW_DATA_KEY),
                 updatingItemIndex = this._itemIndex(updatingItem),
-                updatedItem = $.extend(true, {}, updatingItem, editedItem);
+                previousItem = $.extend(true, {}, updatingItem);
+
+            $.extend(true, updatingItem, editedItem);
 
             var args = this._callEventHandler(this.onItemUpdating, {
                 row: $updatingRow,
-                item: updatedItem,
+                item: updatingItem,
                 itemIndex: updatingItemIndex,
-                previousItem: updatingItem
+                previousItem: previousItem
             });
 
-            return this._controllerCall("updateItem", updatedItem, args.cancel, function(loadedUpdatedItem) {
-                var previousItem = $.extend(true, {}, updatingItem);
-                updatedItem = loadedUpdatedItem || $.extend(true, updatingItem, editedItem);
-
+            return this._controllerCall("updateItem", updatingItem, args.cancel, function(updatedItem) {
+                updatedItem = updatedItem || updatingItem;
                 var $updatedRow = this._finishUpdate($updatingRow, updatedItem, updatingItemIndex);
 
                 this._callEventHandler(this.onItemUpdated, {
@@ -1342,23 +1299,13 @@
             if(!this._editingRow)
                 return;
 
-            var $row = this._editingRow,
-                editingItem = $row.data(JSGRID_ROW_DATA_KEY),
-                editingItemIndex = this._itemIndex(editingItem);
-
-            this._callEventHandler(this.onItemEditCancelling, {
-                row: $row,
-                item: editingItem,
-                itemIndex: editingItemIndex
-            });
-
             this._getEditRow().remove();
             this._editingRow.show();
             this._editingRow = null;
         },
 
         _getEditRow: function() {
-            return this._editingRow && this._editingRow.data(JSGRID_EDIT_ROW_DATA_KEY);
+            return this._editingRow.data(JSGRID_EDIT_ROW_DATA_KEY);
         },
 
         deleteItem: function(item) {
@@ -1471,8 +1418,7 @@
         fields: fields,
         setDefaults: setDefaults,
         locales: locales,
-        locale: locale,
-        version: "@VERSION"
+        locale: locale
     };
 
 }(window, jQuery));

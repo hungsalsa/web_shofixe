@@ -43,29 +43,15 @@ $(function() {
             if(isFieldExcluded(FieldClass))
                 return;
 
-            var item = {
-                field: "test"
-            };
-            var args;
+            var field = new FieldClass({ editing: false });
 
-            var field = new FieldClass({
-                editing: false,
-                itemTemplate: function() {
-                    args = arguments;
-                    FieldClass.prototype.itemTemplate.apply(this, arguments);
-                }
-            });
-
-            var itemTemplate = field.itemTemplate("test", item);
-            var editTemplate = field.editTemplate("test", item);
+            var editTemplate = field.editTemplate("test");
+            var itemTemplate = field.itemTemplate("test");
 
             var editTemplateContent = editTemplate instanceof jQuery ? editTemplate[0].outerHTML : editTemplate;
             var itemTemplateContent = itemTemplate instanceof jQuery ? itemTemplate[0].outerHTML : itemTemplate;
 
-            equal(editTemplateContent, itemTemplateContent, "item template is rendered instead of edit template for " + name);
-            equal(args.length, 2, "passed both arguments for " + name);
-            equal(args[0], "test", "field value passed as a first argument for " + name);
-            equal(args[1], item, "item passed as a second argument for " + name);
+            equal(editTemplateContent, itemTemplateContent, "item template is rendered instead of edit template for field " + name);
         });
     });
 
@@ -129,8 +115,8 @@ $(function() {
         equal(field.filterTemplate()[0].tagName.toLowerCase(), "input");
         equal(field.insertTemplate()[0].tagName.toLowerCase(), "input");
         equal(field.editTemplate(6)[0].tagName.toLowerCase(), "input");
-        strictEqual(field.filterValue(), undefined);
-        strictEqual(field.insertValue(), undefined);
+        strictEqual(field.filterValue(), 0);
+        strictEqual(field.insertValue(), 0);
         strictEqual(field.editValue(), 6);
     });
 
@@ -296,20 +282,6 @@ $(function() {
 
         field.insertTemplate();
         strictEqual(field.insertValue(), "2");
-    });
-
-    test("value type defaulted to string", function() {
-        var field = new jsGrid.SelectField({
-            name: "testField",
-            items: [
-                { text: "test1" },
-                { text: "test2", value: "2" }
-            ],
-            textField: "text",
-            valueField: "value"
-        });
-
-        strictEqual(field.sorter, "string", "sorter set to string if first item has no value field");
     });
 
     test("object items", function() {

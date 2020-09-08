@@ -13,21 +13,15 @@
 		readOnly: false,
 
         filterValue: function() {
-            return this.filterControl.val()
-                ? parseInt(this.filterControl.val() || 0, 10)
-                : undefined;
+            return parseInt(this.filterControl.val() || 0, 10);
         },
 
         insertValue: function() {
-            return this.insertControl.val()
-                ? parseInt(this.insertControl.val() || 0, 10)
-                : undefined;
+            return parseInt(this.insertControl.val() || 0, 10);
         },
 
         editValue: function() {
-            return this.editControl.val()
-                ? parseInt(this.editControl.val() || 0, 10)
-                : undefined;
+            return parseInt(this.editControl.val() || 0, 10);
         },
 
         _createTextBox: function() {

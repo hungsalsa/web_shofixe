@@ -1,157 +1,148 @@
-/*
-Template Name: Elitehospital Admin
-Author: Themedesigner
-Email: niravjoshi87@gmail.com
-File: js
-*/
-"use strict";
-// Dashboard 1 Morris-chart
-Morris.Area({
-        element: 'morris-area-chart2',
-        data: [{
-            period: '2010',
-            OPD: 0,
-            ICU: 0,
-            
-        }, {
-            period: '2011',
-            OPD: 130,
-            ICU: 100,
-            
-        }, {
-            period: '2012',
-            OPD: 30,
-            ICU: 60,
-            
-        }, {
-            period: '2013',
-            OPD: 30,
-            ICU: 200,
-            
-        }, {
-            period: '2014',
-            OPD: 200,
-            ICU: 150,
-            
-        }, {
-            period: '2015',
-            OPD: 105,
-            ICU: 90,
-            
-        },
-         {
-            period: '2016',
-            OPD: 250,
-            ICU: 150,
-           
-        }],
-        xkey: 'period',
-        ykeys: ['OPD', 'ICU'],
-        labels: ['OPD $', 'ICU $'],
-        pointSize: 0,
-        fillOpacity: 0.4,
-        pointStrokeColors:['#b4becb', '#00c292'],
-        behaveLikeLine: true,
-        gridLineColor: '#e0e0e0',
-        lineWidth: 0,
-        smooth: false,
-        hideHover: 'auto',
-        lineColors: ['#b4becb', '#00c292'],
-        resize: true
-        
-    });
-Morris.Bar({
-        element: 'morris-area-chart1',
-        data: [{
-            period: '2010',
-            OPD: 40,
-            ICU: 50,
-            
-        }, {
-            period: '2011',
-            OPD: 130,
-            ICU: 100,
-            
-        }, {
-            period: '2012',
-            OPD: 30,
-            ICU: 60,
-            
-        }, {
-            period: '2013',
-            OPD: 30,
-            ICU: 200,
-            
-        }, {
-            period: '2014',
-            OPD: 200,
-            ICU: 150,
-            
-        }, {
-            period: '2015',
-            OPD: 105,
-            ICU: 90,
-            
-        },
-         {
-            period: '2016',
-            OPD: 250,
-            ICU: 150,
-           
-        }],
-        xkey: 'period',
-        ykeys: ['OPD', 'ICU'],
-        labels: ['OPD', 'ICU'],
-        pointSize: 0,
-       
-        pointStrokeColors:['#469fb4', '#01c0c8'],
-        barColors:['#469fb4', '#01c0c8'],
-        behaveLikeLine: true,
-        gridLineColor: '#e0e0e0',
-        lineWidth: 0,
-        smooth: false,
-        hideHover: 'auto',
-        lineColors: ['#469fb4', '#01c0c8'],
-        resize: true
-        
-    });
+ $(document).ready(function () {
+     "use strict";
+     // toat popup js
+     $.toast({
+         heading: 'Welcome to Ample admin',
+         text: 'Use the predefined ones, or specify a custom position object.',
+         position: 'top-right',
+         loaderBg: '#fff',
+         icon: 'warning',
+         hideAfter: 3500,
+         stack: 6
+     })
+     $('#calendar').fullCalendar('option', 'height', 745);
+     // Dashboard 1 Morris-chart
+     Morris.Area({
+         element: 'morris-area-chart2',
+         data: [{
+                 period: '2010',
+                 SiteA: 50,
+                 SiteB: 0,
+             }, {
+                 period: '2011',
+                 SiteA: 160,
+                 SiteB: 100,
+             }, {
+                 period: '2012',
+                 SiteA: 110,
+                 SiteB: 60,
+             }, {
+                 period: '2013',
+                 SiteA: 60,
+                 SiteB: 200,
+             }, {
+                 period: '2014',
+                 SiteA: 130,
+                 SiteB: 150,
+             }, {
+                 period: '2015',
+                 SiteA: 200,
+                 SiteB: 90,
+             }
+        , {
+                 period: '2016',
+                 SiteA: 100,
+                 SiteB: 150,
+             }],
+         xkey: 'period',
+         ykeys: ['SiteA', 'SiteB'],
+         labels: ['Site A', 'Site B'],
+         pointSize: 0,
+         fillOpacity: 0.1,
+         pointStrokeColors: ['#79e580', '#2cabe3'],
+         behaveLikeLine: true,
+         gridLineColor: '#ffffff',
+         lineWidth: 2,
+         smooth: true,
+         hideHover: 'auto',
+         lineColors: ['#79e580', '#2cabe3'],
+         resize: true
+     });
 
-var sparklineLogin = function () { 
-$("#sparkline8").sparkline([2,4,4,6,8,5,6,4,8,6,6,2 ], {
-            type: 'line',
-            width: '100%',
-            height: '130',
-            lineColor: '#00c292',
-            fillColor: 'rgba(0, 194, 146, 0.2)',
-            maxSpotColor: '#00c292',
-            highlightLineColor: 'rgba(0, 0, 0, 0.2)',
-            highlightSpotColor: '#00c292'
-        });
-        $("#sparkline9").sparkline([2,4,8,6,8,5,6,4,8,6,6,2 ], {
-            type: 'line',
-            width: '100%',
-            height: '130',
-            lineColor: '#03a9f3',
-            fillColor: 'rgba(3, 169, 243, 0.2)',
-            minSpotColor:'#03a9f3',
-            maxSpotColor: '#03a9f3',
-            highlightLineColor: 'rgba(0, 0, 0, 0.2)',
-            highlightSpotColor: '#03a9f3'
-        });
-        $("#sparkline10").sparkline([2,4,4,6,8,5,6,4,8,6,6,2], {
-            type: 'line',
-            width: '100%',
-            height: '130',
-            lineColor: '#fb9678',
-            fillColor: 'rgba(251, 150, 120, 0.2)',
-            maxSpotColor: '#fb9678',
-            highlightLineColor: 'rgba(0, 0, 0, 0.2)',
-            highlightSpotColor: '#fb9678'
-        });
-}
-var sparkResize;
-$(window).resize(function (e) {
-    clearTimeout(sparkResize);
-    sparkResize = setTimeout(sparklineLogin, 100);
-});
-sparklineLogin();
+     //ct-bar-chart
+     new Chartist.Bar('#ct-daily-sales', {
+         labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+         series: [
+    [5, 4, 3, 7, 5, 2, 3]
+
+  ]
+     }, {
+         axisX: {
+             showLabel: false,
+             showGrid: false,
+             // On the x-axis start means top and end means bottom
+             position: 'start'
+         },
+
+         chartPadding: {
+             top: -20,
+             left: 45,
+         },
+         axisY: {
+             showLabel: false,
+             showGrid: false,
+             // On the y-axis start means left and end means right
+             position: 'end'
+         },
+         height: 335,
+         plugins: [
+    Chartist.plugins.tooltip()
+  ]
+     });
+
+     // ct-weather
+     var chart = new Chartist.Line('#ct-weather', {
+         labels: ['1', '2', '3', '4', '5', '6'],
+         series: [
+    [1, 0, 5, 3, 2, 2.5]
+
+  ]
+     }, {
+         showArea: true,
+         showPoint: false,
+
+         chartPadding: {
+             left: -20
+         },
+         axisX: {
+             showLabel: false,
+             showGrid: false
+         },
+         axisY: {
+             showLabel: false,
+             showGrid: true
+         },
+         fullWidth: true,
+
+     });
+     //ct-visits
+     new Chartist.Line('#ct-visits', {
+         labels: ['2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015'],
+         series: [
+    [5, 2, 7, 4, 5, 3, 5, 4],
+    [2, 5, 2, 6, 2, 5, 2, 4]
+  ]
+     }, {
+         top: 0,
+
+         low: 1,
+         showPoint: true,
+
+         fullWidth: true,
+         plugins: [
+    Chartist.plugins.tooltip()
+  ],
+         axisY: {
+             labelInterpolationFnc: function (value) {
+                 return (value / 1) + 'k';
+             }
+         },
+         showArea: true
+     });
+     // counter
+     $(".counter").counterUp({
+         delay: 100,
+         time: 1200
+     });
+
+ });

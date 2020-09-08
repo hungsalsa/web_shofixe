@@ -25,7 +25,9 @@ class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
-
+    public $currentPassword;
+    public $newPassword;
+    public $newPasswordConfirm;
 
     /**
      * {@inheritdoc}
@@ -35,6 +37,9 @@ class User extends ActiveRecord implements IdentityInterface
         return '{{%user}}';
     }
 
+    public static function getDb() {
+        return Yii::$app->get('db1');
+    }
     /**
      * {@inheritdoc}
      */
@@ -53,12 +58,27 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            [['newPassword','currentPassword','newPasswordConfirm'],'required', 'on' => 'changepassword'],
+            [['currentPassword'],'validateCurrentPassword', 'on' => 'changepassword'], 
+            [['newPassword','newPasswordConfirm'],'string' , 'min'=> 6],
+            [['newPassword','newPasswordConfirm'],'filter' , 'filter'=> 'trim'],
+            [['newPasswordConfirm'],'compare' , 'compareAttribute'=> 'newPassword','message'=>'Hai mật khẩu không giống nhau', 'on' => 'changepassword'],
         ];
     }
 
     /**
      * {@inheritdoc}
      */
+    public function validateCurrentPassword(){
+        if (!$this->verifyPassword($this->currentPassword)) {
+            $this->addError("currentPassword","Mật khẩu cũ không đúng");
+        }
+    }
+    public function verifyPassword($password)
+    {
+        $dbpassword = static::findOne(['username'=>Yii::$app->user->identity->username,'status'=>self::STATUS_ACTIVE])->password_hash;
+        return Yii::$app->security->validatePassword($password,$dbpassword);
+    }
     public static function findIdentity($id)
     {
         return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
@@ -124,6 +144,10 @@ class User extends ActiveRecord implements IdentityInterface
     public function getId()
     {
         return $this->getPrimaryKey();
+    }
+    public function getManager()
+    {
+        return \Yii::$app->user->identity->manager;
     }
 
     /**

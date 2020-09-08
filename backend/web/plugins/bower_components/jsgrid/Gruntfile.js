@@ -61,21 +61,6 @@
             }
         },
 
-        "string-replace": {
-            version: {
-                files: [{
-                    src: "<%= concat.js.dest %>",
-                    dest: "<%= concat.js.dest %>"
-                }],
-                options: {
-                    replacements: [{
-                        pattern: /"@VERSION"/g,
-                        replacement: "'<%= pkg.version %>'"
-                    }]
-                }
-            }
-        },
-
         imageEmbed: {
             options: {
                 deleteAfterEncoding : true
@@ -122,9 +107,8 @@
     grunt.loadNpmTasks("grunt-image-embed");
     grunt.loadNpmTasks("grunt-contrib-cssmin");
     grunt.loadNpmTasks("grunt-contrib-qunit");
-    grunt.loadNpmTasks('grunt-string-replace');
 
-    grunt.registerTask("default", ["copy", "concat", "string-replace", "imageEmbed", "uglify", "cssmin"]);
+    grunt.registerTask("default", ["copy", "concat", "imageEmbed", "uglify", "cssmin"]);
 
     grunt.registerTask("test", "qunit");
 };

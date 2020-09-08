@@ -38,12 +38,12 @@
     border-spacing: 0;
 }
 
-.jsgrid-cell {
+.jsgrid-table td {
     padding: 0.5em 0.5em;
 }
 
-.jsgrid-сell,
-.jsgrid-header-cell {
+.jsgrid-table td,
+.jsgrid-table th {
     box-sizing: border-box;
 }
 
@@ -65,7 +65,7 @@
     text-align: right;
 }
 
-.jsgrid-header-cell {
+.jsgrid-header-row > th {
     padding: .5em .5em;
 }
 
@@ -89,11 +89,11 @@
 }
 
 
-.jsgrid-selected-row .jsgrid-cell {
+.jsgrid-selected-row td {
     cursor: pointer;
 }
 
-.jsgrid-nodata-row .jsgrid-cell {
+.jsgrid-nodata-row td {
     padding: .5em 0;
     text-align: center;
 }

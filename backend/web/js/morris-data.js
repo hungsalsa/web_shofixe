@@ -1,10 +1,3 @@
-/*
-Template Name: Elitehospital Admin
-Author: Themedesigner
-Email: niravjoshi87@gmail.com
-File: js
-*/
-"use strict";
 // Dashboard 1 Morris-chart
 
 Morris.Area({

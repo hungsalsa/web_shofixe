@@ -7,7 +7,7 @@ $.fn.numericInputExample = function () {
 		dataRows = element.find('tbody tr'),
 		initialTotal = function () {
 			var column, total;
-			for (column = 1; column < footer.children(); column++) {
+			for (column = 1; column < footer.children().size(); column++) {
 				total = 0;
 				dataRows.each(function () {
 					var row = $(this);

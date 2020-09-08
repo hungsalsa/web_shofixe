@@ -6,3 +6,4 @@ ReWritecond %{REQUEST_URL} !^public
 RewriteRule ^backend(.*)$ backend/web/$1 [L,PT]
 # handle the case of frontend
 RewriteRule ^(.*)$ frontend/web/$1 [L,QSA]
+

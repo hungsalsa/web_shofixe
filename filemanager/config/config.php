@@ -141,7 +141,7 @@ $config = array(
 	|
 	*/
 
-	'access_keys' => array('86d93af342a8b8ac53b8d1cc42949f34','48ef7eccfc064a72d71aec24ebf9d0ad'),
+	'access_keys' => array('59504ba894ee6616c76df4baa31dcf2f'),
 
 	//--------------------------------------------------------------------------------------------------------
 	// YOU CAN COPY AND CHANGE THESE VARIABLES INTO FOLDERS config.php FILES TO CUSTOMIZE EACH FOLDER OPTIONS

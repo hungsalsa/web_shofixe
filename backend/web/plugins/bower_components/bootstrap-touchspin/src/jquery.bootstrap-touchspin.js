@@ -35,7 +35,6 @@
       min: 0,
       max: 100,
       initval: '',
-      replacementval: '',
       step: 1,
       decimals: 0,
       stepinterval: 100,
@@ -53,16 +52,13 @@
       maxboostedstep: false,
       mousewheel: true,
       buttondown_class: 'btn btn-default',
-      buttonup_class: 'btn btn-default',
-      buttondown_txt: '-',
-      buttonup_txt: '+'
+      buttonup_class: 'btn btn-default'
     };
 
     var attributeMap = {
       min: 'min',
       max: 'max',
       initval: 'init-val',
-      replacementval: 'replacement-val',
       step: 'step',
       decimals: 'decimals',
       stepinterval: 'step-interval',
@@ -80,9 +76,7 @@
       maxboostedstep: 'max-boosted-step',
       mousewheel: 'mouse-wheel',
       buttondown_class: 'button-down-class',
-      buttonup_class: 'button-up-class',
-      buttondown_txt: 'button-down-txt',
-      buttonup_txt: 'button-up-txt'
+      buttonup_class: 'button-up-class'
     };
 
     return this.each(function() {
@@ -164,14 +158,6 @@
 
       function _updateSettings(newsettings) {
         settings = $.extend({}, settings, newsettings);
-
-        // Update postfix and prefix texts if those settings were changed.
-        if (newsettings.postfix) {
-          originalinput.parent().find('.bootstrap-touchspin-postfix').text(newsettings.postfix);
-        }
-        if (newsettings.prefix) {
-          originalinput.parent().find('.bootstrap-touchspin-prefix').text(newsettings.prefix);
-        }
       }
 
       function _buildHtml() {
@@ -205,20 +191,20 @@
             postfixhtml = '<span class="input-group-addon bootstrap-touchspin-postfix">' + settings.postfix + '</span>';
 
         if (prev.hasClass('input-group-btn')) {
-          downhtml = '<button class="' + settings.buttondown_class + ' bootstrap-touchspin-down" type="button">' + settings.buttondown_txt + '</button>';
+          downhtml = '<button class="' + settings.buttondown_class + ' bootstrap-touchspin-down" type="button">-</button>';
           prev.append(downhtml);
         }
         else {
-          downhtml = '<span class="input-group-btn"><button class="' + settings.buttondown_class + ' bootstrap-touchspin-down" type="button">' + settings.buttondown_txt + '</button></span>';
+          downhtml = '<span class="input-group-btn"><button class="' + settings.buttondown_class + ' bootstrap-touchspin-down" type="button">-</button></span>';
           $(downhtml).insertBefore(originalinput);
         }
 
         if (next.hasClass('input-group-btn')) {
-          uphtml = '<button class="' + settings.buttonup_class + ' bootstrap-touchspin-up" type="button">' + settings.buttonup_txt + '</button>';
+          uphtml = '<button class="' + settings.buttonup_class + ' bootstrap-touchspin-up" type="button">+</button>';
           next.prepend(uphtml);
         }
         else {
-          uphtml = '<span class="input-group-btn"><button class="' + settings.buttonup_class + ' bootstrap-touchspin-up" type="button">' + settings.buttonup_txt + '</button></span>';
+          uphtml = '<span class="input-group-btn"><button class="' + settings.buttonup_class + ' bootstrap-touchspin-up" type="button">+</button></span>';
           $(uphtml).insertAfter(originalinput);
         }
 
@@ -235,7 +221,7 @@
           html = '<div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix">' + settings.prefix + '</span><span class="input-group-addon bootstrap-touchspin-postfix">' + settings.postfix + '</span><span class="input-group-btn-vertical"><button class="' + settings.buttondown_class + ' bootstrap-touchspin-up" type="button"><i class="' + settings.verticalupclass + '"></i></button><button class="' + settings.buttonup_class + ' bootstrap-touchspin-down" type="button"><i class="' + settings.verticaldownclass + '"></i></button></span></div>';
         }
         else {
-          html = '<div class="input-group bootstrap-touchspin"><span class="input-group-btn"><button class="' + settings.buttondown_class + ' bootstrap-touchspin-down" type="button">' + settings.buttondown_txt + '</button></span><span class="input-group-addon bootstrap-touchspin-prefix">' + settings.prefix + '</span><span class="input-group-addon bootstrap-touchspin-postfix">' + settings.postfix + '</span><span class="input-group-btn"><button class="' + settings.buttonup_class + ' bootstrap-touchspin-up" type="button">' + settings.buttonup_txt + '</button></span></div>';
+          html = '<div class="input-group bootstrap-touchspin"><span class="input-group-btn"><button class="' + settings.buttondown_class + ' bootstrap-touchspin-down" type="button">-</button></span><span class="input-group-addon bootstrap-touchspin-prefix">' + settings.prefix + '</span><span class="input-group-addon bootstrap-touchspin-postfix">' + settings.postfix + '</span><span class="input-group-btn"><button class="' + settings.buttonup_class + ' bootstrap-touchspin-up" type="button">+</button></span></div>';
         }
 
         container = $(html).insertBefore(originalinput);
@@ -521,10 +507,6 @@
         val = originalinput.val();
 
         if (val === '') {
-          if (settings.replacementval !== '') {
-            originalinput.val(settings.replacementval);
-            originalinput.trigger('change');
-          }
           return;
         }
 
@@ -535,12 +517,7 @@
         parsedval = parseFloat(val);
 
         if (isNaN(parsedval)) {
-          if (settings.replacementval !== '') {
-            parsedval = settings.replacementval;
-          }
-          else {
-            parsedval = 0;
-          }
+          parsedval = 0;
         }
 
         returnval = parsedval;

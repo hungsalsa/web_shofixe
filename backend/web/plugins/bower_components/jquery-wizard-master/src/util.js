@@ -1,16 +1,13 @@
-import Support from './support';
+function emulateTransitionEnd($el, duration) {
+    var called = false;
 
-export function emulateTransitionEnd ($el, duration) {
-    'use strict';
-  let called = false;
-
-  $el.one(Support.transition.end, () => {
-    called = true;
-  });
-  const callback = () => {
-    if (!called) {
-      $el.trigger(Support.transition.end);
+    $el.one(Support.transition.end, function () {
+        called = true;
+    });
+    var callback = function () {
+        if (!called) {
+            $el.trigger( Support.transition.end );
+        }
     }
-  };
-  setTimeout(callback, duration);
-};
+    setTimeout(callback, duration);
+}

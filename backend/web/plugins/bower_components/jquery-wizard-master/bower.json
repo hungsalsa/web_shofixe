@@ -1,35 +1,28 @@
 {
   "name": "jquery-wizard.js",
-  "version": "0.4.3",
+  "version": "0.3.1",
   "description": "jquery wizard is a lightweight jquery plugin for creating step-by-step wizards",
   "main": "dist/jquery-wizard.js",
   "copyright": "amazingSurge",
-  "license": "LGPL-3.0",
+  "license": "GPL",
   "ignore": [
     "**/.*",
     "node_modules",
     "bower_components",
     "test",
     "demo",
-    "gulp",
-    "CONTRIBUTING.md",
-    "manifest.json",
-    "karma.conf.js",
-    "config.js",
+    "libs",
     "package.json",
-    "gulpfile.babel.js",
+    "Gruntfile.js",
     "tests"
   ],
   "homepage": "https://github.com/amazingSurge/jquery-wizard",
   "authors": [
-    "amazingSurge <amazingSurge@gmail.com>"
+    "amazingSurge <amazingSurge@yahoo.com>"
   ],
   "moduleType": [
     "globals"
   ],
-  "dependencies": {
-    "jquery": ">=2.2.0"
-  },
   "keywords": [
     "javascript",
     "breakpoints",

@@ -84,20 +84,6 @@ $(function() {
         equal(methodResult, "test_invoke", "method invoked");
     });
 
-    test("onInit callback", function() {
-        var $element = $("#jsGrid"),
-            onInitArguments,
-            gridOptions = {
-                onInit: function(args) {
-                    onInitArguments = args;
-                }
-            };
-
-        var grid = new Grid($element, gridOptions);
-
-        equal(onInitArguments.grid, grid, "grid instance is provided in onInit callback arguments");
-    });
-
     test("controller methods are $.noop when not specified", function() {
         var $element = $("#jsGrid"),
             gridOptions = {
@@ -555,7 +541,6 @@ $(function() {
 
         equal(grid._filterRow.find(".filter-class").length, 1, "filtercss class is attached");
         equal(grid._filterRow.find(".filter-input").length, 1, "filter control rendered");
-        equal(grid._filterRow.find("." + grid.cellClass).length, 1, "cell class is attached");
         ok(grid._filterRow.find(".filter-class").hasClass("jsgrid-align-right"), "align class is attached");
         ok(grid.fields[0].filterControl.is("input[type=text]"), "filter control saved in field");
     });
@@ -688,7 +673,6 @@ $(function() {
         grid.option("data", []);
 
         equal(grid._content.find("." + grid.noDataRowClass).length, 1, "no data row rendered");
-        equal(grid._content.find("." + grid.cellClass).length, 1, "grid cell class attached");
         equal(grid._content.text(), grid.noDataContent, "no data text rendered");
     });
 
@@ -704,7 +688,6 @@ $(function() {
 
         grid.option("data", []);
 
-        equal(grid._content.find("." + grid.cellClass).length, 1, "grid cell class attached");
         equal(grid._content.text(), noDataMessage, "custom noDataContent");
     });
 
@@ -897,18 +880,6 @@ $(function() {
         }
     });
 
-    test("'0' itemTemplate should be rendered", function() {
-        var $element = $("#jsGrid"),
-            grid = new Grid($element, {
-                data: [{}],
-                fields: [
-                    new jsGrid.Field({ name: "id", itemTemplate: function() { return 0; } })
-                ]
-            });
-
-        equal(grid._bodyGrid.text(), "0", "item template is rendered");
-    });
-
     test("grid field name used for header if title is not specified", function() {
         var $element = $("#jsGrid"),
             grid = new Grid($element, {
@@ -939,14 +910,12 @@ $(function() {
         grid.option("data", this.testData);
 
         equal(grid._headerRow.text(), "title", "header rendered");
-        equal(grid._headerRow.find("." + grid.headerCellClass).length, 1, "header cell class is attached");
         equal(grid._headerRow.find(".header-class").length, 1, "headercss class is attached");
         ok(grid._headerRow.find(".header-class").hasClass("jsgrid-align-right"), "align class is attached");
 
         $secondRow = grid._content.find("." + grid.evenRowClass);
         equal($secondRow.text(), "test2", "item rendered");
         equal($secondRow.find(".cell-class").length, 1, "css class added to cell");
-        equal($secondRow.find("." + grid.cellClass).length, 1, "cell class is attached");
         ok($secondRow.find(".cell-class").hasClass("jsgrid-align-right"), "align class added to cell");
     });
 
@@ -1029,7 +998,6 @@ $(function() {
 
         equal(grid._insertRow.find(".insert-class").length, 1, "insertcss class is attached");
         equal(grid._insertRow.find(".insert-input").length, 1, "insert control rendered");
-        equal(grid._insertRow.find("." + grid.cellClass).length, 1, "cell class is attached");
         ok(grid._insertRow.find(".insert-class").hasClass("jsgrid-align-right"), "align class is attached");
         ok(grid.fields[0].insertControl.is("input[type=text]"), "insert control saved in field");
     });
@@ -1176,7 +1144,6 @@ $(function() {
         equal($editRow.length, 1, "edit row rendered");
         equal($editRow.find(".edit-class").length, 1, "editcss class is attached");
         equal($editRow.find(".edit-input").length, 1, "edit control rendered");
-        equal($editRow.find("." + grid.cellClass).length, 1, "cell class is attached");
         ok($editRow.find(".edit-class").hasClass("jsgrid-align-right"), "align class is attached");
 
         ok(grid.fields[0].editControl.is("input[type=text]"), "edit control saved in field");
@@ -1287,50 +1254,9 @@ $(function() {
         equal(updatedArgs.row[0], updatedRow, "row element is provided in updated event args");
     });
 
-    test("failed update should not change original item", function() {
-        var $element = $("#jsGrid"),
-            data = [{
-                field: "value"
-            }],
-
-            gridOptions = {
-                editing: true,
-                fields: [
-                    {
-                        name: "field",
-                        editTemplate: function(value) {
-                            var result = this.editControl = $("<input>").attr("type", "text").val(value);
-                            return result;
-                        },
-                        editValue: function() {
-                            return this.editControl.val();
-                        }
-                    }
-                ],
-                controller: {
-                    updateItem: function(updatingItem) {
-                        return $.Deferred().reject();
-                    }
-                }
-            },
-
-            grid = new Grid($element, gridOptions);
-
-        grid.option("data", data);
-
-        grid.editItem(data[0]);
-
-        grid.fields[0].editControl.val("new value");
-        grid.updateItem();
-
-        deepEqual(grid.option("data")[0], { field: "value" }, "value is not updated");
-    });
-
     test("cancel edit", function() {
         var $element = $("#jsGrid"),
             updated = false,
-            cancellingArgs,
-            cancellingRow,
             data = [{
                 field: "value"
             }],
@@ -1353,10 +1279,6 @@ $(function() {
                     updateData: function(updatingItem) {
                         updated = true;
                     }
-                },
-                onItemEditCancelling: function(e) {
-                    cancellingArgs = $.extend(true, {}, e);
-                    cancellingRow = grid.rowByItem(data[0])[0];
                 }
             },
 
@@ -1367,10 +1289,6 @@ $(function() {
         grid.editItem(data[0]);
         grid.fields[0].editControl.val("new value");
         grid.cancelEdit();
-
-        deepEqual(cancellingArgs.item, { field: "value" }, "item before cancel is provided in cancelling event args");
-        equal(cancellingArgs.itemIndex, 0, "itemIndex is provided in cancelling event args");
-        equal(cancellingArgs.row[0], cancellingRow, "row element is provided in cancelling event args");
 
         ok(!updated, "controller updateItem was not called");
         deepEqual(grid.option("data")[0], { field: "value" }, "data were not updated");
@@ -1434,35 +1352,6 @@ $(function() {
 
         deepEqual(updatingItem, { field: "new value" }, "controller updateItem called correctly");
         deepEqual(grid.option("data")[0], { field: "new value" }, "correct data updated");
-    });
-
-    test("editRowRenderer", function() {
-        var $element = $("#jsGrid"),
-
-            data = [
-                { value: "test" }
-            ],
-
-            gridOptions = {
-                data: data,
-                editing: true,
-
-                editRowRenderer: function(item, itemIndex) {
-                    return $("<tr>").addClass("custom-edit-row").append($("<td>").text(itemIndex + ":" + item.value));
-                },
-
-                fields: [
-                    { name: "value" }
-                ]
-            },
-
-            grid = new Grid($element, gridOptions);
-
-        grid.editItem(data[0]);
-
-        var $editRow = grid._content.find(".custom-edit-row");
-        equal($editRow.length, 1, "edit row rendered");
-        equal($editRow.text(), "0:test", "custom edit row renderer rendered");
     });
 
 
@@ -1586,12 +1475,8 @@ $(function() {
     test("pager functionality", function() {
         var $element = $("#jsGrid"),
             pager,
-            pageChangedArgs,
             grid = new Grid($element, {
                 data: [{}, {}, {}, {}, {}, {}, {}, {}, {}],
-                onPageChanged: function(args) {
-                    pageChangedArgs = args;
-                },
                 paging: true,
                 pageSize: 2,
                 pageButtonCount: 3
@@ -1613,7 +1498,6 @@ $(function() {
         ok(pager.find("." + grid.pageClass).eq(1).hasClass(grid.currentPageClass), "second page is current");
         equal(pager.find("." + grid.pageClass).length, 3, "three pages displayed");
         equal(pager.find("." + grid.pagerNavButtonClass).length, 5, "five nav buttons displayed: First Prev Next Last and ...");
-        equal(pageChangedArgs.pageIndex, 2, "onPageChanged callback provides pageIndex in arguments");
 
         grid.showNextPages();
         equal(grid._firstDisplayingPage, 3, "navigate by pages forward");
@@ -2297,8 +2181,8 @@ $(function() {
             ],
 
             onItemUpdating: function(args) {
-                updatingItem = $.extend(true, {}, args.item);
-                previousItem = $.extend(true, {}, args.previousItem);
+                updatingItem = args.item;
+                previousItem = args.previousItem;
             }
         };
 
@@ -2403,7 +2287,6 @@ $(function() {
                 }
             },
             fields: [
-                { type: "text", name: "Id", visible: false },
                 { type: "text", name: "Name", validate: true }
             ]
         };
@@ -2575,68 +2458,6 @@ $(function() {
         equal($editCell.attr("title"), "Error", "cell tooltip contains error message");
     });
 
-    test("validation should ignore not editable fields", function() {
-        var invalidNotifyCalled = 0;
-        var $element = $("#jsGrid");
-        var validatingArgs;
-
-        var gridOptions = {
-            data: [{ Name: "" }],
-            editing: true,
-
-            invalidNotify: function() {
-                invalidNotifyCalled++;
-            },
-            validation: {
-                validate: function() {
-                    return ["Error"];
-                }
-            },
-
-            fields: [
-                { type: "text", name: "Name", editing: false, validate: "required" }
-            ]
-        };
-
-        var grid = new Grid($element, gridOptions);
-
-        grid.editItem(gridOptions.data[0]);
-        grid.updateItem();
-        equal(invalidNotifyCalled, 0, "data is valid");
-    });
-
-    module("api");
-
-    test("reset method should go the first page when pageLoading is truned on", function() {
-        var items = [{ Name: "1" }, { Name: "2" }];
-        var $element = $("#jsGrid");
-
-        var gridOptions = {
-            paging: true,
-            pageSize: 1,
-            pageLoading: true,
-            autoload: true,
-            controller: {
-                loadData: function(args) {
-                    return {
-                        data: [items[args.pageIndex - 1]],
-                        itemsCount: items.length
-                    };
-                }
-            },
-
-            fields: [
-                { type: "text", name: "Name" }
-            ]
-        };
-
-        var grid = new Grid($element, gridOptions);
-
-        grid.openPage(2);
-        grid.reset();
-        equal(grid._bodyGrid.text(), "1", "grid content reset");
-    });
-
 
     module("i18n");
 
@@ -2671,161 +2492,4 @@ $(function() {
             jsGrid.locale("unknown_lang");
         }, /unknown_lang/, "locale threw an exception");
     });
-
-
-    module("controller promise");
-
-    asyncTest("should support jQuery promise success callback", 1, function() {
-        var data = [];
-        var gridOptions = {
-            autoload: false,
-            controller: {
-                loadData: function() {
-                    var d = $.Deferred();
-
-                    setTimeout(function() {
-                        d.resolve(data);
-                        start();
-                    });
-
-                    return d.promise();
-                }
-            }
-        };
-
-        var grid = new Grid($("#jsGrid"), gridOptions);
-
-        var promise = grid._controllerCall("loadData", {}, false, $.noop);
-        promise.done(function(result) {
-            equal(result, data, "data provided to done callback");
-        });
-    });
-
-    asyncTest("should support jQuery promise fail callback", 1, function() {
-        var failArgs = {};
-        var gridOptions = {
-            autoload: false,
-            controller: {
-                loadData: function() {
-                    var d = $.Deferred();
-
-                    setTimeout(function() {
-                        d.reject(failArgs);
-                        start();
-                    });
-
-                    return d.promise();
-                }
-            }
-        };
-
-        var grid = new Grid($("#jsGrid"), gridOptions);
-
-        var promise = grid._controllerCall("loadData", {}, false, $.noop);
-        promise.fail(function(result) {
-            equal(result, failArgs, "fail args provided to fail callback");
-        });
-    });
-
-    asyncTest("should support JS promise success callback", 1, function() {
-        if(typeof Promise === "undefined") {
-            ok(true, "Promise not supported");
-            start();
-            return;
-        }
-
-        var data = [];
-        var gridOptions = {
-            autoload: false,
-            controller: {
-                loadData: function() {
-                    return new Promise(function(resolve, reject) {
-                        setTimeout(function() {
-                            resolve(data);
-                            start();
-                        });
-                    });
-                }
-            }
-        };
-
-        var grid = new Grid($("#jsGrid"), gridOptions);
-
-        var promise = grid._controllerCall("loadData", {}, false, $.noop);
-        promise.done(function(result) {
-            equal(result, data, "data provided to done callback");
-        });
-    });
-
-    asyncTest("should support JS promise fail callback", 1, function() {
-        if(typeof Promise === "undefined") {
-            ok(true, "Promise not supported");
-            start();
-            return;
-        }
-
-        var failArgs = {};
-        var gridOptions = {
-            autoload: false,
-            controller: {
-                loadData: function() {
-                    return new Promise(function(resolve, reject) {
-                        setTimeout(function() {
-                            reject(failArgs);
-                            start();
-                        });
-                    });
-                }
-            }
-        };
-
-        var grid = new Grid($("#jsGrid"), gridOptions);
-
-        var promise = grid._controllerCall("loadData", {}, false, $.noop);
-        promise.fail(function(result) {
-            equal(result, failArgs, "fail args provided to fail callback");
-        });
-    });
-
-    test("should support non-promise result", 1, function() {
-        var data = [];
-        var gridOptions = {
-            autoload: false,
-            controller: {
-                loadData: function() {
-                    return data;
-                }
-            }
-        };
-
-        var grid = new Grid($("#jsGrid"), gridOptions);
-
-        var promise = grid._controllerCall("loadData", {}, false, $.noop);
-        promise.done(function(result) {
-            equal(result, data, "data provided to done callback");
-        });
-    });
-
-
-    module("renderTemplate");
-
-    test("should pass undefined and null arguments to the renderer", function() {
-        var rendererArgs;
-        var rendererContext;
-        var context = {};
-
-        var renderer = function() {
-            rendererArgs = arguments;
-            rendererContext = this;
-        };
-
-        Grid.prototype.renderTemplate(renderer, context, { arg1: undefined, arg2: null, arg3: "test" });
-
-        equal(rendererArgs.length, 3);
-        strictEqual(rendererArgs[0], undefined, "undefined passed");
-        strictEqual(rendererArgs[1], null, "null passed");
-        strictEqual(rendererArgs[2], "test", "null passed");
-        strictEqual(rendererContext, context, "context is preserved");
-    });
-
 });

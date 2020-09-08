@@ -5,8 +5,8 @@
 Project site [js-grid.com](http://js-grid.com/)
 
 **jsGrid** is a lightweight client-side data grid control based on jQuery.
-It supports basic grid operations like inserting, filtering, editing, deleting, paging, sorting, and validating.
-jsGrid is tunable and allows to customize appearance and components.
+It supports basic grid operations like inserting, filtering, editing, deleting, paging and sorting.
+Although jsGrid is tunable and allows to customize appearance and components.
 
 ![jsGrid lightweight client-side data grid](http://content.screencast.com/users/tabalinas/folders/Jing/media/beada891-57fc-41f3-ad77-fbacecd01d15/00000002.png)
 
@@ -48,7 +48,7 @@ Install jsgrid with bower:
 
 ```bash
 
-$ bower install js-grid --save
+$ bower install js-grid 
 
 ```
 
@@ -422,7 +422,7 @@ $("#grid").jsGrid({
             return error.field + ": " + error.message;
         });
         
-        console.log(messages);
+        console.log(message);
     }
     
     ...
@@ -553,8 +553,8 @@ Custom properties:
     items: [],                  // an array of items for select
     valueField: "",             // name of property of item to be used as value
     textField: "",              // name of property of item to be used as displaying value
-    selectedIndex: -1,          // index of selected item by default
-    valueType: "number|string", // the data type of the value
+    selectedIndex: -1           // index of selected item by default
+    valueType: "number|string"  // the data type of the value
     readOnly: false             // a boolean defines whether select is readonly (added in v1.4)
 }
 
@@ -607,8 +607,9 @@ Custom properties:
 
 {
     sorter: "number",   // uses sorter for numbers
-    align: "center",    // center text alignment
-    autosearch: true    // triggers searching when the user clicks checkbox in filter
+    align: "center"     // center text alignment
+    autosearch: true,   // triggers searching when the user clicks checkbox in filter
+    readOnly: false     // a boolean defines whether textarea is readonly (added in v1.4)
 }
 
 ```
@@ -621,8 +622,7 @@ Custom properties:
 ```javascript
 
 {
-    autosearch: true,   // triggers searching when the user presses `enter` key in the filter input
-    readOnly: false     // a boolean defines whether textarea is readonly (added in v1.4)
+    autosearch: true    // triggers searching when the user presses `enter` key in the filter input
 }
 
 ```
@@ -1096,7 +1096,7 @@ $("#grid").jsGrid("updateItem", item, { ID: 1, Name: "John", Age: 25, Country: 2
 
 Set current locale of all grids.
 
-**localeName|localeConfig** is the name of the supported locale (see [available locales](src/i18n)) or a custom localization config. 
+**localeName|localeConfig** is the name of the supported locale ('fr', 'es', 'pl', 'ru', 'pt_br') or a custom localization config. 
 Find more information on custom localization config in [Localization](#localization). 
 
 ```javascript
@@ -1142,9 +1142,6 @@ The following callbacks are supported:
 {
     onDataLoading: function(args) {},    // before controller.loadData
     onDataLoaded: function(args) {},     // on done of controller.loadData
-    
-    onInit: function(args) {},           // after grid initialization 
-    
     onItemInserting: function(args) {},  // before controller.insertItem
     onItemInserted: function(args) {},   // on done of controller.insertItem
     onItemUpdating: function(args) {},   // before controller.updateItem
@@ -1157,8 +1154,6 @@ The following callbacks are supported:
     
     onOptionChanging: function(args) {}, // before changing the grid option
     onOptionChanged: function(args) {},  // after changing the grid option
-    
-    onPageChanged: function(args) {},    // after changing the current page
     
     onRefreshing: function(args) {},     // before grid refresh
     onRefreshed: function(args) {},      // after grid refresh
@@ -1225,37 +1220,6 @@ $("#grid").jsGrid({
     
     onDataLoaded: function(args) {
         console.log(args.data);
-    }
-});
-
-```
-
-### onInit
-> version added: 1.5
-
-Fires after grid initialization right before rendering. Usually used to get grid instance. 
-
-Has the following arguments:
-
-```javascript
-
-{
-    grid                // grid instance
-}
-
-```
-
-In the following example we get the grid instance on initialization:
-
-```javascript
-
-var gridInstance;
-
-$("#grid").jsGrid({
-    ...
-    
-    onInit: function(args) {
-        gridInstance = args.grid;
     }
 });
 
@@ -1540,36 +1504,6 @@ Has the following arguments:
 
 ```
 
-### onPageChanged
-> version added: 1.5
-
-Fires once grid current page index is changed. It happens either by switching between the pages with the pager links, or by calling the method `openPage`, or changing the option `pageIndex`.
-
-Has the following arguments:
-
-```javascript
-
-{
-    grid                // grid instance
-    pageIndex           // current page index
-}
-
-```
-
-In the following example we print the current page index in the browser console once it has been changed:
-
-```javascript
-
-$("#grid").jsGrid({
-    ...
-    
-    onPageChanged: function(args) {
-        console.log(args.pageIndex);
-    }
-});
-
-```
-
 ### onRefreshing
 Fires before grid refresh.
 
@@ -1601,8 +1535,8 @@ Has the following arguments:
 
 The controller is a gateway between grid and data storage. All data manipulations call accordant controller methods.
 By default grid has an empty controller and can work with static array of items stored in option `data`.
-
-A controller should implement the following methods:
+ 
+A controller should implement following interface:
 
 ```javascript
 
@@ -1615,9 +1549,6 @@ A controller should implement the following methods:
 
 ```
 
-Asynchronous controller methods should return a Promise, resolved once the request is completed. 
-Starting v1.5 jsGrid supports standard JavaScript Promise/A, earlier versions support only jQuery.Promise.
-
 For instance the controller for typical REST service might look like:
 
 ```javascript
@@ -1627,7 +1558,8 @@ For instance the controller for typical REST service might look like:
         return $.ajax({
             type: "GET",
             url: "/items",
-            data: filter
+            data: filter,
+            dataType: "json"
         });
     },
     
@@ -1635,7 +1567,8 @@ For instance the controller for typical REST service might look like:
         return $.ajax({
             type: "POST",
             url: "/items",
-            data: item
+            data: item,
+            dataType: "json"
         });
     },
     
@@ -1643,7 +1576,8 @@ For instance the controller for typical REST service might look like:
         return $.ajax({
             type: "PUT",
             url: "/items",
-            data: item
+            data: item,
+            dataType: "json"
         });
     },
     
@@ -1651,7 +1585,8 @@ For instance the controller for typical REST service might look like:
         return $.ajax({
             type: "DELETE",
             url: "/items",
-            data: item
+            data: item,
+            dataType: "json"
         });
     },
 }
@@ -1845,7 +1780,7 @@ The `jsGrid.validators` object contains all built-in validators. The key of the 
  * **rangeLength** - the length of the field value is limited by range (the range should be provided as an array in `param` field of validation config)
  * **minLength** - the minimum length of the field value is limited (the minimum value should be provided in `param` field of validation config)
  * **maxLength** - the maximum length of the field value is limited (the maximum value should be provided in `param` field of validation config)
- * **pattern** - the field value should match the defined pattern (the pattern should be provided as a regexp literal or string in `param` field of validation config)
+ * **pattern** - the field value should match the defined pattern (the pattern should be provided as a string regexp in `param` field of validation config)
  * **range** - the value of the number field is limited by range (the range should be provided as an array in `param` field of validation config)
  * **min** - the minimum value of the number field is limited (the minimum should be provided in `param` field of validation config)
  * **max** - the maximum value of the number field is limited (the maximum should be provided in `param` field of validation config)
@@ -1926,17 +1861,14 @@ In this example we define new sorting strategy for our client objects:
 
 ```javascript
 
-// clients array
+// client object format
 var clients = [{
-    Index: 1,
     Name: "John",
     Age: 25
 }, ...];
 
 // sort clients by name and then by age
-jsGrid.sortStrategies.client = function(index1, index2) {
-    var client1 = clients[index1];
-    var client2 = clients[index2];
+jsGrid.sortStrategies.client = function(client1, client2) {
     return client1.Name.localeCompare(client2.Name) 
         || client1.Age - client2.Age;
 };
@@ -1950,7 +1882,7 @@ Now, our new sorting strategy `client` can be used in the grid config as follows
 {
     fields: [
       ...
-      { name: "Index", sorter: "client" },
+      { type: "text", name: "Name", sorter: "client" },
       ...
     ]
 }
@@ -1964,13 +1896,12 @@ Worth to mention, that if you need particular sorting only once, you can just in
     fields: [
       ...
       { 
-          name: "Index", 
-          sorter: function(index1, index2) {
-              var client1 = clients[index1];
-              var client2 = clients[index2];
+          type: "text", 
+          name: "Name", 
+          sorter: function(client1, client2) {
               return client1.Name.localeCompare(client2.Name) 
                   || client1.Age - client2.Age;
-          }
+          } 
       },
       ...
     ]
@@ -1991,8 +1922,7 @@ The load strategy has the following methods:
     
     openPage: function(index) {},                            // handles opening of the particular page
     loadParams: function() {},                               // returns additional parameters for controller.loadData method
-    sort: function() {},                                     // handles sorting of data in the grid, should return a Promise
-    reset: function() {},                                    // handles grid refresh on grid reset with 'reset' method call, should return a Promise
+    sort: function() {},                                     // handles sorting of data in the grid
     
     finishLoad: function(loadedData) {},                     // handles the finish of loading data by controller.loadData
     finishInsert: function(insertedItem) {},                 // handles the finish of inserting item by controller.insertItem
@@ -2013,8 +1943,7 @@ It provides the following behavior:
 - **itemsCount** returns the actual amount of all the loaded items
 - **openPage** refreshes the grid to render items of current page
 - **loadParams** returns empty object, since no extra load params are needed
-- **sort** sorts data items and refreshes the grid calling `grid.refresh`
-- **reset** calls `grid.refresh` method to refresh the grid
+- **sort** sorts data items and refreshes the grid
 - **finishLoad** puts the data coming from `controller.loadData` into the option `data` of the grid 
 - **finishInsert** pushes new inserted item into the option `data` and refreshes the grid
 - **finishDelete** removes deleted item from the option `data` and resets the grid
@@ -2031,7 +1960,6 @@ It provides the following behavior:
 - **openPage** calls `grid.loadData` to load data for the current page
 - **loadParams** returns an object with the structure `{ pageIndex, pageSize }` to provide server with paging info
 - **sort** calls `grid.loadData` to load sorted data from the server
-- **reset** calls `grid.loadData` method to refresh the data
 - **finishLoad** saves `itemsCount` returned by server and puts the `data` into the option `data` of the grid 
 - **finishInsert** calls `grid.search` to reload the data
 - **finishDelete** calls `grid.search` to reload the data

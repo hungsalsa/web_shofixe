@@ -1,84 +1,58 @@
-/**
- * Css features detect
- **/
-import $ from "jquery";
+var Support = (function() {
+    var style = $('<support>').get(0).style,
+        prefixes = ['webkit', 'Moz', 'O', 'ms'],
+        events = {
+            transition: {
+                end: {
+                    WebkitTransition: 'webkitTransitionEnd',
+                    MozTransition: 'transitionend',
+                    OTransition: 'oTransitionEnd',
+                    transition: 'transitionend'
+                }
+            }
+        },
+        tests = {
+            csstransitions: function() {
+                return !!test('transition');
+            }
+        };
 
-let support = {};
+    function test(property, prefixed) {
+        var result = false,
+            upper = property.charAt(0).toUpperCase() + property.slice(1);
 
-((support) => {
-  /**
-   * Borrowed from Owl carousel
-   **/
-  const events = {
-      transition: {
-        end: {
-          WebkitTransition: 'webkitTransitionEnd',
-          MozTransition: 'transitionend',
-          OTransition: 'oTransitionEnd',
-          transition: 'transitionend'
+        if (style[property] !== undefined) {
+            result = property;
         }
-      },
-      animation: {
-        end: {
-          WebkitAnimation: 'webkitAnimationEnd',
-          MozAnimation: 'animationend',
-          OAnimation: 'oAnimationEnd',
-          animation: 'animationend'
+        if (!result) {
+            $.each(prefixes, function(i, prefix) {
+                if (style[prefix + upper] !== undefined) {
+                    result = '-' + prefix.toLowerCase() + '-' + upper;
+                    return false;
+                }
+            });
         }
-      }
-    },
-    prefixes = ['webkit', 'Moz', 'O', 'ms'],
-    style = $('<support>').get(0).style,
-    tests = {
-      csstransitions() {
-        return Boolean(test('transition'));
-      },
-      cssanimations() {
-        return Boolean(test('animation'));
-      }
-    };
 
-  const test = (property, prefixed) => {
-    let result = false,
-      upper = property.charAt(0).toUpperCase() + property.slice(1);
-
-    if (style[property] !== undefined) {
-      result = property;
-    }
-    if (!result) {
-      $.each(prefixes, (i, prefix) => {
-        if (style[prefix + upper] !== undefined) {
-          result = `-${prefix.toLowerCase()}-${upper}`;
-          return false;
+        if (prefixed) {
+            return result;
         }
-        return true;
-      });
+        if (result) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    if (prefixed) {
-      return result;
+    function prefixed(property) {
+        return test(property, true);
     }
-    if (result) {
-      return true;
+    var support = {};
+    if (tests.csstransitions()) {
+        /* jshint -W053 */
+        support.transition = new String(prefixed('transition'))
+        support.transition.end = events.transition.end[support.transition];
     }
-    return false;
-  };
 
-  const prefixed = (property) => {
-    return test(property, true);
-  };
+    return support;
+})();
 
-  if (tests.csstransitions()) {
-    /*eslint no-new-wrappers: "off"*/
-    support.transition = new String(prefixed('transition'));
-    support.transition.end = events.transition.end[support.transition];
-  }
-
-  if (tests.cssanimations()) {
-    /*eslint no-new-wrappers: "off"*/
-    support.animation = new String(prefixed('animation'));
-    support.animation.end = events.animation.end[support.animation];
-  }
-})(support);
-
-export default support;

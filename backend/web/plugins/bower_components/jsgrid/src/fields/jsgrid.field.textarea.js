@@ -17,7 +17,7 @@
 
         editTemplate: function(value) {
             if(!this.editing)
-                return this.itemTemplate.apply(this, arguments);
+                return this.itemTemplate(value);
 
             var $result = this.editControl = this._createTextArea();
             $result.val(value);

@@ -59,16 +59,22 @@ return [
             // 'enableStrictParsing' => false,
             'rules' => [
                 // '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
-                'gio-hang/addcart/<id:\d+>/<num:\d+>' => 'gio-hang/addcart',
-                'gio-hang/delcart/<id:\d+>' => 'gio-hang/delcart',
-                'gio-hang/updatecart/<id:\d+>/<num:\d+>' => 'gio-hang/updatecart',
+                '<controller:\w+>/<action:\w+>/<slug:\w+>' => '<controller>/<action>',
+                // '<controller:\w+>/<action:\w+>/<slug:\w+>' => '<controller>/<action>',
+                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+                // '<slug:\w+>' => '<controller>/index',
+                // '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+                // 'gio-hang/addcart/<id:\d+>/<num:\d+>' => 'gio-hang/addcart',
+                // 'gio-hang/delcart/<id:\d+>' => 'gio-hang/delcart',
+                // 'gio-hang/updatecart/<id:\d+>/<num:\d+>' => 'gio-hang/updatecart',
                 // '<controller:\w+>/<action:\w+>/<slug:\w+>' => '<controller>/<action>',
                 // '<controller:\w+>/<action:\w+>/<id:\d+>/<soluong:\d+>' => '<controller>/<action>/',
-                // 'product/<id:\d+>/<slug>' => 'product/view',
-                'tin-tuc/<slug>.html' => 'tin-tuc/view',
-                'tin-tuc/<slug>' => 'tin-tuc/list',
-                '<slug>.html' => 'product/view',
-                'san-pham/<slug>' => 'product/danhsach',
+                // 'product/<id:\d+>/<slug>' => 'san-pham/view',
+                // 'tin-tuc/<slug>.html' => 'tin-tuc/view',
+                // 'tin-tuc/<slug>' => 'tin-tuc/list',
+                '<slug>.html' => 'san-pham/view',
+                '<slug>' => 'san-pham/index',
+                // 'san-pham/<slug>' => 'product/danhsach',
                 // 'san-pham/<slug>/trang-<page:\d+>' => 'product/danhsach',
 
 
@@ -84,8 +90,7 @@ return [
               //   // '<controller:\w+>/<slug:\w+>' => '<controller>/view',
             
               // '<action:\w+>/<slug:\d+>' => '<controller>/<action>',
-              '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
-              '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+              
                 
                 // 'product'=>'product/index',
                 // 'danh'=>'product/listpro',

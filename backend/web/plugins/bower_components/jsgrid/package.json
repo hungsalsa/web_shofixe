@@ -1,7 +1,7 @@
 {
     "name": "jsgrid",
-    "version": "1.5.3",
-    "description": "Lightweight data grid jQuery plugin. It supports basic grid operations like inserting, filtering, editing, deleting, paging, sorting, and validation. jsGrid is tunable and allows to customize appearance and components.",
+    "version": "1.4.1",
+    "description": "Lightweight data grid jQuery plugin. It supports basic grid operations like inserting, filtering, editing, deleting, paging and sorting. Although jsGrid is tunable and allows to customize appearance and components.",
     "keywords": [
         "grid",
         "jquery",
@@ -13,7 +13,11 @@
         "type": "MIT",
         "url": "https://github.com/tabalinas/jsgrid/blob/master/LICENSE"
     },
-    "main": "dist/jsgrid.js",
+    "main": [
+        "dist/jsgrid.js",
+        "dist/jsgrid.css",
+        "dist/jsgrid-theme.css"
+    ],
     "directories": {
         "test": "tests"
     },
@@ -30,9 +34,8 @@
         "grunt-contrib-concat": "~0.3.0",
         "grunt-contrib-copy": "^0.7.0",
         "grunt-contrib-cssmin": "^0.10.0",
-        "grunt-contrib-qunit": "^1.2.0",
+        "grunt-contrib-qunit": "^0.5.2",
         "grunt-contrib-uglify": "^0.4.0",
-        "grunt-image-embed": "^0.3.1",
-        "grunt-string-replace": "^1.2.1"
+        "grunt-image-embed": "^0.3.1"
     }
 }

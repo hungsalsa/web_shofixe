@@ -1,345 +1,389 @@
 <?php
-/* @var $this yii\web\View */
-$this->title = 'My Yii Application';
+use yii\helpers\Html;
+$this->title = 'Quản lý của MOTOTECH';
+use backend\modules\sanpham\models\Product;
+
+$product = new Product();
+?>      
+<div class="row">
+  <div class="col-md-12 align-self-center">
+    <h3 class="text-themecolor text-center">Thống kê ngày <?= date("d/m/Y") ?></h3>
+  </div>
+<!-- ============================================================== -->
+<!-- End Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- Info box -->
+<!-- ============================================================== -->
+  <h5 class="card-title col-md-12 text-center">Khách hàng đã thêm</h5>
+  <!-- Column -->
+  <?php $total = array_sum($dataCount['khachhang']['today']);
+  if ( $total==0 ) {
+    $total = 1;
+  }
+   
+  ?>
+  <div class="white-box">
+    <div class="row row-in">
+      <?php $i=1;
+      foreach ($dataCount['khachhang']['today'] as $key => $value): ?>
+        <div class="col-lg-3 col-sm-6 row-in-br">
+          <ul class="col-in">
+            <li>
+              <?php if (isset($imageUser[$key])): ?>
+                <?= Html::img($imageUser[$key], ['alt' => "$value",'style'=>'width: 75px; height: 75px; border-radius: 50%;']) ?>
+              <?php else: ?>
+                <span class="circle circle-md bg-danger"><i class="ti-clipboard"></i></span>
+              <?php endif ?>
+            </li>
+            <li class="col-last">
+              <h3 class="counter text-right m-t-15"><?= $value ?></h3>
+            </li>
+            <li class="col-middle">
+              <h6><?= $dataCount['user'][$key] ?></h6>
+              <div class="progress">
+                <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=  ($value/$total)*100 ?>%">
+                  <span class="sr-only">40% Complete (success)</span>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <?php if ($i%4==0): ?>
+          <div class="clearfix"></div><hr>
+        <?php endif ?>
+        
+        <?php $i++; endforeach ?>
+        <!-- Column -->
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <h5 class="card-title col-md-12 text-center">Phiếu dịch vụ đã thêm</h5>
+    <!-- Column -->
+    <?php $total = array_sum($dataCount['khdichvu']['today']);
+        if ( $total==0 ) {
+          $total = 1;
+        }?>
+        <div class="white-box">
+          <div class="row row-in">
+            <?php $count=1; foreach ($dataCount['khdichvu']['today'] as $key => $value): ?>
+
+            <div class="col-lg-3 col-sm-6 row-in-br">
+              <ul class="col-in">
+                <li>
+                  <?php if (isset($imageUser[$key])): ?>
+                      <?= Html::img($imageUser[$key], ['alt' => "$value",'style'=>'width: 75px; height: 75px; border-radius: 50%;']) ?>
+                    <?php else: ?>
+                      <span class="circle circle-md bg-danger"><i class="ti-clipboard"></i></span>
+                    <?php endif ?>
+                </li>
+                <li class="col-last">
+                  <h3 class="counter text-right m-t-15"><?= $value ?></h3>
+                </li>
+                <li class="col-middle">
+                  <h6><?= $dataCount['user'][$key] ?></h6>
+                  <div class="progress">
+                    <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=  ($value/$total)*100 ?>%">
+                      <span class="sr-only">40% Complete (success)</span>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <?php if ($count%4==0): ?>
+              <div class="clearfix"></div><hr>
+            <?php endif;$count++; endforeach ?>
+          </div>
+        </div>
+  </div>
+  <!-- Column -->
+  <div class="row">
+    <div class="col-md-12 align-self-center">
+      <h3 class="text-themecolor text-center">Thống kê ngày <?= date('d/m/Y', strtotime('-1 day', strtotime(date("Y/m/d")))) ?></h3>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Info box -->
+    <!-- ============================================================== -->
+
+    <h5 class="card-title col-md-12 text-center">Khách hàng</h5>
+    <!-- Column -->
+    <?php $total = array_sum($dataCount['khachhang']['yesterday']);
+    if ($total==0) {
+      $total = 1;
+    }?>
+    <div class="white-box">
+      <div class="row row-in">
+        <?php $count=1; foreach ($dataCount['khachhang']['yesterday'] as $key => $value): ?>
+        <div class="col-lg-3 col-sm-6 row-in-br">
+          <ul class="col-in">
+            <li>
+              <?php if (isset($imageUser[$key])): ?>
+                <?= Html::img($imageUser[$key], ['alt' => "$value",'style'=>'width: 75px; height: 75px; border-radius: 50%;']) ?>
+              <?php else: ?>
+                  <span class="circle circle-md bg-danger"><i class="ti-clipboard"></i></span>
+              <?php endif ?>
+            </li>
+            <li class="col-last">
+              <h3 class="counter text-right m-t-15"><?= $value ?></h3>
+            </li>
+            <li class="col-middle">
+              <h6><?= $dataCount['user'][$key] ?></h6>
+              <div class="progress">
+                <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=  ($value/$total)*100 ?>%">
+                  <span class="sr-only"><?=  ($value/$total)*100 ?>% Complete (success)</span>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <?php if ($count%4==0): ?>
+          <div class="clearfix"></div><hr>
+        <?php endif;$count++;endforeach ?>
+      </div>
+    </div>
+    <!-- Column -->
+  </div>
+  <div class="row">
+    <h5 class="card-title col-md-12 text-center">Phiếu dịch vụ đã thêm</h5>
+    <!-- Dịch vụ ngày hôm qua -->
+    <?php $total = array_sum($dataCount['khdichvu']['yesterday']);
+    if ($total==0) {
+      $total = 1;
+    }?>
+    <div class="white-box">
+      <div class="row row-in">
+        <?php $count=1; foreach ($dataCount['khdichvu']['yesterday'] as $key => $value): ?>
+        <div class="col-lg-3 col-sm-6 row-in-br">
+          <ul class="col-in">
+            <li>
+              <?php if (isset($imageUser[$key])): ?>
+                <?= Html::img($imageUser[$key], ['alt' => "$value",'style'=>'width: 75px; height: 75px; border-radius: 50%;']) ?>
+              <?php else: ?>
+                  <span class="circle circle-md bg-danger"><i class="ti-clipboard"></i></span>
+              <?php endif ?>
+            </li>
+            <li class="col-last">
+              <h3 class="counter text-right m-t-15"><?= $value ?></h3>
+            </li>
+            <li class="col-middle">
+              <h6><?= $dataCount['user'][$key] ?></h6>
+              <div class="progress">
+                <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="<?= $value ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=  ($value/$total)*100 ?>%">
+                  <span class="sr-only"><?=  ($value/$total)*100 ?>% Complete (success)</span>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <?php if ($count%4==0): ?>
+          <div class="clearfix"></div><hr>
+        <?php endif;$count++;endforeach; ?>
+      </div>
+    </div>
+  </div>
+
+  <!-- Column -->
+  <div class="row">
+    <div class="col-md-12 align-self-center">
+      <h3 class="text-themecolor text-center">Thống kê tổng</h3>
+    </div>
+    <h5 class="card-title col-md-12 text-center">Khách hàng</h5>
+    <!-- Column -->
+    <?php $total = array_sum($dataCount['khachhang']);
+        if ($total==0) {
+          $total = 1;
+        }?>
+        <div class="white-box">
+          <div class="row row-in">
+            <?php $count =1; foreach ($dataCount['khachhang'] as $key => $value): ?>
+            <?php if (!array_key_exists($key, $dataCount['user'])){continue;} ?>
+            <div class="col-lg-3 col-sm-6 row-in-br">
+              <ul class="col-in">
+                <li>
+                  <?php if (isset($imageUser[$key])): ?>
+                    <?= Html::img($imageUser[$key], ['alt' => "$value",'style'=>'width: 75px; height: 75px; border-radius: 50%;']) ?>
+                  <?php else: ?>
+                      <span class="circle circle-md bg-danger"><i class="ti-clipboard"></i></span>
+                  <?php endif ?>
+                </li>
+                <li class="col-last">
+                  <h3 class="counter text-right m-t-15"><?= $value ?></h3>
+                </li>
+                <li class="col-middle">
+                  <h6><?= $dataCount['user'][$key] ?></h6>
+                  <div class="progress">
+                    <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="<?= $value ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=  ($value/$total)*100 ?>%">
+                      <span class="sr-only"><?=  ($value/$total)*100 ?>% Complete (success)</span>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <?php if ($count%4==0): ?>
+              <div class="clearfix"></div><hr>
+            <?php endif;$count++;endforeach ?>
+        </div>
+      </div>
+  </div>
+  <div class="row">
+    <h5 class="card-title col-md-12 text-center">Phiếu dịch vụ đã thêm</h5>
+    <!-- Column -->
+    <?php $total = array_sum($dataCount['khdichvu']);
+        if ($total==0) {
+          $total = 1;
+        }?>
+        <div class="white-box">
+          <div class="row row-in">
+            <?php $count=1; foreach ($dataCount['khdichvu'] as $key => $value): ?>
+            <?php if (!array_key_exists($key, $dataCount['user'])){continue;} ?>
+            <div class="col-lg-3 col-sm-6 row-in-br">
+              <ul class="col-in">
+                <li>
+                  <?php if (isset($imageUser[$key])): ?>
+                    <?= Html::img($imageUser[$key], ['alt' => "$value",'style'=>'width: 75px; height: 75px; border-radius: 50%;']) ?>
+                  <?php else: ?>
+                      <span class="circle circle-md bg-danger"><i class="ti-clipboard"></i></span>
+                  <?php endif ?>
+                </li>
+                <li class="col-last">
+                  <h3 class="counter text-right m-t-15"><?= $value ?></h3>
+                </li>
+                <li class="col-middle">
+                  <h6><?= $dataCount['user'][$key] ?></h6>
+                  <div class="progress">
+                    <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="<?= $value ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=  ($value/$total)*100 ?>%">
+                      <span class="sr-only"><?=  ($value/$total)*100 ?>% Complete (success)</span>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <?php if ($count%4==0): ?>
+              <div class="clearfix"></div><hr>
+            <?php endif;$count++; endforeach ?>
+        </div>
+      </div>
+  </div>
+
+  <div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+      <h4 class="page-title">Biểu đồ</h4> </div>
+      <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        
+      </div>
+      <!-- /.col-lg-12 -->
+    </div>
+    <!-- row -->
+    
+    <!-- /.row -->
+    <!-- .row -->
+    <div class="row">
+      <div class="col-md-6 col-lg-6 col-xs-12">
+        <div class="white-box">
+          <h3 class="box-title">Tỷ lệ phiều dịch vụ</h3>
+          <div class="flot-chart">
+            <div class="flot-chart-content" id="flot-pie-chart"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.row -->
+               
+<script type="text/javascript">
+  var so_0 = <?= $dataCount['khdichvu'][1] ?>;
+  var _label_0 = "<?= $dataCount['user'][1] ?>";
+
+  var so_1 = <?= $dataCount['khdichvu'][2] ?>;
+  var _label_1 = "<?= $dataCount['user'][2] ?>";
+  
+  var so_2 = <?= $dataCount['khdichvu'][7] ?>;
+  var _label_2 = "<?= $dataCount['user'][7] ?>";
+  
+  var so_3 = <?= $dataCount['khdichvu'][8] ?>;
+  var _label_3 = "<?= $dataCount['user'][8] ?>";
+  
+  var so_4 = <?= $dataCount['khdichvu'][9] ?>;
+  var _label_4 = "<?= $dataCount['user'][9] ?>";
+  
+  var so_5 = <?= $dataCount['khdichvu'][10] ?>;
+  var _label_5 = "<?= $dataCount['user'][10] ?>";
+  
+  var so_6 = <?= $dataCount['khdichvu'][12] ?>;
+  var _label_6 = "<?= $dataCount['user'][12] ?>";
+</script>
+<?php
+// $this->registerCss(".page-titles{border-top: 11px solid red; } .page-titles:first-child{border-top: none; }");
+
+$this->registerJs('
+$( document ).ready(function() {
+
+    //Flot Pie Chart
+  $(function() {
+
+      var data = [
+      {
+          label: _label_0,
+          data: so_0,
+          color: "#f44336",
+          
+      },{
+          label: _label_1,
+          data: so_1,
+          color: "#4f5467",
+          
+      }, {
+          label: _label_2,
+          data: so_2,
+          color: "#00c292",
+      }, {
+          label: _label_3,
+          data: so_3,
+          color:"#01c0c8",
+      }, {
+          label: _label_4,
+          data: so_4,
+          color:"#fb9678",
+      }, {
+          label: _label_5,
+          data: so_5,
+          color:"#0927fb",
+      }, {
+          label: _label_6,
+          data: so_6,
+          color:"#0927fb",
+      }
+      ];
+
+      var plotObj = $.plot($("#flot-pie-chart"), data, {
+          series: {
+              pie: {
+                  innerRadius: 0.2,
+                  show: true
+              }
+          },
+          grid: {
+              hoverable: true
+          },
+          color: null,
+          tooltip: true,
+          tooltipOpts: {
+              content: "%p.0%, %s", // show percentages, rounding to 2 decimal places
+              shifts: {
+                  x: 20,
+                  y: 0
+              },
+              defaultTheme: false
+          }
+      });
+
+  });
+      
+  });
+  ');
+
 ?>
-<div class="row bg-title">
-   <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-      <h4 class="page-title">Hospital Dashboard</h4>
-   </div>
-   <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-      <a href="" target="_blank" class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Buy Now</a>
-      <ol class="breadcrumb">
-         <li><a href="index.html">Hospital</a></li>
-         <li class="active">Dashboard</li>
-      </ol>
-   </div>
-   <!-- /.col-lg-12 -->
-</div>
-<!--row -->
-<div class="row">
-   <div class="col-md-3 col-sm-6">
-      <div class="white-box">
-         <div class="r-icon-stats">
-            <i class="ti-user bg-megna"></i>
-            <div class="bodystate">
-               <h4>370</h4>
-               <span class="text-muted">New Patient</span> 
-            </div>
-         </div>
-      </div>
-   </div>
-   <div class="col-md-3 col-sm-6">
-      <div class="white-box">
-         <div class="r-icon-stats">
-            <i class="ti-shopping-cart bg-info"></i>
-            <div class="bodystate">
-               <h4>342</h4>
-               <span class="text-muted">OPD Patient</span> 
-            </div>
-         </div>
-      </div>
-   </div>
-   <div class="col-md-3 col-sm-6">
-      <div class="white-box">
-         <div class="r-icon-stats">
-            <i class="ti-wallet bg-success"></i>
-            <div class="bodystate">
-               <h4>13</h4>
-               <span class="text-muted">Today's Ops.</span> 
-            </div>
-         </div>
-      </div>
-   </div>
-   <div class="col-md-3 col-sm-6">
-      <div class="white-box">
-         <div class="r-icon-stats">
-            <i class="ti-wallet bg-inverse"></i>
-            <div class="bodystate">
-               <h4>$34650</h4>
-               <span class="text-muted">Hospital Earning</span> 
-            </div>
-         </div>
-      </div>
-   </div>
-</div>
-<!--/row -->
-<!-- .row -->
-<div class="row">
-   <div class="col-md-4 col-sm-12 col-xs-12">
-      <div class="white-box">
-         <h3 class="box-title"><small class="pull-right m-t-10 text-success"><i class="fa fa-sort-asc"></i> 18% High then last month</small> New Patient</h3>
-         <div class="stats-row">
-            <div class="stat-item">
-               <h6>Overall</h6>
-               <b>80.40%</b>
-            </div>
-            <div class="stat-item">
-               <h6>Montly</h6>
-               <b>15.40%</b>
-            </div>
-            <div class="stat-item">
-               <h6>Day</h6>
-               <b>5.50%</b>
-            </div>
-         </div>
-         <div id="sparkline8" class="minus-mar"></div>
-      </div>
-   </div>
-   <div class="col-md-4 col-sm-12 col-xs-12">
-      <div class="white-box">
-         <h3 class="box-title"><small class="pull-right m-t-10 text-danger"><i class="fa fa-sort-desc"></i> 18% less then last month</small>OPD Patients</h3>
-         <div class="stats-row">
-            <div class="stat-item">
-               <h6>Overall</h6>
-               <b>80.40%</b>
-            </div>
-            <div class="stat-item">
-               <h6>Montly</h6>
-               <b>15.40%</b>
-            </div>
-            <div class="stat-item">
-               <h6>Day</h6>
-               <b>5.50%</b>
-            </div>
-         </div>
-         <div id="sparkline9" class="minus-mar"></div>
-      </div>
-   </div>
-   <div class="col-md-4 col-sm-12 col-xs-12">
-      <div class="white-box">
-         <h3 class="box-title"><small class="pull-right m-t-10 text-success"><i class="fa fa-sort-asc"></i> 18% High then last month</small>Treatment</h3>
-         <div class="stats-row">
-            <div class="stat-item">
-               <h6>Overall Growth</h6>
-               <b>80.40%</b>
-            </div>
-            <div class="stat-item">
-               <h6>Montly</h6>
-               <b>15.40%</b>
-            </div>
-            <div class="stat-item">
-               <h6>Day</h6>
-               <b>5.50%</b>
-            </div>
-         </div>
-         <div id="sparkline10" class="minus-mar"></div>
-      </div>
-   </div>
-</div>
-<!-- /.row -->
-<!--row -->
-<div class="row">
-   <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
-      <div class="white-box">
-         <h3 class="box-title">Patients In</h3>
-         <ul class="list-inline text-center">
-            <li>
-               <h5><i class="fa fa-circle m-r-5" style="color: #00bfc7;"></i>OPD</h5>
-            </li>
-            <li>
-               <h5><i class="fa fa-circle m-r-5" style="color: #b4becb;"></i>ICU</h5>
-            </li>
-         </ul>
-         <div id="morris-area-chart1" style="height: 370px;"></div>
-      </div>
-   </div>
-   <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
-      <div class="white-box">
-         <h3 class="box-title">Hospital Earning</h3>
-         <ul class="list-inline text-center">
-            <li>
-               <h5><i class="fa fa-circle m-r-5" style="color: #00bfc7;"></i>OPD</h5>
-            </li>
-            <li>
-               <h5><i class="fa fa-circle m-r-5" style="color: #b4becb;"></i>ICU</h5>
-            </li>
-         </ul>
-         <div id="morris-area-chart2" style="height: 370px;"></div>
-      </div>
-   </div>
-</div>
-<!-- row -->
-<!-- /row -->
-<div class="row">
-   <div class="col-sm-6">
-      <div class="white-box">
-         <h3 class="box-title m-b-0">New Patient List</h3>
-         <p class="text-muted">this is the sample data here for crm</p>
-         <div class="table-responsive">
-            <table class="table">
-               <thead>
-                  <tr>
-                     <th>#</th>
-                     <th>First Name</th>
-                     <th>Last Name</th>
-                     <th>Username</th>
-                     <th>Diseases</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  <tr>
-                     <td>1</td>
-                     <td>Deshmukh</td>
-                     <td>Prohaska</td>
-                     <td>@Genelia</td>
-                     <td><span class="label label-danger">Fever</span> </td>
-                  </tr>
-                  <tr>
-                     <td>2</td>
-                     <td>Deshmukh</td>
-                     <td>Gaylord</td>
-                     <td>@Ritesh</td>
-                     <td><span class="label label-info">Cancer</span> </td>
-                  </tr>
-                  <tr>
-                     <td>3</td>
-                     <td>Sanghani</td>
-                     <td>Gusikowski</td>
-                     <td>@Govinda</td>
-                     <td><span class="label label-warning">Lakva</span> </td>
-                  </tr>
-                  <tr>
-                     <td>4</td>
-                     <td>Roshan</td>
-                     <td>Rogahn</td>
-                     <td>@Hritik</td>
-                     <td><span class="label label-success">Dental</span> </td>
-                  </tr>
-                  <tr>
-                     <td>5</td>
-                     <td>Joshi</td>
-                     <td>Hickle</td>
-                     <td>@Maruti</td>
-                     <td><span class="label label-info">Cancer</span> </td>
-                  </tr>
-                  <tr>
-                     <td>6</td>
-                     <td>Nigam</td>
-                     <td>Eichmann</td>
-                     <td>@Sonu</td>
-                     <td><span class="label label-success">Dental</span> </td>
-                  </tr>
-               </tbody>
-            </table>
-         </div>
-      </div>
-   </div>
-   <div class="col-sm-6">
-      <div class="white-box">
-         <h3 class="box-title m-b-0">Laboratory Test</h3>
-         <p class="text-muted">this is the sample data here for crm</p>
-         <div class="table-responsive">
-            <table class="table table-hover">
-               <thead>
-                  <tr>
-                     <th>#</th>
-                     <th>Name</th>
-                     <th>ECG</th>
-                     <th>Result</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  <tr>
-                     <td>1</td>
-                     <td>Genelia Deshmukh</td>
-                     <td><span class="peity-line" data-width="120" data-peity='{ "fill": ["#01c0c8"], "stroke":["#01c0c8"]}' data-height="40">0,-3,-2,-4,-5,-4,-3,-2,-5,-1</span> </td>
-                     <td><span class="text-danger text-semibold"><i class="fa fa-level-down" aria-hidden="true"></i> 28.76%</span> </td>
-                  </tr>
-                  <tr>
-                     <td>2</td>
-                     <td>Ajay Devgan</td>
-                     <td><span class="peity-line" data-width="120" data-peity='{ "fill": ["#01c0c8"], "stroke":["#01c0c8"]}' data-height="40">0,-1,-1,-2,-3,-1,-2,-3,-1,-2</span> </td>
-                     <td><span class="text-warning text-semibold"><i class="fa fa-level-down" aria-hidden="true"></i> 8.55%</span> </td>
-                  </tr>
-                  <tr>
-                     <td>3</td>
-                     <td>Hrithik Roshan</td>
-                     <td><span class="peity-line" data-width="120" data-peity='{ "fill": ["#01c0c8"], "stroke":["#01c0c8"]}' data-height="40">0,3,6,1,2,4,6,3,2,1</span> </td>
-                     <td><span class="text-success text-semibold"><i class="fa fa-level-up" aria-hidden="true"></i> 58.56%</span> </td>
-                  </tr>
-                  <tr>
-                     <td>4</td>
-                     <td>Steve Gection</td>
-                     <td><span class="peity-line" data-width="120" data-peity='{ "fill": ["#01c0c8"], "stroke":["#01c0c8"]}' data-height="40">0,3,6,4,5,4,7,3,4,2</span> </td>
-                     <td><span class="text-info text-semibold"><i class="fa fa-level-up" aria-hidden="true"></i> 35.76%</span> </td>
-                  </tr>
-               </tbody>
-            </table>
-         </div>
-      </div>
-   </div>
-</div>
-<!-- /.row -->
-<!-- .right-sidebar -->
-<div class="right-sidebar">
-   <div class="slimscrollright">
-      <div class="rpanel-title"> Service Panel <span><i class="ti-close right-side-toggle"></i></span> </div>
-      <div class="r-panel-body">
-         <ul>
-            <li><b>Layout Options</b></li>
-            <li>
-               <div class="checkbox checkbox-info">
-                  <input id="checkbox1" type="checkbox" class="fxhdr">
-                  <label for="checkbox1"> Fix Header </label>
-               </div>
-            </li>
-            <li>
-               <div class="checkbox checkbox-warning">
-                  <input id="checkbox2" type="checkbox" class="fxsdr">
-                  <label for="checkbox2"> Fix Sidebar </label>
-               </div>
-            </li>
-            <li>
-               <div class="checkbox checkbox-success">
-                  <input id="checkbox4" type="checkbox" class="open-close">
-                  <label for="checkbox4"> Toggle Sidebar </label>
-               </div>
-            </li>
-         </ul>
-         <ul id="themecolors" class="m-t-20">
-            <li><b>With Light sidebar</b></li>
-            <li><a href="javascript:void(0)" data-theme="default" class="default-theme">1</a></li>
-            <li><a href="javascript:void(0)" data-theme="green" class="green-theme">2</a></li>
-            <li><a href="javascript:void(0)" data-theme="gray" class="yellow-theme">3</a></li>
-            <li><a href="javascript:void(0)" data-theme="blue" class="blue-theme">4</a></li>
-            <li><a href="javascript:void(0)" data-theme="purple" class="purple-theme">5</a></li>
-            <li><a href="javascript:void(0)" data-theme="megna" class="megna-theme working">6</a></li>
-            <li class="d-block m-t-30"><b>With Dark sidebar</b></li>
-            <li><a href="javascript:void(0)" data-theme="default-dark" class="default-dark-theme">7</a></li>
-            <li><a href="javascript:void(0)" data-theme="green-dark" class="green-dark-theme">8</a></li>
-            <li><a href="javascript:void(0)" data-theme="gray-dark" class="yellow-dark-theme">9</a></li>
-            <li><a href="javascript:void(0)" data-theme="blue-dark" class="blue-dark-theme">10</a></li>
-            <li><a href="javascript:void(0)" data-theme="purple-dark" class="purple-dark-theme">11</a></li>
-            <li><a href="javascript:void(0)" data-theme="megna-dark" class="megna-dark-theme">12</a></li>
-         </ul>
-         <ul class="m-t-20 chatonline">
-            <li><b>Chat option</b></li>
-            <li>
-               <a href="javascript:void(0)"><img src="<?= Yii::$app->homeUrl?>plugins/images/users/varun.jpg" alt="user-img" class="img-circle"> <span>Varun Dhavan <small class="text-success">online</small></span></a>
-            </li>
-            <li>
-               <a href="javascript:void(0)"><img src="<?= Yii::$app->homeUrl?>plugins/images/users/genu.jpg" alt="user-img" class="img-circle"> <span>Genelia Deshmukh <small class="text-warning">Away</small></span></a>
-            </li>
-            <li>
-               <a href="javascript:void(0)"><img src="<?= Yii::$app->homeUrl?>plugins/images/users/ritesh.jpg" alt="user-img" class="img-circle"> <span>Ritesh Deshmukh <small class="text-danger">Busy</small></span></a>
-            </li>
-            <li>
-               <a href="javascript:void(0)"><img src="<?= Yii::$app->homeUrl?>plugins/images/users/arijit.jpg" alt="user-img" class="img-circle"> <span>Arijit Sinh <small class="text-muted">Offline</small></span></a>
-            </li>
-            <li>
-               <a href="javascript:void(0)"><img src="<?= Yii::$app->homeUrl?>plugins/images/users/govinda.jpg" alt="user-img" class="img-circle"> <span>Govinda Star <small class="text-success">online</small></span></a>
-            </li>
-            <li>
-               <a href="javascript:void(0)"><img src="<?= Yii::$app->homeUrl?>plugins/images/users/hritik.jpg" alt="user-img" class="img-circle"> <span>John Abraham<small class="text-success">online</small></span></a>
-            </li>
-            <li>
-               <a href="javascript:void(0)"><img src="<?= Yii::$app->homeUrl?>plugins/images/users/john.jpg" alt="user-img" class="img-circle"> <span>Hritik Roshan<small class="text-success">online</small></span></a>
-            </li>
-            <li>
-               <a href="javascript:void(0)"><img src="<?= Yii::$app->homeUrl?>plugins/images/users/pawandeep.jpg" alt="user-img" class="img-circle"> <span>Pwandeep rajan <small class="text-success">online</small></span></a>
-            </li>
-         </ul>
-      </div>
-   </div>
-</div>
-<!-- /.right-sidebar -->
+

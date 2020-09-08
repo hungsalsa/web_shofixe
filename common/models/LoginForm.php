@@ -11,7 +11,7 @@ class LoginForm extends Model
 {
     public $username;
     public $password;
-    public $rememberMe = true;
+    public $rememberMe;
 
     private $_user;
 
@@ -19,6 +19,9 @@ class LoginForm extends Model
     /**
      * {@inheritdoc}
      */
+    public static function getDb() {
+        return Yii::$app->get('db1');
+    }
     public function rules()
     {
         return [
@@ -28,6 +31,26 @@ class LoginForm extends Model
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'username' => 'Username',
+            'password' => 'Mật khẩu',
+            'auth_key' => 'Auth Key',
+            'password_hash' => 'Mật khẩu',
+            'password_reset_token' => 'Password Reset Token',
+            'email' => 'Email',
+            'manager' => 'Quản lý',
+            'image' => 'Ảnh',
+            'view_cuahang' => 'Người xem cửa hàng',
+            'cuahang_id' => 'Làm việc tại',
+            'status' => 'Status',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 

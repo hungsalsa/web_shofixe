@@ -6,6 +6,16 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
+use backend\modules\chi\models\Employee;
+use backend\modules\chi\models\Chingay;
+use backend\modules\sanpham\models\Product;
+use backend\modules\sanpham\models\ProductCate;
+use backend\models\SignupForm;
+use backend\modules\auth\models\AuthItem;
+use backend\modules\quantri\models\CuaHang;
+use backend\models\User;
+use backend\models\Thongke;
+use yii\web\HttpException;
 // namespace app\components;
 
 /**
@@ -16,7 +26,7 @@ class SiteController extends Controller
     /**
      * {@inheritdoc}
      */
-    public $layout = 'home';
+
     public function behaviors()
     {
         return [
@@ -41,16 +51,68 @@ class SiteController extends Controller
                 ],
             ],
         ];
+
+
+        // return [
+        //     'access' => [
+        //         'class' => AccessControl::className(),
+        //         'rules' => [
+        //             [
+        //                 'actions' => ['login', 'error'],
+        //                 'allow' => true,
+        //             ],
+        //             [
+        //                 'actions' => ['logout', 'index'],
+        //                 'allow' => true,
+        //                 'roles' => ['@'],
+        //                 'matchCallback'=> function ($rule ,$action)
+        //                 {
+        //                     $control = Yii::$app->controller->id;
+        //                     $action = Yii::$app->controller->action->id;
+        //                     // $module = Yii::$app->controller->module->id;
+
+        //                     $role = $control.'/'.$action;
+        //                     if (Yii::$app->user->can($role)) {
+        //                         return true;
+        //                     }
+        //                 }
+        //             ],
+        //         ],
+        //     ],
+        //     'verbs' => [
+        //         'class' => VerbFilter::className(),
+        //         'actions' => [
+        //             'logout' => ['post'],
+        //             'delete' => ['post'],
+        //         ],
+        //     ],
+        // ];
+
     }
 
     /**
      * {@inheritdoc}
      */
+    public function actionError()
+    {
+            $error = Yii::app()->errorHandler->error;
+            switch($error['code'])
+            {
+                case 403:
+
+                $this->render('error403', array('error' => $error));
+                break;
+                default:
+                $this->render('error404', array('error' => $error));
+                break;
+            }
+    }
     public function actions()
     {
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
+                'layout' => 'error404'
             ],
         ];
     }
@@ -60,9 +122,40 @@ class SiteController extends Controller
      *
      * @return string
      */
+    public function beforeAction($action)
+ {
+    $this->layout = 'home'; //your layout name
+    return parent::beforeAction($action);
+ }
     public function actionIndex()
     {
-        return $this->render('index');
+
+        $product = new Product();
+        $cate = new ProductCate();
+        $cuahang = new CuaHang();
+        $cuahangs = $cuahang->getAllCuahang();
+
+        $imageUser = User::find()->select(['image','id'])->where(['<>','image',''])->asArray()->indexBy('id')->column();
+        
+        if(getUser()->manager != 1){
+            $list = json_decode(getUser()->cuahang_id);
+            foreach ($cuahangs as $key => $value) {
+                if(!in_array($key, $list)){
+                    unset($cuahangs[$key]);
+                }
+            }
+            // $cuahangs = json_decode($user->cuahang_id);
+        }
+        
+        $thongk = new Thongke();
+        $dataCount = $thongk->getCount();
+
+
+        $data = [
+            'category'=>$cate->getAllCate(),
+            'cuahangs'=>$cuahangs,
+        ];
+        return $this->render('index',['data'=>$data,'dataCount'=>$dataCount,'imageUser'=>$imageUser]);
     }
 
     /**
@@ -79,8 +172,13 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            Yii::$app->session->setFlash('messeage','Chào mừng bạn tới với admin');
-            return $this->goBack();
+            $user_login = Yii::$app->user->identity->fullname;
+            // if (!in_array($user_login->id,[1,2])) {
+            //     throw new HttpException(403, 'Bạn không có quyền vào đây, chưa chia sẻ quyền');
+            // }
+            Yii::$app->session->setFlash('messeage','Chào mừng '.$user_login.' tới với quản trị Mototech');
+            return $this->goBack((!empty(Yii::$app->request->referrer) ? Yii::$app->request->referrer : null));
+            // return $this->goBack();
         } else {
             $model->password = '';
 
@@ -88,38 +186,6 @@ class SiteController extends Controller
                 'model' => $model,
             ]);
         }
-
-
-
-        if (!\Yii::$app->user->isGuest) {
-        return $this->goHome();
-    }
-
-// $model = new LoginForm();
-// if ($model->load(Yii::$app->request->post()) && $model->login()) {
-// //check user roles, is user is Admin? 
-//     if (\Yii::$app->user->can('Admin'))
-//     {
-//         // yes he is Admin, so redirect page 
-//         // return $this->goBack();
-//          return $this->redirect(['quantri/productcategory']);
-//     }
-//     else // if he is not an Admin then what :P
-//     {   // put him out :P Automatically logout. 
-//         Yii::$app->user->logout();
-//         // set error on login page. 
-//         \Yii::$app->getSession()->setFlash('error', 'You are not authorized to login Admin\'s penal.<br /> Please use valid Username & Password.<br />Please contact Administrator for details.');
-//         //redirect again page to login form.
-//         return $this->redirect(['site/login']);
-//     }
-
-// } else {
-// return $this->render('login', [
-//     'model' => $model,
-// ]);
-// }
-
-
     }
 
     /**
@@ -132,5 +198,58 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+
+    public function actionSignup()
+    {
+        $this->layout = 'signup';
+        $model = new SignupForm();
+        $authitems = AuthItem::find()->all();
+
+        // $authItems = ArrayHelper::map($authitems,'name','description');
+        $authItems = array(
+            'admin' => 'Quản trị cấp cao',
+            'author' => 'Quyền tác giả'
+        );
+
+         // echo '<pre>';
+        // print_r($authItems);die;
+        if ($model->load(Yii::$app->request->post())) {
+            if ($user = $model->signup()) {
+                // if (Yii::$app->getUser()->login($user)) {
+                //     return $this->goHome();
+                // }
+                Yii::$app->session->setFlash('messeage','Bạn đã thêm thành công :'.$user->username);
+                return $this->redirect(['/user']);
+            }
+        }
+
+        return $this->render('signup', [
+            'model' => $model,
+            'authItems' => $authItems,
+        ]);
+    }
+
+    public function actionRegister()
+    {
+        $model = new User();
+
+        if ($model->load($post = Yii::$app->request->post())) {
+            if ($model->validate()) {
+                $model->username = $post['User']['username'];
+                $model->email = $post['User']['email'];
+                $model->fullname = $post['User']['fullname'];
+                $model->password_hash = password_hash($post['User']['email'], PASSWORD_ARGON2I);
+                $model->auth_key = md5(random_bytes(5));
+                $model->accessToken = password_hash(random_bytes(10), PASSWORD_DEFAULT);
+                if($model->save()){
+                    return;
+                }
+            }
+        }
+
+        return $this->render('register', [
+            'model' => $model,
+        ]);
     }
 }
